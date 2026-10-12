@@ -14,6 +14,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:property": "jest test/property",
+    "test:a11y": "jest -t A11Y-",
     "build": "tsup",
     "prepublishOnly": "pnpm build && pnpm size"
   },
@@ -61,6 +64,7 @@
     }
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.3.12",
     "react": "^18.3.1",
     "tsup": "^8.3.5",

@@ -103,4 +103,10 @@ export default tseslint.config(
       'cypress/no-unnecessary-waiting': 'error',
     },
   },
+  {
+    files: ['**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 );

@@ -1,5 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {},
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@satjeet2005/safe-money-ui/styles.css": ["src/react/styles.css"],
+      "@satjeet2005/safe-money-ui/*": ["src/*/index.ts"],
+      "@satjeet2005/safe-money-ui": ["src/money/index.ts"]
+    }
+  },
   "include": ["src/**/*", "test/**/*"]
 }

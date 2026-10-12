@@ -14,5 +14,12 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "moduleResolution": "node"
+    }
   }
 }
