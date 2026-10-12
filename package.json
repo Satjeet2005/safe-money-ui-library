@@ -1,0 +1,37 @@
+{
+  "name": "safe-money-ui-root",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "verify": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm test:a11y && pnpm build && pnpm size && pnpm claims:check",
+    "typecheck": "tsc --noEmit --project packages/safe-money-ui/tsconfig.json && tsc --noEmit --project apps/transfer-demo/tsconfig.json",
+    "lint": "eslint . --max-warnings 0",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "test": "echo \"test will be implemented in WP-02\"",
+    "test:property": "echo \"property tests will be implemented in WP-08/WP-14\"",
+    "test:a11y": "echo \"a11y tests will be implemented in WP-25\"",
+    "build": "pnpm --filter @satjeet2005/safe-money-ui build && pnpm --filter transfer-demo build",
+    "size": "node scripts/size.mjs",
+    "e2e": "echo \"e2e will be implemented in WP-24\"",
+    "e2e:a11y": "echo \"e2e:a11y will be implemented in WP-25\"",
+    "mutation": "echo \"mutation will be implemented in WP-26\"",
+    "claims:check": "node scripts/claims-check.mjs",
+    "dev": "pnpm --filter transfer-demo dev"
+  },
+  "devDependencies": {
+    "eslint": "^9.14.0",
+    "eslint-plugin-cypress": "^5.0.0",
+    "eslint-plugin-jest": "^28.9.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.12.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.14.0"
+  }
+}

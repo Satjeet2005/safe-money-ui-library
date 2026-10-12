@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+.stryker-tmp/
+reports/
+cypress/videos/
+cypress/screenshots/
+*.log
+.DS_Store
+.env*
+PRD safe-money-ui + Chaos Harness.md
+safe-money-ui_Coding_Agent_Action_Plan.md
