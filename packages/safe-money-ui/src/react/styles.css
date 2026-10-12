@@ -1,0 +1,13 @@
+/* safe-money-ui default styles */
+.smu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.smu-error-summary {
+  padding: 16px;
+  margin-bottom: 16px;
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
