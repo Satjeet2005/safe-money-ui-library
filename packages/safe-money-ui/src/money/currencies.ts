@@ -2,9 +2,7 @@ import type { CurrencyCode, Money } from './types.js';
 
 export type { CurrencyCode };
 
-export const CURRENCIES: Readonly<
-  Record<CurrencyCode, { decimals: 0 | 2 | 3 }>
-> = {
+export const CURRENCIES: Readonly<Record<CurrencyCode, { decimals: 0 | 2 | 3 }>> = {
   USD: { decimals: 2 },
   EUR: { decimals: 2 },
   GBP: { decimals: 2 },
