@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   verify:
@@ -33,12 +32,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: coverage/
+          path: |
+            coverage/
+            packages/safe-money-ui/coverage/
+            apps/transfer-demo/coverage/
+          if-no-files-found: ignore
 
   property:
     runs-on: ubuntu-latest
     steps:
-      - actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -89,6 +92,7 @@ jobs:
           path: |
             apps/transfer-demo/cypress/screenshots
             apps/transfer-demo/cypress/videos
+          if-no-files-found: ignore
 
   mutation:
     runs-on: ubuntu-latest
@@ -117,3 +121,4 @@ jobs:
         with:
           name: stryker-report
           path: reports/mutation/
+          if-no-files-found: ignore
