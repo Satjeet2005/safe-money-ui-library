@@ -55,3 +55,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** fast-check property testing, Jest code coverage reporter.
 - **Concept:** Mathematical invariant validation of foreign exchange arithmetic and ensuring exhaustive edge-case test coverage.
 - **How it works:** Proves conversion monotonicity, additive drift bound within 1 minor unit, identity, half-minor rounding bounds, and independent fee formulas under P3; achieved 100% statements, 99% branches, 100% functions, and 100% lines across the entire `src/money` module.
+
+## WP-10: Pure Submit Machine Reducer
+
+- **Tools used:** TypeScript strict discriminated unions, pure state reducer pattern, Jest.
+- **Concept:** A zero-dependency, pure transition reducer governing submit lifecycles across 4 explicit states (`idle`, `submitting`, `succeeded`, `failed`) to eliminate race conditions and double submits at the state level.
+- **How it works:** Rigidly enforces transition permissions according to PRD §9.2 transition matrix; protects against stale responses via monotonic `requestId` matching; preserves input and idempotency tokens upon failure; ignores out-of-order `SUBMIT` actions during in-flight submissions by returning the unchanged state reference.
