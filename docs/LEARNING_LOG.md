@@ -37,3 +37,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** TypeScript strict types, `Intl.NumberFormat`, BigInt string arithmetic, Jest.
 - **Concept:** Dual formatting architecture separating input field formatting from display localization to ensure lossless round-trip parse/format consistency without floating-point hazards.
 - **How it works:** `formatAmountInput` formats purely from integer minor units using a hard-coded separator table matching the parser, while `formatMoney` converts minor units into an exact decimal string passed to `Intl.NumberFormat` via a narrow type compatibility bridge.
+
+## WP-07: FX Conversion and Fees
+
+- **Tools used:** BigInt exact integer arithmetic, Banker's rounding (round-half-to-even), Jest.
+- **Concept:** Lossless multi-currency conversion and percentage fee calculation without floating-point drift.
+- **How it works:** `convert` scales decimal exponents via `BigInt` power factors and fixed USD micro-rates, rounding once at the quotient end with half-even parity rules; `computeFee` calculates cross-currency fees in source currency with a 100 minor unit floor while preserving zero fee for same-currency transfers.
