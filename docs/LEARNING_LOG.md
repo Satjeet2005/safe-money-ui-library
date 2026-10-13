@@ -79,3 +79,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Zod schema validation, safe parse pattern, error redaction.
 - **Concept:** Defensive parsing layer insulating application internals against malformed or hostile external data from network APIs or browser events.
 - **How it works:** Wraps `schema.safeParse` in `parseBoundary` returning a typed `{ ok: true, value } | { ok: false, error }` result without throwing; formats issue paths cleanly (`$` for root, dot notation for nested); caps error issues at 10 items to prevent log pollution; strictly prevents raw unvalidated values or sensitive payload strings from leaking into error messages or serialization.
+
+## WP-14: Property P6 and Submit Module Coverage
+
+- **Tools used:** fast-check property testing, Jest code coverage reporter, async property testing.
+- **Concept:** Formal property verification of state machine lifecycle invariants (I1–I7) alongside rigorous branch and statement coverage.
+- **How it works:** Drives state machine and controller with up to 40 randomized operations per run verifying at-most-one-in-flight (I1), exactly-one-run per submit/retry (I2), monotonic request IDs (I5), idempotency key persistence across retry (I4), reachability of success only via active request matching (I3), complete silence after disposal (I6), and referential identity on ignored events (I7); achieved >96% statements, >92% branches, >95% functions, and >98% lines across the submit module.
