@@ -97,3 +97,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** URLSearchParams parsing, Zod boundary validation, sessionStorage / localStorage mutation, global test hooks (`window.__smu`).
 - **Concept:** Declarative fault-injection configuration driven by UI state and URL presets, combined with deterministic reproducible test modes.
 - **How it works:** Parses predefined presets (`hang`, `late`, `lost`, `shift`, `reject`, `all`) and granular boolean overrides from browser search parameters; applies corrupt storage mutations on demand; installs `window.__smu` debug harness in deterministic mode with sequential `idem-000001` keys and snapshot retrieval.
+
+## WP-17: Redux Toolkit State, Boundary Thunks, and Dependency Injection
+
+- **Tools used:** Redux Toolkit (`createSlice`, `createAsyncThunk`, `configureStore`), extraArgument dependency injection, Zod boundary validation.
+- **Concept:** Predictable application state isolated entirely in `apps/transfer-demo` without leaking state management abstractions into the core money UI library.
+- **How it works:** Implements slices for transfer draft (`draftSlice`), flow transitions and review snapshots (`flowSlice`), boundary-validated remote data (`dataSlice`), chaos fault controls (`chaosSlice`), and local transfer history (`historySlice`); async thunks (`loadAccounts`, `loadRecipients`, `fetchQuote`) execute with injected `service` dependencies via `thunk.extraArgument`, strictly validating API outputs through `parseBoundary` before mutating state or surfacing localized error banners.
