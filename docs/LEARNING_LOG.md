@@ -103,3 +103,10 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Redux Toolkit (`createSlice`, `createAsyncThunk`, `configureStore`), extraArgument dependency injection, Zod boundary validation.
 - **Concept:** Predictable application state isolated entirely in `apps/transfer-demo` without leaking state management abstractions into the core money UI library.
 - **How it works:** Implements slices for transfer draft (`draftSlice`), flow transitions and review snapshots (`flowSlice`), boundary-validated remote data (`dataSlice`), chaos fault controls (`chaosSlice`), and local transfer history (`historySlice`); async thunks (`loadAccounts`, `loadRecipients`, `fetchQuote`) execute with injected `service` dependencies via `thunk.extraArgument`, strictly validating API outputs through `parseBoundary` before mutating state or surfacing localized error banners.
+
+## WP-18: React Library Primitives and Hooks
+
+- **Tools used:** React 18, `useSyncExternalStore`, `useRef`, `useId`, `aria-*` accessibility patterns, Jest, React Testing Library.
+- **Concept:** Accessible, resilient React UI primitives and hooks wrapping core money parsing, formatting, submit state machine, and review guard logic.
+- **How it works:** `MoneyInput` maintains raw user text while providing live polite formatted previews and syncing with `parseAmount`/`formatAmountInput` without floating-point math; `ErrorSummary` announces error groups via `role="alert"` and shifts focus smoothly to invalid target elements upon `focusKey` changes; `useSafeSubmit` orchestrates submit lifecycles through a stable `SubmitController` ref connected via `useSyncExternalStore` and automatically disposes on unmount; `useReviewGuard` exposes a stable review guard instance across renders.
+
