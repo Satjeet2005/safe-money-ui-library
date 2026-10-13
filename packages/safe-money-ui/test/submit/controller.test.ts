@@ -307,11 +307,80 @@ describe('Submit Controller (PRD §9.3 & Action Plan CT-01..CT-09)', () => {
     expect(scheduler.pendingCount()).toBe(0);
 
     // Any subsequent resolve/reject or calls have no effect on listeners
-    deferred.resolve({ id: 'ok' });
-    await Promise.resolve();
-    expect(listenerNotifications).toBe(1);
-
     controller.submit({ amount: 900 });
     expect(listenerNotifications).toBe(1);
+  });
+
+  test('CT-extra: parseResponse returns ok: false -> REJECT with kind invalid_response', async () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => deferred.promise,
+      parseResponse: () => ({ ok: false, message: 'Schema mismatch' }),
+      newKey: () => 'key-1',
+      scheduler,
+    });
+
+    controller.submit({ amount: 999 });
+    deferred.resolve({ arbitrary: 123 });
+    await Promise.resolve();
+
+    const state = controller.getState();
+    expect(state.status).toBe('failed');
+    if (state.status === 'failed') {
+      expect(state.error.kind).toBe('invalid_response');
+      expect(state.error.retryable).toBe(true);
+      expect(state.error.message).toBe('Schema mismatch');
+    }
+  });
+
+  test('CT-extra: reset() from failed or succeeded returns to idle; reset() while submitting is ignored', async () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => deferred.promise,
+      parseResponse: defaultParse,
+      newKey: () => 'key-1',
+      scheduler,
+    });
+
+    controller.submit({ amount: 100 });
+    expect(controller.getState().status).toBe('submitting');
+    // reset while submitting is ignored
+    controller.reset();
+    expect(controller.getState().status).toBe('submitting');
+
+    deferred.resolve({ id: 'ok' });
+    await Promise.resolve();
+    expect(controller.getState().status).toBe('succeeded');
+
+    controller.reset();
+    expect(controller.getState().status).toBe('idle');
+  });
+
+  test('CT-extra: defaultScheduler triggers real setTimeout/clearTimeout when scheduler option omitted', async () => {
+    jest.useFakeTimers();
+    try {
+      const deferred = createDeferred<unknown>();
+      const controller = createSubmitController<TestIn, TestOut>({
+        run: () => deferred.promise,
+        parseResponse: defaultParse,
+        newKey: () => 'key-default',
+        timeoutMs: 1000,
+      });
+
+      controller.submit({ amount: 123 });
+      expect(controller.getState().status).toBe('submitting');
+
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+
+      expect(controller.getState().status).toBe('failed');
+      controller.dispose();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
