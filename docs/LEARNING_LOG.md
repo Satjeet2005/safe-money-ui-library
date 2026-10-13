@@ -43,3 +43,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** BigInt exact integer arithmetic, Banker's rounding (round-half-to-even), Jest.
 - **Concept:** Lossless multi-currency conversion and percentage fee calculation without floating-point drift.
 - **How it works:** `convert` scales decimal exponents via `BigInt` power factors and fixed USD micro-rates, rounding once at the quotient end with half-even parity rules; `computeFee` calculates cross-currency fees in source currency with a 100 minor unit floor while preserving zero fee for same-currency transfers.
+
+## WP-08: Public Money Entry, Build and Properties P1/P2/P4/P5
+
+- **Tools used:** fast-check property testing, tsup multi-format bundler (ESM/CJS/DTS).
+- **Concept:** Exposing a strictly bounded public domain API while proving end-to-end algebraic properties across arbitrary inputs.
+- **How it works:** Wires `./money` and root `.` package exports without runtime imports; verifies parser totality (P5), round-trip format/parse identity (P1), optional grouping invariance (P2), and parse soundness/normalization idempotence (P4) under 1,000 randomized iterations with reproducible seed.
