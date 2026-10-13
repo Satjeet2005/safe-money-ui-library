@@ -115,3 +115,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** React 18, Redux Toolkit, Zod runtime schema validation, sessionStorage API, React Testing Library.
 - **Concept:** End-to-end form orchestration integrating library primitives, Redux state, defensive boundary validation, and centralized localization without hard-coded string literals.
 - **How it works:** `SendForm` coordinates recipient/account/locale selection with `MoneyInput`, client-side fee-inclusive balance validation, and ordered accessible `ErrorSummary` error dispatch; `draftStorage` safely round-trips supported draft fields through `sessionStorage['smu.draft.v1']` with Zod boundary verification, immediately discarding invalid schemas and notifying the user via a polite warning banner while preventing stale auto-resaves.
+
+## WP-20: Review Screen and Confirm Algorithm
+
+- **Tools used:** React 18, Redux Toolkit, injected Clock helper, React Testing Library.
+- **Concept:** Critical transfer confirmation screen combining review-guard snapshot verification, quote expiry re-validation, and safe single-submit dispatch.
+- **How it works:** `Review` verifies live Redux draft values against the review snapshot; redirects back to form if values drifted; checks quote expiration against the clock and automatically refreshes rate quote if expired; halts submission and presents localized warning banners whenever parameters or rates change, requiring user re-confirmation before final submission.
