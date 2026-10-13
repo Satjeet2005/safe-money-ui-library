@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-export type HistoryEntry = {
+export type HistoryEntry = Readonly<{
   id: string;
   kind: 'completed' | 'unconfirmed';
   recipientName: string;
   amountText: string;
-};
+}>;
 
 export type HistoryState = {
   entries: HistoryEntry[];
@@ -19,7 +19,7 @@ export const historySlice = createSlice({
   name: 'history',
   initialState,
   reducers: {
-    addEntry: (state, action) => {
+    addEntry: (state, action: PayloadAction<HistoryEntry>) => {
       state.entries.unshift(action.payload);
     },
   },

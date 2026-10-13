@@ -2,6 +2,34 @@ import { createMockService } from '../../src/service/mockService.js';
 import type { ChaosConfigPayload } from '../../src/service/schemas.js';
 import { createIdGenerator } from '../../src/service/ids.js';
 
+type MockQuote = {
+  quoteId: string;
+  source: { currency: string; minor: number };
+  target: { currency: string; minor: number };
+  feeMinor: number;
+  rateMicro: number;
+  expiresAtMs: number;
+};
+
+type MockTransfer = {
+  transferId?: string;
+  status: string;
+  debited?: { currency: string; minor: number };
+  credited?: { currency: string; minor: number };
+  completedAtMs?: number;
+};
+
+type MockRejection = {
+  error: {
+    code: string;
+    message: string;
+  };
+};
+
+type MockAccounts = {
+  accounts?: Array<{ currency: string; balanceMinor: number }>;
+};
+
 describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
   const defaultChaos: ChaosConfigPayload = {
     latencyMs: 0,
@@ -73,7 +101,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     expect(rawQuote.quoteId).toBe('q-000001');
     expect(rawQuote.source).toEqual({ currency: 'USD', minor: 10000 });
@@ -90,7 +118,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     // Advance clock past expiration
     clock.advance(30_001);
@@ -101,7 +129,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockRejection;
 
     expect(result).toEqual({
       error: {
@@ -118,7 +146,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     const req = {
       idempotencyKey: 'idem-test-replay',
@@ -128,12 +156,12 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       sourceMinor: 10000,
     };
 
-    const first = (await service.submitTransfer(req)) as any;
+    const first = (await service.submitTransfer(req)) as MockTransfer;
     expect(first.status).toBe('completed');
     expect(first.transferId).toBe('TRF-000001');
     expect(service.debug.executedCount()).toBe(1);
 
-    const replay = (await service.submitTransfer(req)) as any;
+    const replay = (await service.submitTransfer(req)) as MockTransfer;
     expect(replay.status).toBe('completed');
     expect(replay.transferId).toBe('TRF-000001');
     expect(service.debug.executedCount()).toBe(1);
@@ -146,7 +174,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     await service.submitTransfer({
       idempotencyKey: 'idem-clash',
@@ -182,7 +210,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
         recipientId: 'rcp-001',
         sourceCurrency: 'USD',
         sourceMinor: 10000,
-      })) as any;
+      })) as MockQuote;
 
       const result = (await service.submitTransfer({
         idempotencyKey: `idem-${code}`,
@@ -190,7 +218,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
         recipientId: 'rcp-001',
         sourceCurrency: 'USD',
         sourceMinor: 10000,
-      })) as any;
+      })) as MockRejection;
 
       expect(result).toEqual({
         error: { code, message: msg },
@@ -207,7 +235,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     const req = {
       idempotencyKey: 'idem-five-calls',
@@ -218,7 +246,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
     };
 
     for (let i = 0; i < 5; i++) {
-      const resp = (await service.submitTransfer(req)) as any;
+      const resp = (await service.submitTransfer(req)) as MockTransfer;
       expect(resp.transferId).toBe('TRF-000001');
     }
 
@@ -234,7 +262,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     const req = {
       idempotencyKey: 'idem-lost-resp',
@@ -250,7 +278,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
     expect(service.debug.balances()['USD']).toBe(489_900);
 
     // Second delivery succeeds with the same transfer ID
-    const second = (await service.submitTransfer(req)) as any;
+    const second = (await service.submitTransfer(req)) as MockTransfer;
     expect(second.status).toBe('completed');
     expect(second.transferId).toBe('TRF-000001');
     expect(service.debug.executedCount()).toBe(1);
@@ -266,7 +294,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
         recipientId: 'rcp-001',
         sourceCurrency: 'USD',
         sourceMinor: 10000,
-      })) as any;
+      })) as MockQuote;
 
       setChaos({ lateResponseMs: 15000 });
 
@@ -283,12 +311,12 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       await Promise.resolve();
       jest.advanceTimersByTime(15000);
 
-      const first = (await transferPromise) as any;
+      const first = (await transferPromise) as MockTransfer;
       expect(first.transferId).toBe('TRF-000001');
       expect(service.debug.executedCount()).toBe(1);
 
       // Replay returns immediately without delay
-      const replay = (await service.submitTransfer(req)) as any;
+      const replay = (await service.submitTransfer(req)) as MockTransfer;
       expect(replay.transferId).toBe('TRF-000001');
       expect(service.debug.executedCount()).toBe(1);
     } finally {
@@ -305,7 +333,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     const promise = service.submitTransfer(
       {
@@ -332,7 +360,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     setChaos({ malformedPayload: true });
 
@@ -342,13 +370,13 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockTransfer;
 
     expect(resp.transferId).toBeUndefined();
     expect(resp.status).toBe('done');
 
     // Also check getAccounts malformed payload (removes accounts key)
-    const accountsResp = (await service.getAccounts()) as any;
+    const accountsResp = (await service.getAccounts()) as MockAccounts;
     expect(accountsResp.accounts).toBeUndefined();
   });
 
@@ -359,7 +387,7 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockQuote;
 
     const resp = (await service.submitTransfer({
       idempotencyKey: 'idem-inconsistent',
@@ -367,10 +395,10 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
-    })) as any;
+    })) as MockTransfer;
 
     // q.target.minor was 9200, so inconsistent payload should be 9201
-    expect(resp.credited.minor).toBe(9201);
+    expect(resp.credited?.minor).toBe(9201);
   });
 
   // SV-12: Configured latency delays resolution by exactly latencyMs

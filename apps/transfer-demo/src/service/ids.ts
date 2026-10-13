@@ -1,5 +1,3 @@
-import * as nodeCrypto from 'node:crypto';
-
 /**
  * Generates transfer, quote, and idempotency IDs for the transfer demo.
  * @example
@@ -15,6 +13,20 @@ export function createIdGenerator(deterministic = false) {
   let quoteCount = 0;
   let idemCount = 0;
 
+  function generateUuid(): string {
+    if (typeof globalThis !== 'undefined' && typeof globalThis.crypto?.randomUUID === 'function') {
+      return globalThis.crypto.randomUUID();
+    }
+    const bytes = new Uint8Array(16);
+    if (typeof globalThis !== 'undefined' && globalThis.crypto?.getRandomValues) {
+      globalThis.crypto.getRandomValues(bytes);
+    }
+    bytes[6] = (bytes[6]! & 0x0f) | 0x40;
+    bytes[8] = (bytes[8]! & 0x3f) | 0x80;
+    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+  }
+
   return {
     transferId: (): string => {
       transferCount += 1;
@@ -29,11 +41,7 @@ export function createIdGenerator(deterministic = false) {
         idemCount += 1;
         return `idem-${String(idemCount).padStart(6, '0')}`;
       }
-      const uuid =
-        typeof globalThis.crypto?.randomUUID === 'function'
-          ? globalThis.crypto.randomUUID()
-          : nodeCrypto.randomUUID();
-      return `idem-${uuid}`;
+      return `idem-${generateUuid()}`;
     },
   };
 }

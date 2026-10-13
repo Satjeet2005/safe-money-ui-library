@@ -191,7 +191,7 @@ export function createMockService(deps: ServiceDeps): MockService {
       const fingerprint = `${validReq.quoteId}|${validReq.recipientId}|${validReq.sourceCurrency}|${validReq.sourceMinor}`;
 
       // 3. Idempotency store check
-      let storedRecord = idempotencyStore.get(validReq.idempotencyKey);
+      const storedRecord = idempotencyStore.get(validReq.idempotencyKey);
       let responseToDeliver: Record<string, unknown>;
 
       if (storedRecord) {

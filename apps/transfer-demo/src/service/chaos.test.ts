@@ -32,7 +32,7 @@ describe('WP-16: Chaos Configuration, URL Presets, Deterministic Mode', () => {
 
   beforeEach(() => {
     sessionStorage.clear();
-    delete (globalThis as any).__smu;
+    delete (globalThis as Record<string, unknown>).__smu;
   });
 
   test('DEFAULT_CHAOS_CONFIG has exact PRD defaults', () => {
@@ -104,7 +104,7 @@ describe('WP-16: Chaos Configuration, URL Presets, Deterministic Mode', () => {
 
     expect(result.isInvalid).toBe(false);
     expect(result.config).not.toBeNull();
-    expect((result.config as any).evilInjectedField).toBeUndefined();
+    expect('evilInjectedField' in (result.config as Record<string, unknown>)).toBe(false);
   });
 
   test('applyCorruptStorage writes {"version":2,"junk":true} to sessionStorage["smu.draft.v1"]', () => {
@@ -119,14 +119,16 @@ describe('WP-16: Chaos Configuration, URL Presets, Deterministic Mode', () => {
       transferIds: () => ['TRF-000001'],
     };
 
+    const win = globalThis as typeof globalThis & { __smu?: typeof mockDebug };
+
     // When deterministic = false
     setupDeterministicDebugHook(mockDebug, false);
-    expect((globalThis as any).__smu).toBeUndefined();
+    expect(win.__smu).toBeUndefined();
 
     // When deterministic = true
     setupDeterministicDebugHook(mockDebug, true);
-    expect((globalThis as any).__smu).toBe(mockDebug);
-    expect((globalThis as any).__smu.executedCount()).toBe(42);
+    expect(win.__smu).toBe(mockDebug);
+    expect(win.__smu?.executedCount()).toBe(42);
   });
 
   test('Deterministic mode produces counter-based idempotency keys idem-000001..', () => {

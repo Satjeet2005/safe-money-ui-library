@@ -1,4 +1,3 @@
-import { describe, it, expect, jest } from '@jest/globals';
 import {
   draftSlice,
   setRecipient,
@@ -143,10 +142,7 @@ describe('flowSlice', () => {
     let state = flowSlice.reducer(undefined, setQuoteStatus('loading'));
     expect(state.quoteStatus).toBe('loading');
 
-    state = flowSlice.reducer(
-      state,
-      setBanner({ kind: 'warning', copyKey: 'review.rateChanged' }),
-    );
+    state = flowSlice.reducer(state, setBanner({ kind: 'warning', copyKey: 'review.rateChanged' }));
     expect(state.banner).toEqual({ kind: 'warning', copyKey: 'review.rateChanged' });
 
     state = flowSlice.reducer(state, clearBanner());
@@ -260,11 +256,16 @@ describe('historySlice', () => {
 });
 
 describe('Async Thunks via createAppStore', () => {
+  const getAccountsMock = jest.fn();
+  const getRecipientsMock = jest.fn();
+  const getQuoteMock = jest.fn();
+  const submitTransferMock = jest.fn();
+
   const dummyService: MockService = {
-    getAccounts: jest.fn<MockService['getAccounts']>(),
-    getRecipients: jest.fn<MockService['getRecipients']>(),
-    getQuote: jest.fn<MockService['getQuote']>(),
-    submitTransfer: jest.fn<MockService['submitTransfer']>(),
+    getAccounts: getAccountsMock,
+    getRecipients: getRecipientsMock,
+    getQuote: getQuoteMock,
+    submitTransfer: submitTransferMock,
     debug: {
       executedCount: () => 0,
       balances: () => ({}),
@@ -276,7 +277,7 @@ describe('Async Thunks via createAppStore', () => {
     const mockAccounts = {
       accounts: [{ currency: 'USD' as const, balanceMinor: 500000 }],
     };
-    (dummyService.getAccounts as jest.Mock).mockResolvedValueOnce(mockAccounts);
+    getAccountsMock.mockResolvedValueOnce(mockAccounts);
 
     const store = createAppStore({ service: dummyService });
     expect(store.getState().data.accountsStatus).toBe('idle');
@@ -290,7 +291,7 @@ describe('Async Thunks via createAppStore', () => {
   });
 
   it('loadAccounts thunk: sets failed and error banner on boundary rejection', async () => {
-    (dummyService.getAccounts as jest.Mock).mockResolvedValueOnce({
+    getAccountsMock.mockResolvedValueOnce({
       accounts: [{ currency: 'INVALID_CURRENCY', balanceMinor: -10 }],
     });
 
@@ -305,7 +306,7 @@ describe('Async Thunks via createAppStore', () => {
   });
 
   it('loadAccounts thunk: sets failed and error banner on network error', async () => {
-    (dummyService.getAccounts as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+    getAccountsMock.mockRejectedValueOnce(new Error('Network error'));
 
     const store = createAppStore({ service: dummyService });
     await store.dispatch(loadAccounts());
@@ -329,7 +330,7 @@ describe('Async Thunks via createAppStore', () => {
         },
       ],
     };
-    (dummyService.getRecipients as jest.Mock).mockResolvedValueOnce(mockRecipients);
+    getRecipientsMock.mockResolvedValueOnce(mockRecipients);
 
     const store = createAppStore({ service: dummyService });
     expect(store.getState().data.recipientsStatus).toBe('idle');
@@ -343,7 +344,7 @@ describe('Async Thunks via createAppStore', () => {
   });
 
   it('loadRecipients thunk: sets failed and error banner on network error or schema mismatch', async () => {
-    (dummyService.getRecipients as jest.Mock).mockRejectedValueOnce(new Error('Server fault'));
+    getRecipientsMock.mockRejectedValueOnce(new Error('Server fault'));
 
     const store = createAppStore({ service: dummyService });
     await store.dispatch(loadRecipients());
@@ -364,7 +365,7 @@ describe('Async Thunks via createAppStore', () => {
       rateMicro: 920000,
       expiresAtMs: 30000,
     };
-    (dummyService.getQuote as jest.Mock).mockResolvedValueOnce(rawQuote);
+    getQuoteMock.mockResolvedValueOnce(rawQuote);
 
     const store = createAppStore({ service: dummyService });
     store.dispatch(setRecipient('rcp-001'));
@@ -399,7 +400,7 @@ describe('Async Thunks via createAppStore', () => {
       rateMicro: 850000,
       expiresAtMs: 35000,
     };
-    (dummyService.getQuote as jest.Mock).mockResolvedValueOnce(rawQuote);
+    getQuoteMock.mockResolvedValueOnce(rawQuote);
 
     const store = createAppStore({ service: dummyService });
     await store.dispatch(
@@ -424,7 +425,7 @@ describe('Async Thunks via createAppStore', () => {
   });
 
   it('fetchQuote thunk: fails and sets quote.failed banner when schema validation fails', async () => {
-    (dummyService.getQuote as jest.Mock).mockResolvedValueOnce({
+    getQuoteMock.mockResolvedValueOnce({
       quoteId: 'malformed-id',
       source: { currency: 'BAD', minor: 100 },
     });
@@ -444,7 +445,7 @@ describe('Async Thunks via createAppStore', () => {
   });
 
   it('fetchQuote thunk: fails and sets quote.failed banner when service call rejects', async () => {
-    (dummyService.getQuote as jest.Mock).mockRejectedValueOnce(new Error('Network timeout'));
+    getQuoteMock.mockRejectedValueOnce(new Error('Network timeout'));
 
     const store = createAppStore({ service: dummyService });
     store.dispatch(setRecipient('rcp-001'));

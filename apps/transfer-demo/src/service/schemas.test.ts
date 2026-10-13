@@ -44,6 +44,11 @@ describe('WP-15A: Schemas, Fixtures, Clock and IDs', () => {
       expect(Minor.safeParse(1_000_000_000_001).success).toBe(false);
     });
 
+    test('MoneyS validates currency and minor units', () => {
+      expect(MoneyS.safeParse({ currency: 'USD', minor: 500 }).success).toBe(true);
+      expect(MoneyS.safeParse({ currency: 'INVALID', minor: 500 }).success).toBe(false);
+    });
+
     test('AccountsResponse validates fixtures and strips unknown properties', () => {
       const raw = {
         accounts: [

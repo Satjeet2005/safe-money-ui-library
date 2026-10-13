@@ -1,10 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { LocaleCode } from '@satjeet2005/safe-money-ui/money';
+import type { z } from 'zod';
+import type { SourceCurrency } from '../service/schemas.js';
 
 export type DraftState = {
   recipientId: string | null;
-  sourceCurrency: 'USD' | 'EUR' | 'GBP';
+  sourceCurrency: z.infer<typeof SourceCurrency>;
   amountText: string;
-  locale: 'en-US' | 'de-DE' | 'pl-PL' | 'en-IN';
+  locale: LocaleCode;
   showErrors: boolean;
   errorFocusKey: number;
 };
@@ -22,16 +25,16 @@ export const draftSlice = createSlice({
   name: 'draft',
   initialState,
   reducers: {
-    setRecipient: (state, action) => {
+    setRecipient: (state, action: PayloadAction<string | null>) => {
       state.recipientId = action.payload;
     },
-    setSourceCurrency: (state, action) => {
+    setSourceCurrency: (state, action: PayloadAction<z.infer<typeof SourceCurrency>>) => {
       state.sourceCurrency = action.payload;
     },
-    setAmountText: (state, action) => {
+    setAmountText: (state, action: PayloadAction<string>) => {
       state.amountText = action.payload;
     },
-    setLocale: (state, action) => {
+    setLocale: (state, action: PayloadAction<LocaleCode>) => {
       state.locale = action.payload;
     },
     attemptFailed: (state) => {
@@ -39,7 +42,9 @@ export const draftSlice = createSlice({
       state.errorFocusKey += 1;
     },
     resetDraft: () => initialState,
-    hydrateDraft: (_state, action) => action.payload,
+    hydrateDraft: (state, action: PayloadAction<Partial<DraftState>>) => {
+      Object.assign(state, action.payload);
+    },
   },
 });
 
