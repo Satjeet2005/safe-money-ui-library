@@ -1,13 +1,98 @@
-/* safe-money-ui default styles */
+/* safe-money-ui default accessible styles */
 .smu-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.smu-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #111827;
+}
+
+.smu-input {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.smu-input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.smu-input[aria-invalid='true'] {
+  border-color: #dc2626;
+}
+
+.smu-input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.smu-hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.smu-preview {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.smu-error {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #dc2626;
+  font-weight: 500;
 }
 
 .smu-error-summary {
-  padding: 16px;
-  margin-bottom: 16px;
-  outline: 3px solid #1d4ed8;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #dc2626;
+  border-radius: 0.375rem;
+  background-color: #fef2f2;
+}
+
+.smu-error-summary:focus {
+  outline: 3px solid #2563eb;
   outline-offset: 2px;
+}
+
+.smu-error-summary-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.smu-error-summary-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.smu-error-summary-item {
+  margin-bottom: 0.25rem;
+}
+
+.smu-error-summary-link {
+  color: #b91c1c;
+  text-decoration: underline;
+}
+
+.smu-error-summary-link:hover,
+.smu-error-summary-link:focus {
+  color: #7f1d1d;
 }

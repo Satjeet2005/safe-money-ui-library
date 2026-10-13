@@ -1,10 +1,13 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MoneyInput, type MoneyInputProps } from '../../src/react/MoneyInput.js';
 import type { CurrencyCode, ParseError, ParseErrorCode } from '../../src/money/types.js';
 
-const testMessages: Record<ParseErrorCode, (ctx: ParseError & { currency: CurrencyCode }) => string> = {
+const testMessages: Record<
+  ParseErrorCode,
+  (ctx: ParseError & { currency: CurrencyCode }) => string
+> = {
   EMPTY: () => 'Enter an amount.',
   NOT_A_NUMBER: () => 'Use digits only.',
   NEGATIVE_NOT_ALLOWED: () => 'Amount cannot be negative.',
@@ -172,10 +175,7 @@ describe('MoneyInput (MI-01..MI-10)', () => {
     );
 
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(input).toHaveAttribute(
-      'aria-describedby',
-      'test-amount-error test-amount-hint',
-    );
+    expect(input).toHaveAttribute('aria-describedby', 'test-amount-error test-amount-hint');
   });
 
   it('MI-07: renders error element as <p id="${id}-error"> without a role attribute', () => {
