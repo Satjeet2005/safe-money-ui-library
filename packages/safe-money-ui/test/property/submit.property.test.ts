@@ -138,7 +138,6 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
           const deferredHolder: { current: Deferred<unknown> | null } = { current: null };
           const staleDeferreds: Deferred<unknown>[] = [];
           let currentRequestId = 0;
-          let currentKey = '';
           let lastAcceptedKey = '';
           let totalRunCalls = 0;
           let totalAccepted = 0;
@@ -276,7 +275,6 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
                 expect(stateAfter.idempotencyKey).not.toBe(lastAcceptedKey);
                 lastAcceptedKey = stateAfter.idempotencyKey;
               }
-              currentKey = stateAfter.idempotencyKey;
             }
 
             // I5. requestId strictly increases on every accepted SUBMIT or RETRY
