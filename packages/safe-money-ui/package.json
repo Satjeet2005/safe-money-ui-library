@@ -15,7 +15,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "test:property": "jest test/property",
+    "test:property": "FC_NUM_RUNS=1000 jest test/property",
     "test:a11y": "jest -t A11Y-",
     "build": "tsup",
     "prepublishOnly": "pnpm build && pnpm size"
@@ -26,28 +26,28 @@
   "exports": {
     ".": {
       "types": "./dist/money/index.d.ts",
-      "import": "./dist/money/index.js",
-      "require": "./dist/money/index.cjs"
+      "import": "./dist/money/index.mjs",
+      "require": "./dist/money/index.js"
     },
     "./money": {
       "types": "./dist/money/index.d.ts",
-      "import": "./dist/money/index.js",
-      "require": "./dist/money/index.cjs"
+      "import": "./dist/money/index.mjs",
+      "require": "./dist/money/index.js"
     },
     "./submit": {
       "types": "./dist/submit/index.d.ts",
-      "import": "./dist/submit/index.js",
-      "require": "./dist/submit/index.cjs"
+      "import": "./dist/submit/index.mjs",
+      "require": "./dist/submit/index.js"
     },
     "./boundary": {
       "types": "./dist/boundary/index.d.ts",
-      "import": "./dist/boundary/index.js",
-      "require": "./dist/boundary/index.cjs"
+      "import": "./dist/boundary/index.mjs",
+      "require": "./dist/boundary/index.js"
     },
     "./react": {
       "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "require": "./dist/react/index.cjs"
+      "import": "./dist/react/index.mjs",
+      "require": "./dist/react/index.js"
     },
     "./styles.css": "./src/react/styles.css"
   },
