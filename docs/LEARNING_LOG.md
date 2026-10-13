@@ -49,3 +49,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** fast-check property testing, tsup multi-format bundler (ESM/CJS/DTS).
 - **Concept:** Exposing a strictly bounded public domain API while proving end-to-end algebraic properties across arbitrary inputs.
 - **How it works:** Wires `./money` and root `.` package exports without runtime imports; verifies parser totality (P5), round-trip format/parse identity (P1), optional grouping invariance (P2), and parse soundness/normalization idempotence (P4) under 1,000 randomized iterations with reproducible seed.
+
+## WP-09: Property P3 and Money Module Coverage
+
+- **Tools used:** fast-check property testing, Jest code coverage reporter.
+- **Concept:** Mathematical invariant validation of foreign exchange arithmetic and ensuring exhaustive edge-case test coverage.
+- **How it works:** Proves conversion monotonicity, additive drift bound within 1 minor unit, identity, half-minor rounding bounds, and independent fee formulas under P3; achieved 100% statements, 99% branches, 100% functions, and 100% lines across the entire `src/money` module.
