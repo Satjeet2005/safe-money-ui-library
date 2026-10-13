@@ -1,7 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
-import { setAccounts, setRecipients, setAccountsStatus, setRecipientsStatus } from '../store/dataSlice.js';
+import {
+  setAccounts,
+  setRecipients,
+  setAccountsStatus,
+  setRecipientsStatus,
+} from '../store/dataSlice.js';
 import { setRecipient, setSourceCurrency, setAmountText } from '../store/draftSlice.js';
 import { goToReview, type ReviewSnapshot, type QuotePayload } from '../store/flowSlice.js';
 import { Review } from './Review.js';
@@ -97,11 +102,7 @@ describe('Review Screen (REV-01..REV-06)', () => {
 
     const utils = render(
       <Provider store={store}>
-        <Review
-          onSubmit={submitMock}
-          submitting={options?.submitting ?? false}
-          clock={fakeClock}
-        />
+        <Review onSubmit={submitMock} submitting={options?.submitting ?? false} clock={fakeClock} />
       </Provider>,
     );
 
@@ -223,5 +224,43 @@ describe('Review Screen (REV-01..REV-06)', () => {
       sourceMinor: 10000,
     });
     expect(getQuoteMock).not.toHaveBeenCalled();
+  });
+
+  it('renders complete transfer summary in dl with formatted amounts, rate, and rate-held note', () => {
+    setup();
+
+    expect(screen.getByText('Elena Rostova · DE · ****1234')).toBeInTheDocument();
+    expect(screen.getByText('$100.00')).toBeInTheDocument();
+    expect(screen.getByText('$1.50')).toBeInTheDocument();
+    expect(screen.getByText('$101.50')).toBeInTheDocument();
+    expect(screen.getByText('1 USD = 0.9200 EUR')).toBeInTheDocument();
+    expect(screen.getByText('€92.00')).toBeInTheDocument();
+    expect(
+      screen.getByText('The rate is held for 30 seconds from when this screen opens.'),
+    ).toBeInTheDocument();
+  });
+
+  it('edit action dispatches goToForm without submitting transfer', () => {
+    const { store, submitMock } = setup();
+
+    const editButton = screen.getByRole('button', { name: 'Edit details' });
+    fireEvent.click(editButton);
+
+    expect(store.getState().flow.step).toBe('form');
+    expect(submitMock).not.toHaveBeenCalled();
+  });
+
+  it('submitting state shows aria-disabled buttons, review.sending text, and status message', () => {
+    const { submitMock } = setup({ submitting: true });
+
+    const confirmButton = screen.getByRole('button', { name: 'Sending…' });
+    const editButton = screen.getByRole('button', { name: 'Edit details' });
+
+    expect(confirmButton).toHaveAttribute('aria-disabled', 'true');
+    expect(editButton).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('status')).toHaveTextContent('Sending your transfer…');
+
+    fireEvent.click(confirmButton);
+    expect(submitMock).not.toHaveBeenCalled();
   });
 });
