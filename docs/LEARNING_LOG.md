@@ -85,3 +85,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** fast-check property testing, Jest code coverage reporter, async property testing.
 - **Concept:** Formal property verification of state machine lifecycle invariants (I1–I7) alongside rigorous branch and statement coverage.
 - **How it works:** Drives state machine and controller with up to 40 randomized operations per run verifying at-most-one-in-flight (I1), exactly-one-run per submit/retry (I2), monotonic request IDs (I5), idempotency key persistence across retry (I4), reachability of success only via active request matching (I3), complete silence after disposal (I6), and referential identity on ignored events (I7); achieved >96% statements, >92% branches, >95% functions, and >98% lines across the submit module.
+
+## WP-15: Simulated Service, Schemas, and Chaos Fault Injection
+
+- **Tools used:** Zod schema validation, BigInt exact math, in-memory stateful mock service, injected clock and timer scheduling.
+- **Concept:** A zero-backend deterministic simulated money transfer service capable of reproducing real-world distributed systems faults (lost responses, hanging connections, delayed responses, malformed payloads, rate shifts, and duplicate requests).
+- **How it works:** Enforces boundary validation through strict schemas stripping unknown keys; computes exchange rates and fees using lossless integer math; maintains an in-memory idempotency store with request fingerprinting; models one-shot fault behaviors (e.g., throwing network error after debiting for lost-response, but replaying successfully on retry) verified under 12 targeted service test cases (SV-01..SV-12).
