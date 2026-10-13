@@ -1,9 +1,4 @@
-import {
-  loadDraft,
-  saveDraft,
-  clearDraft,
-  DRAFT_STORAGE_KEY,
-} from './draftStorage.js';
+import { loadDraft, saveDraft, clearDraft, DRAFT_STORAGE_KEY } from './draftStorage.js';
 
 describe('draftStorage (DS-01..DS-04)', () => {
   beforeEach(() => {

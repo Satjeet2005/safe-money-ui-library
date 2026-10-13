@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const Currency = z.enum(['USD', 'EUR', 'GBP', 'PLN', 'INR', 'JPY', 'KWD']);
 export const SourceCurrency = z.enum(['USD', 'EUR', 'GBP']);
+export type SourceCurrency = z.infer<typeof SourceCurrency>;
 export const Minor = z.number().int().nonnegative().max(1_000_000_000_000);
 export const MoneyS = z.object({ currency: Currency, minor: Minor });
 

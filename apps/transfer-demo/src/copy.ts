@@ -1,3 +1,11 @@
+import { formatMoney } from '@satjeet2005/safe-money-ui/money';
+import type {
+  CurrencyCode,
+  LocaleCode,
+  ParseError,
+  ParseErrorCode,
+} from '@satjeet2005/safe-money-ui/money';
+
 export const COPY = {
   'app.title': 'Northwind Pay',
   'app.demoBanner':
@@ -83,3 +91,89 @@ export const COPY = {
 } as const;
 
 export type CopyKey = keyof typeof COPY;
+
+export const UI_LABELS = {
+  chaosButton: 'Chaos mode',
+  demoNotice: 'Demo notice',
+  accountSummary: 'Account Summary',
+} as const;
+
+/**
+ * Replaces `{name}` placeholders in template string with variable values.
+ * @example
+ * ```ts
+ * interpolate('You send {amount}', { amount: '$100.00' }); // 'You send $100.00'
+ * ```
+ */
+export function interpolate(template: string, vars: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_match, key: string) => {
+    const val = vars[key];
+    return val !== undefined ? String(val) : `{${key}}`;
+  });
+}
+
+/**
+ * Formats the ErrorSummary title with singular/plural copy for validation errors.
+ * @example
+ * ```ts
+ * formatSummaryTitle(1); // 'Fix 1 problem to continue'
+ * formatSummaryTitle(2); // 'Fix 2 problems to continue'
+ * ```
+ */
+export function formatSummaryTitle(count: number): string {
+  if (count === 1) {
+    return 'Fix 1 problem to continue';
+  }
+  return interpolate(COPY['form.summary.title'], { n: count });
+}
+
+/**
+ * Creates MoneyInput error message map for a given locale.
+ * @example
+ * ```ts
+ * const messages = createMoneyInputMessages('en-US');
+ * messages.EMPTY({ code: 'EMPTY', currency: 'USD' });
+ * ```
+ */
+export function createMoneyInputMessages(
+  locale: LocaleCode,
+): Record<ParseErrorCode, (ctx: ParseError & { currency: CurrencyCode }) => string> {
+  return {
+    EMPTY: () => COPY['error.EMPTY'],
+    NOT_A_NUMBER: () => COPY['error.NOT_A_NUMBER'],
+    NEGATIVE_NOT_ALLOWED: () => COPY['error.NEGATIVE_NOT_ALLOWED'],
+    MULTIPLE_DECIMAL_SEPARATORS: () => COPY['error.MULTIPLE_DECIMAL_SEPARATORS'],
+    INVALID_GROUPING: () => COPY['error.INVALID_GROUPING'],
+    TOO_MANY_DECIMALS: (ctx) => {
+      if (ctx.maxDecimals === 0) {
+        return `${ctx.currency} has no decimals. Enter a whole number.`;
+      }
+      return interpolate(COPY['error.TOO_MANY_DECIMALS'], {
+        currency: ctx.currency,
+        maxDecimals: ctx.maxDecimals ?? 2,
+      });
+    },
+    ZERO_NOT_ALLOWED: () => COPY['error.ZERO_NOT_ALLOWED'],
+    BELOW_MIN: (ctx) =>
+      interpolate(COPY['error.BELOW_MIN'], {
+        limit: formatMoney({ currency: ctx.currency, minor: ctx.limitMinor ?? 0 }, { locale }),
+      }),
+    ABOVE_MAX: (ctx) =>
+      interpolate(COPY['error.ABOVE_MAX'], {
+        limit: formatMoney({ currency: ctx.currency, minor: ctx.limitMinor ?? 0 }, { locale }),
+      }),
+    UNSAFE_MAGNITUDE: () => COPY['error.UNSAFE_MAGNITUDE'],
+  };
+}
+
+/**
+ * Gets user-facing rejection message for a service rejection error code.
+ * @example
+ * ```ts
+ * getRejectionMessage('INSUFFICIENT_FUNDS');
+ * ```
+ */
+export function getRejectionMessage(code: string): string {
+  const key = `result.rejected.${code}` as CopyKey;
+  return COPY[key] ?? COPY['submit.invalid_response'];
+}

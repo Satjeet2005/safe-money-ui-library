@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
 import { setAccounts, setRecipients } from '../store/dataSlice.js';
@@ -85,9 +85,9 @@ describe('SendForm (FORM-01..FORM-06)', () => {
     expect(recipientSelect).toHaveAttribute('aria-invalid', 'true');
     expect(recipientSelect).toHaveAttribute('aria-describedby', 'recipient-error');
 
-    const fieldError = screen.getByText('Choose a recipient.');
-    expect(fieldError).toBeInTheDocument();
-    expect(fieldError.id).toBe('recipient-error');
+    const fieldError = document.getElementById('recipient-error');
+    expect(fieldError).not.toBeNull();
+    expect(fieldError).toHaveTextContent('Choose a recipient.');
 
     const summary = screen.getByRole('alert');
     expect(summary).toBeInTheDocument();
@@ -140,14 +140,17 @@ describe('SendForm (FORM-01..FORM-06)', () => {
 
   it('FORM-04: summary title uses exact copy-table wording for singular and plural errors', async () => {
     // 1 error case
-    const { store: store1 } = setup({ recipientId: 'rcp-001', amountText: '' });
+    setup({ recipientId: 'rcp-001', amountText: '' });
     fireEvent.click(screen.getByRole('button', { name: 'Review transfer' }));
     expect(screen.getByRole('alert')).toHaveTextContent('Fix 1 problem to continue');
 
+    cleanup();
+    sessionStorage.clear();
+
     // 2 errors case
-    const { store: store2 } = setup({ recipientId: null, amountText: '' });
-    fireEvent.click(screen.getAllByRole('button', { name: 'Review transfer' })[1]!);
-    expect(screen.getAllByRole('alert')[1]).toHaveTextContent('Fix 2 problems to continue');
+    setup({ recipientId: null, amountText: '' });
+    fireEvent.click(screen.getByRole('button', { name: 'Review transfer' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Fix 2 problems to continue');
   });
 
   it('FORM-05: insufficient funds including fee rejects transfer without requesting quote', async () => {
@@ -173,7 +176,7 @@ describe('SendForm (FORM-01..FORM-06)', () => {
   it('FORM-06: insufficient funds error formats available balance in source-account currency and current locale', async () => {
     // Source account USD, draft locale en-US, balance $5,000.00
     // Recipient currency EUR.
-    const { store } = setup({ recipientId: 'rcp-001', amountText: '5000.00' });
+    setup({ recipientId: 'rcp-001', amountText: '5000.00' });
 
     fireEvent.click(screen.getByRole('button', { name: 'Review transfer' }));
 
