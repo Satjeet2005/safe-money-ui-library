@@ -111,17 +111,17 @@ export function createSubmitController<TIn, TOut>(
         }
         clearActiveTimer();
         const parsed = options.parseResponse(raw);
-        const prev = state;
-        let next = prev;
+        const prev: SubmitState<TIn, TOut> = state;
+        let next: SubmitState<TIn, TOut> = prev;
         if (parsed.ok) {
-          next = machine.reduce(state, { type: 'RESOLVE', requestId, result: parsed.value });
+          next = machine.reduce(prev, { type: 'RESOLVE', requestId, result: parsed.value });
         } else {
           const err: SubmitError = {
             kind: 'invalid_response',
             retryable: true,
             message: parsed.message || invalidResponseMessage,
           };
-          next = machine.reduce(state, { type: 'REJECT', requestId, error: err });
+          next = machine.reduce(prev, { type: 'REJECT', requestId, error: err });
         }
         if (prev !== next) {
           state = next;
