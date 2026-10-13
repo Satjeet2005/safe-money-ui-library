@@ -67,3 +67,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Injected Scheduler, AbortController, Promise orchestration, Event notifications.
 - **Concept:** Orchestration layer driving the pure submit state machine alongside real-world side effects (timeouts, abort signals, idempotency tokens, response parsing, and listener subscriptions).
 - **How it works:** Starts configurable timeout timer with `scheduler.setTimeout` concurrently with async `run`; dispatches `REJECT` and aborts on timeout; ignores stale/late responses after timeout or disposal via active `requestId` checks; handles network failure and typed `SubmitRejection` distinctions; guarantees listener notifications fire only on true state reference mutations.
+
+## WP-12: Generic Review Guard
+
+- **Tools used:** TypeScript generics, `Object.freeze`, `Object.is` value equality.
+- **Concept:** Client-side consistency verification protecting high-risk money actions against silent parameter mutations between confirmation preview and final submit.
+- **How it works:** Stores a frozen shallow clone upon `capture`; evaluates live vs snapshot values using `Object.is` across the symmetric key union; accurately detects added, modified, or removed keys while failing safely when no snapshot exists.
