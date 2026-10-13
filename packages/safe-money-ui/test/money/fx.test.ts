@@ -1,4 +1,4 @@
-import { CURRENCIES, MAX_MINOR, createMoney } from '../../src/money/currencies.js';
+import { MAX_MINOR, createMoney } from '../../src/money/currencies.js';
 import { PER_USD_MICRO, convert } from '../../src/money/fx.js';
 import type { CurrencyCode, Money } from '../../src/money/types.js';
 
