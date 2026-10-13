@@ -73,3 +73,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** TypeScript generics, `Object.freeze`, `Object.is` value equality.
 - **Concept:** Client-side consistency verification protecting high-risk money actions against silent parameter mutations between confirmation preview and final submit.
 - **How it works:** Stores a frozen shallow clone upon `capture`; evaluates live vs snapshot values using `Object.is` across the symmetric key union; accurately detects added, modified, or removed keys while failing safely when no snapshot exists.
+
+## WP-13: Zod Boundary Helper
+
+- **Tools used:** Zod schema validation, safe parse pattern, error redaction.
+- **Concept:** Defensive parsing layer insulating application internals against malformed or hostile external data from network APIs or browser events.
+- **How it works:** Wraps `schema.safeParse` in `parseBoundary` returning a typed `{ ok: true, value } | { ok: false, error }` result without throwing; formats issue paths cleanly (`$` for root, dot notation for nested); caps error issues at 10 items to prevent log pollution; strictly prevents raw unvalidated values or sensitive payload strings from leaking into error messages or serialization.
