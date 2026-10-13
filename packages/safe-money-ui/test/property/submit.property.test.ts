@@ -10,35 +10,6 @@ import { createFakeScheduler } from '../helpers/fakeScheduler.js';
 import { createDeferred, type Deferred } from '../helpers/deferred.js';
 import { getPropertyConfig } from '../helpers/arbitraries.js';
 
-type Command =
-  | { type: 'submit'; n: number }
-  | { type: 'retry' }
-  | { type: 'reset' }
-  | { type: 'resolveCurrent' }
-  | { type: 'resolveStale' }
-  | { type: 'rejectCurrent'; kind: SubmitErrorKind }
-  | { type: 'rejectStale' }
-  | { type: 'fireTimeout' }
-  | { type: 'dispose' };
-
-const commandArb = fc.commands(
-  [
-    fc.record({ type: fc.constant('submit' as const), n: fc.integer({ min: 1, max: 10_000 }) }),
-    fc.constant({ type: 'retry' as const }),
-    fc.constant({ type: 'reset' as const }),
-    fc.constant({ type: 'resolveCurrent' as const }),
-    fc.constant({ type: 'resolveStale' as const }),
-    fc.record({
-      type: fc.constant('rejectCurrent' as const),
-      kind: fc.constantFrom<SubmitErrorKind>('timeout', 'network', 'rejected', 'invalid_response'),
-    }),
-    fc.constant({ type: 'rejectStale' as const }),
-    fc.constant({ type: 'fireTimeout' as const }),
-    fc.constant({ type: 'dispose' as const }),
-  ],
-  { maxCommands: 40 },
-);
-
 describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
   // Part 1: Reducer-only harness
   it('P6 (reducer-only): invariant checks on state transitions and ignored event identity', () => {
@@ -81,7 +52,7 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
           let prevRequestId = 0;
 
           for (const event of events) {
-            const prevState = state;
+            const prevState: SubmitState<number, string> = state;
             state = machine.reduce(state, event as SubmitEvent<number, string>);
 
             // I7. Any ignored event returns the identical state reference
@@ -164,8 +135,8 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
         async (commands) => {
           const scheduler = createFakeScheduler();
           let inFlightCount = 0;
-          let currentDeferred: Deferred<unknown> | null = null;
-          let staleDeferreds: Deferred<unknown>[] = [];
+          const deferredHolder: { current: Deferred<unknown> | null } = { current: null };
+          const staleDeferreds: Deferred<unknown>[] = [];
           let currentRequestId = 0;
           let currentKey = '';
           let lastAcceptedKey = '';
@@ -180,7 +151,7 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
               totalRunCalls++;
               inFlightCount++;
               const d = createDeferred<unknown>();
-              currentDeferred = d;
+              deferredHolder.current = d;
               ctx.signal.addEventListener('abort', () => {
                 // If controller aborted due to timeout or dispose, settle the run promise as aborted
                 d.reject(new Error('Aborted'));
@@ -228,10 +199,11 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
                 break;
               }
               case 'resolveCurrent': {
-                if (currentDeferred) {
-                  currentDeferred.resolve({ val: 42 });
-                  staleDeferreds.push(currentDeferred);
-                  currentDeferred = null;
+                const target = deferredHolder.current;
+                if (target !== null) {
+                  target.resolve({ val: 42 });
+                  staleDeferreds.push(target);
+                  deferredHolder.current = null;
                 }
                 break;
               }
@@ -242,16 +214,17 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
                 break;
               }
               case 'rejectCurrent': {
-                if (currentDeferred) {
+                const target = deferredHolder.current;
+                if (target !== null) {
                   if (cmd.kind === 'rejected') {
-                    currentDeferred.reject(new SubmitRejection('Rejected', 'BIZ_ERR', false));
+                    target.reject(new SubmitRejection('Rejected', 'BIZ_ERR', false));
                   } else if (cmd.kind === 'invalid_response') {
-                    currentDeferred.resolve({ bad: true });
+                    target.resolve({ bad: true });
                   } else {
-                    currentDeferred.reject(new Error('Network drop'));
+                    target.reject(new Error('Network drop'));
                   }
-                  staleDeferreds.push(currentDeferred);
-                  currentDeferred = null;
+                  staleDeferreds.push(target);
+                  deferredHolder.current = null;
                 }
                 break;
               }
@@ -263,9 +236,9 @@ describe('Property P6: Submit Invariants I1..I7 (PRD §9.5, §14.3)', () => {
               }
               case 'fireTimeout': {
                 scheduler.advance(5000);
-                if (currentDeferred) {
-                  staleDeferreds.push(currentDeferred);
-                  currentDeferred = null;
+                if (deferredHolder.current !== null) {
+                  staleDeferreds.push(deferredHolder.current);
+                  deferredHolder.current = null;
                 }
                 break;
               }
