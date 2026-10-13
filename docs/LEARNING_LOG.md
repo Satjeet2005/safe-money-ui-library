@@ -110,3 +110,8 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Concept:** Accessible, resilient React UI primitives and hooks wrapping core money parsing, formatting, submit state machine, and review guard logic.
 - **How it works:** `MoneyInput` maintains raw user text while providing live polite formatted previews and syncing with `parseAmount`/`formatAmountInput` without floating-point math; `ErrorSummary` announces error groups via `role="alert"` and shifts focus smoothly to invalid target elements upon `focusKey` changes; `useSafeSubmit` orchestrates submit lifecycles through a stable `SubmitController` ref connected via `useSyncExternalStore` and automatically disposes on unmount; `useReviewGuard` exposes a stable review guard instance across renders.
 
+## WP-19: Send Form, Copy, Draft Persistence, and App Shell
+
+- **Tools used:** React 18, Redux Toolkit, Zod runtime schema validation, sessionStorage API, React Testing Library.
+- **Concept:** End-to-end form orchestration integrating library primitives, Redux state, defensive boundary validation, and centralized localization without hard-coded string literals.
+- **How it works:** `SendForm` coordinates recipient/account/locale selection with `MoneyInput`, client-side fee-inclusive balance validation, and ordered accessible `ErrorSummary` error dispatch; `draftStorage` safely round-trips supported draft fields through `sessionStorage['smu.draft.v1']` with Zod boundary verification, immediately discarding invalid schemas and notifying the user via a polite warning banner while preventing stale auto-resaves.
