@@ -261,12 +261,14 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
   test('SV-08: Late response delays first delivery and retry returns same transfer ID', async () => {
     jest.useFakeTimers();
     try {
-      const { service } = setupService({ lateResponseMs: 15000 });
+      const { service, setChaos } = setupService();
       const q = (await service.getQuote({
         recipientId: 'rcp-001',
         sourceCurrency: 'USD',
         sourceMinor: 10000,
       })) as any;
+
+      setChaos({ lateResponseMs: 15000 });
 
       const req = {
         idempotencyKey: 'idem-late-resp',
@@ -277,9 +279,10 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
       };
 
       const transferPromise = service.submitTransfer(req);
-
-      // Advance timers by 15,000 ms
+      // Give asynchronous execution steps a tick to reach sleep
+      await Promise.resolve();
       jest.advanceTimersByTime(15000);
+
       const first = (await transferPromise) as any;
       expect(first.transferId).toBe('TRF-000001');
       expect(service.debug.executedCount()).toBe(1);
@@ -324,12 +327,14 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
 
   // SV-10: Malformed delivery removes transferId and changes status to 'done'
   test('SV-10: malformedPayload deletes transferId and changes status to done', async () => {
-    const { service } = setupService({ malformedPayload: true });
+    const { service, setChaos } = setupService();
     const q = (await service.getQuote({
       recipientId: 'rcp-001',
       sourceCurrency: 'USD',
       sourceMinor: 10000,
     })) as any;
+
+    setChaos({ malformedPayload: true });
 
     const resp = (await service.submitTransfer({
       idempotencyKey: 'idem-malformed',
@@ -370,9 +375,16 @@ describe('WP-15C: Simulated Service (SV-01..SV-12)', () => {
 
   // SV-12: Configured latency delays resolution by exactly latencyMs
   test('SV-12: Configured latency delays resolution by latencyMs', async () => {
-    const { service, sleepCalls } = setupService({ latencyMs: 500 });
-    await service.getAccounts();
-    expect(sleepCalls.length).toBe(1);
-    expect(sleepCalls[0]!.ms).toBe(500);
+    jest.useFakeTimers();
+    try {
+      const { service, sleepCalls } = setupService({ latencyMs: 500 });
+      const accountsPromise = service.getAccounts();
+      expect(sleepCalls.length).toBe(1);
+      expect(sleepCalls[0]!.ms).toBe(500);
+      jest.advanceTimersByTime(500);
+      await accountsPromise;
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
