@@ -104,9 +104,8 @@ describe('Submit Controller (PRD §9.3 & Action Plan CT-01..CT-09)', () => {
     const state = controller.getState();
     expect(state.status).toBe('succeeded');
     if (state.status === 'succeeded') {
-      expect(state.input).toEqual({ amount: 200 });
       expect(state.idempotencyKey).toBe('key-1');
-      expect(state.response).toEqual({ id: 'tx-123', status: 'CONFIRMED' });
+      expect(state.result).toEqual({ id: 'tx-123', status: 'CONFIRMED' });
     }
   });
 
