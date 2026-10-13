@@ -91,3 +91,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Zod schema validation, BigInt exact math, in-memory stateful mock service, injected clock and timer scheduling.
 - **Concept:** A zero-backend deterministic simulated money transfer service capable of reproducing real-world distributed systems faults (lost responses, hanging connections, delayed responses, malformed payloads, rate shifts, and duplicate requests).
 - **How it works:** Enforces boundary validation through strict schemas stripping unknown keys; computes exchange rates and fees using lossless integer math; maintains an in-memory idempotency store with request fingerprinting; models one-shot fault behaviors (e.g., throwing network error after debiting for lost-response, but replaying successfully on retry) verified under 12 targeted service test cases (SV-01..SV-12).
+
+## WP-16: Chaos Configuration, URL Presets, and Deterministic Debug Hook
+
+- **Tools used:** URLSearchParams parsing, Zod boundary validation, sessionStorage / localStorage mutation, global test hooks (`window.__smu`).
+- **Concept:** Declarative fault-injection configuration driven by UI state and URL presets, combined with deterministic reproducible test modes.
+- **How it works:** Parses predefined presets (`hang`, `late`, `lost`, `shift`, `reject`, `all`) and granular boolean overrides from browser search parameters; applies corrupt storage mutations on demand; installs `window.__smu` debug harness in deterministic mode with sequential `idem-000001` keys and snapshot retrieval.

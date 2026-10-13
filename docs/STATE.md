@@ -5,7 +5,7 @@ REPO_URL: <unset>
 DEMO_URL: <unset>
 VIDEO_URL: <unset>
 NPM_SCOPE: <unset>
-CURRENT_WP: WP-16
+CURRENT_WP: WP-17
 EXTERNAL_CODE_COPIED: none
 
 ## Work Package History
@@ -25,3 +25,4 @@ EXTERNAL_CODE_COPIED: none
 - WP-13 done 2026-10-13 66834ef
 - WP-14 done 2026-10-13 0d56207
 - WP-15 done 2026-10-13 43eb3a1
+- WP-16 done 2026-10-13 46455cb
