@@ -181,6 +181,11 @@ describe('formatAmountInput - Locale separators and grouping', () => {
     expect(() => formatAmountInput({ currency: 'USD', minor: -5 }, 'en-US')).toThrow(RangeError);
     expect(() => formatAmountInput({ currency: 'USD', minor: 1.5 }, 'en-US')).toThrow(RangeError);
   });
+
+  it('throws RangeError when money is null or not an object', () => {
+    expect(() => formatAmountInput(null as unknown as Money, 'en-US')).toThrow(RangeError);
+    expect(() => formatAmountInput(undefined as unknown as Money, 'en-US')).toThrow(RangeError);
+  });
 });
 
 describe('formatAmountInput and parseAmount round-trip consistency', () => {

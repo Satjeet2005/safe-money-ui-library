@@ -387,5 +387,17 @@ describe('parseAmount - Algorithm edge cases and validation order', () => {
         locale: 'fr-FR' as unknown as LocaleCode,
       }),
     ).toThrow(RangeError);
+
+    expect(() =>
+      parseAmount('100', null as unknown as { currency: CurrencyCode; locale: LocaleCode }),
+    ).toThrow(RangeError);
+  });
+
+  it('rejects numbers with more than 13 integer digits as UNSAFE_MAGNITUDE at step 9', () => {
+    // 14 digits in integer part
+    expect(parseAmount('10000000000000', { currency: 'USD', locale: 'en-US' })).toEqual({
+      ok: false,
+      error: { code: 'UNSAFE_MAGNITUDE' },
+    });
   });
 });
