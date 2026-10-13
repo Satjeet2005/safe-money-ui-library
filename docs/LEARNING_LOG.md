@@ -25,3 +25,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** TypeScript strict typing, Jest, TDD assertions.
 - **Concept:** Representation of monetary amounts as non-negative safe integers in minor currency units (bounded by `MAX_MINOR = 10^12`) to eliminate floating-point inaccuracies.
 - **How it works:** `CURRENCIES` records exact decimal precision for 7 ISO currencies; `createMoney` acts as the single invariant gate, rejecting negative, fractional, NaN, non-finite, unsafe, or out-of-bounds numbers by throwing `RangeError`.
+
+## WP-05: Locale-Aware Money Parsing
+
+- **Tools used:** TypeScript, Jest, BigInt string-based math, TDD red/green workflow.
+- **Concept:** Deterministic, locale-aware parsing of user string input into integer minor units without IEEE 754 floating-point inaccuracies.
+- **How it works:** Implements a strict 12-step validation pipeline checking trimming, negative signs, locale-permitted separators, canonical grouping regexes, currency-specific decimal bounds, and safe magnitude (`MAX_MINOR = 10^12`) using `BigInt` scaling.
