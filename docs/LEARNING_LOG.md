@@ -181,3 +181,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Node.js `zlib.gzipSync` (level 9), `scripts/size.mjs`, Jest, `scripts/claims-check.mjs`.
 - **Concept:** One-time Phase 4 ratchet preventing size creep by clamping bundle allowances tightly to measured production outputs rather than leaving loose initial estimates.
 - **How it works:** Measured all 4 library ESM entry files and the combined app JS output using gzip level 9; applied the exact PRD formula `ceil((measured * 1.10) / 100) * 100` to establish permanent ceilings (money: 900 B, submit: 200 B, boundary: 400 B, react: 1,700 B, app: 88,900 B); verified that all targets pass with zero failures and that budgets can never be raised again; refreshed the complete metrics ledger in `docs/METRICS.md` with verified command outputs, dates, and equivalent mutants.
+
+## WP-28: Manual Accessibility Checklist and Usability Kit
+
+- **Tools used:** Markdown templates, PRD manual checklist specification, privacy guardrail design.
+- **Concept:** Structured manual accessibility testing protocol and participant usability study framework.
+- **How it works:** Prepared `docs/A11Y_MANUAL.md` with the 6 mandatory PRD checks (screen reader happy/error/unconfirmed, 200%/400% zoom, keyboard only, phone device) and empty result fields to maintain honest claims; created `docs/USABILITY_CHECK.md` defining facilitator scripts, privacy guardrails (only first name and age band), 3 ordered tasks, neutral post-task questions, and 8 participant slots.
