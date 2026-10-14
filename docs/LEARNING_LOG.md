@@ -199,3 +199,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** `pnpm publish --dry-run`, `tsup`, `vercel.json` verification.
 - **Concept:** Package distribution verification, monorepo artifact bundling, and human-in-the-loop release gating.
 - **How it works:** Updated `packages/safe-money-ui/package.json` with a dedicated size verification script and wired `tsup`'s `onSuccess` callback to ensure `dist/styles.css` is packaged into tarball outputs; proved packaging viability with a 34-file dry run; verified Vercel hosting settings; and authored `docs/RELEASE_CHECKLIST.md` covering all manual release steps while maintaining `Q-AI-001` as an explicit release blocker.
+
+## WP-31: Case Study
+
+- **Tools used:** `wc -w`, `scripts/claims-check.mjs`, markdown drafting.
+- **Concept:** Technical case-study authoring, strict word budgeting, and honest limitation reporting.
+- **How it works:** Authored `docs/CASE_STUDY.md` under 600 words (546 words) following the exact PRD section order; omitted the unrecorded bug heading per PRD rules; detailed the idempotent key reuse trade-off; verified metric markers against `docs/METRICS.md`; and passed all claims verification checks.
