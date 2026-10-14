@@ -239,6 +239,7 @@ export function Review({
       <div className="review-actions">
         <button
           type="button"
+          id="confirm-button"
           aria-disabled={submitting ? 'true' : undefined}
           onClick={(e) => {
             if (submitting) {

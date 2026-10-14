@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "test:a11y": "jest -t A11Y-"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",

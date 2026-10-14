@@ -1,6 +1,9 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { DEFAULT_CHAOS_CONFIG } from '../service/chaos.js';
+import { DEFAULT_CHAOS_CONFIG, applyCorruptStorage } from '../service/chaos.js';
 import type { ChaosConfigPayload } from '../service/schemas.js';
+
+export { DEFAULT_CHAOS_CONFIG, applyCorruptStorage };
+export type { ChaosConfigPayload };
 
 export type ChaosState = ChaosConfigPayload & {
   panelOpen: boolean;

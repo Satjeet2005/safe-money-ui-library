@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createAppStore } from './store/store.js';
 import { setAccounts, setAccountsStatus, setRecipientsStatus } from './store/dataSlice.js';
@@ -171,13 +171,23 @@ describe('App shell and integration', () => {
       act(() => {
         store.dispatch(
           goToReview({
-            recipientId: 'rcp-001',
-            quoteId: 'q-000001',
-            sourceCurrency: 'USD',
-            sourceMinor: 10000,
-            feeMinor: 200,
-            targetCurrency: 'EUR',
-            targetMinor: 9200,
+            quote: {
+              quoteId: 'q-000001',
+              source: { currency: 'USD', minor: 10000 },
+              target: { currency: 'EUR', minor: 9200 },
+              feeMinor: 200,
+              rateMicro: 920000,
+              expiresAtMs: 100_000,
+            },
+            snapshot: {
+              recipientId: 'rcp-001',
+              quoteId: 'q-000001',
+              sourceCurrency: 'USD',
+              sourceMinor: 10000,
+              feeMinor: 200,
+              targetCurrency: 'EUR',
+              targetMinor: 9200,
+            },
           }),
         );
       });
@@ -212,4 +222,3 @@ describe('App shell and integration', () => {
     });
   });
 });
-

@@ -1,11 +1,11 @@
-import type { JSX } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, type JSX } from 'react';
+import { useSelector } from 'react-redux';
 import { AccountSummary } from './components/AccountSummary.js';
 import { ChaosPanel } from './components/ChaosPanel.js';
 import { TransferFlow } from './screens/TransferFlow.js';
 import { COPY, UI_LABELS } from './copy.js';
-import type { RootState, AppDispatch } from './store/store.js';
-import { togglePanel } from './store/chaosSlice.js';
+import type { FlowStep } from './store/flowSlice.js';
+import type { RootState } from './store/store.js';
 
 /**
  * Top-level application shell with header, account summary, transfer flow, and activity.
@@ -15,9 +15,21 @@ import { togglePanel } from './store/chaosSlice.js';
  * ```
  */
 export function App(): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
   const historyEntries = useSelector((state: RootState) => state.history.entries);
-  const chaosPanelOpen = useSelector((state: RootState) => state.chaos.panelOpen);
+  const step = useSelector((state: RootState) => state.flow.step);
+
+  useEffect(() => {
+    document.documentElement.lang = 'en';
+  }, []);
+
+  useEffect(() => {
+    const titles: Record<FlowStep, string> = {
+      form: 'Northwind Pay – Send money',
+      review: 'Northwind Pay – Review',
+      result: 'Northwind Pay – Result',
+    };
+    document.title = titles[step];
+  }, [step]);
 
   return (
     <div className="app-container">
@@ -50,11 +62,7 @@ export function App(): JSX.Element {
         )}
       </section>
 
-      <button type="button" onClick={() => dispatch(togglePanel())} className="chaos-toggle-button">
-        {UI_LABELS.chaosButton}
-      </button>
-
-      {chaosPanelOpen && <ChaosPanel />}
+      <ChaosPanel />
     </div>
   );
 }

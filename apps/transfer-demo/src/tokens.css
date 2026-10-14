@@ -23,4 +23,94 @@ body {
   line-height: 1.5;
   background-color: var(--color-bg);
   color: var(--color-text);
+  overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+button {
+  min-height: 44px;
+  min-width: 44px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.banner {
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  margin: var(--space-2) 0;
+}
+
+.banner-info {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.banner-warning {
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+}
+
+.banner-error {
+  background-color: #fef2f2;
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+}
+
+.chaos-panel-container {
+  margin-top: var(--space-4);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#chaos-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  background-color: var(--color-surface);
+}
+
+.chaos-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.chaos-group legend {
+  font-weight: 600;
+  padding: 0 var(--space-1);
+}
+
+.chaos-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chaos-radios,
+.chaos-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chaos-radios label,
+.chaos-checkboxes label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.chaos-radios input[type='radio'],
+.chaos-checkboxes input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
 }

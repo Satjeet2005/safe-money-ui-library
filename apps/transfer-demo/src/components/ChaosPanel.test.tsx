@@ -1,8 +1,8 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { axe } from 'jest-axe';
 import { createAppStore } from '../store/store.js';
-import { setChaos, togglePanel } from '../store/chaosSlice.js';
+import { setChaos, togglePanel, type ChaosConfigPayload } from '../store/chaosSlice.js';
 import { setAmountText, setSourceCurrency, setLocale } from '../store/draftSlice.js';
 import { ChaosPanel } from './ChaosPanel.js';
 import { COPY } from '../copy.js';
@@ -50,10 +50,9 @@ describe('ChaosPanel component (WP-22)', () => {
       const section = document.getElementById('chaos-panel');
       expect(section).toBeInTheDocument();
       expect(section).toHaveAttribute('aria-labelledby', 'chaos-heading');
-      expect(screen.getByRole('heading', { level: 2, name: COPY['chaos.heading'] })).toHaveAttribute(
-        'id',
-        'chaos-heading',
-      );
+      expect(
+        screen.getByRole('heading', { level: 2, name: COPY['chaos.heading'] }),
+      ).toHaveAttribute('id', 'chaos-heading');
       expect(screen.getByText(COPY['chaos.helper'])).toBeInTheDocument();
     });
 
@@ -76,8 +75,11 @@ describe('ChaosPanel component (WP-22)', () => {
   });
 
   describe('Presets', () => {
-    function renderOpenPanel() {
+    function renderOpenPanel(initialChaos?: Partial<ChaosConfigPayload>) {
       const store = createAppStore();
+      if (initialChaos) {
+        store.dispatch(setChaos(initialChaos));
+      }
       store.dispatch(togglePanel());
       render(
         <Provider store={store}>
@@ -88,9 +90,7 @@ describe('ChaosPanel component (WP-22)', () => {
     }
 
     it('Slow network preset resets configuration to defaults and sets latencyMs: 3000', () => {
-      const store = renderOpenPanel();
-      // Set some dirty settings first
-      store.dispatch(setChaos({ hangForever: true, rejectWith: 'INSUFFICIENT_FUNDS' }));
+      const store = renderOpenPanel({ hangForever: true, rejectWith: 'INSUFFICIENT_FUNDS' });
 
       fireEvent.click(screen.getByRole('button', { name: 'Slow network' }));
 
@@ -101,8 +101,7 @@ describe('ChaosPanel component (WP-22)', () => {
     });
 
     it('Timeout then recover preset resets configuration to defaults and sets hangForever: true', () => {
-      const store = renderOpenPanel();
-      store.dispatch(setChaos({ latencyMs: 3000, rateMoves: true }));
+      const store = renderOpenPanel({ latencyMs: 3000, rateMoves: true });
 
       fireEvent.click(screen.getByRole('button', { name: 'Timeout then recover' }));
 
@@ -113,8 +112,7 @@ describe('ChaosPanel component (WP-22)', () => {
     });
 
     it('Lost response preset resets configuration to defaults and sets loseResponse: true', () => {
-      const store = renderOpenPanel();
-      store.dispatch(setChaos({ malformedPayload: true }));
+      const store = renderOpenPanel({ malformedPayload: true });
 
       fireEvent.click(screen.getByRole('button', { name: 'Lost response' }));
 
@@ -124,8 +122,7 @@ describe('ChaosPanel component (WP-22)', () => {
     });
 
     it('Bad payload preset resets configuration to defaults and sets malformedPayload: true', () => {
-      const store = renderOpenPanel();
-      store.dispatch(setChaos({ lateResponseMs: 15000 }));
+      const store = renderOpenPanel({ lateResponseMs: 15000 });
 
       fireEvent.click(screen.getByRole('button', { name: 'Bad payload' }));
 
@@ -155,9 +152,10 @@ describe('ChaosPanel component (WP-22)', () => {
         </Provider>,
       );
 
-      const noneRadio = screen.getByRole('radio', { name: 'None' });
-      const r500 = screen.getByRole('radio', { name: '500 ms' });
-      const r3s = screen.getByRole('radio', { name: '3 s' });
+      const group = screen.getByRole('group', { name: 'Latency' });
+      const noneRadio = within(group).getByRole('radio', { name: 'None' });
+      const r500 = within(group).getByRole('radio', { name: '500 ms' });
+      const r3s = within(group).getByRole('radio', { name: '3 s' });
 
       expect(noneRadio).toBeChecked();
       expect(r500).not.toBeChecked();
@@ -187,10 +185,11 @@ describe('ChaosPanel component (WP-22)', () => {
         </Provider>,
       );
 
-      const rNone = screen.getByRole('radio', { name: 'None' });
-      const rFunds = screen.getByRole('radio', { name: 'Insufficient funds' });
-      const rBlocked = screen.getByRole('radio', { name: 'Recipient blocked' });
-      const rUnavailable = screen.getByRole('radio', { name: 'Service unavailable' });
+      const group = screen.getByRole('group', { name: 'Server rejection' });
+      const rNone = within(group).getByRole('radio', { name: 'None' });
+      const rFunds = within(group).getByRole('radio', { name: 'Insufficient funds' });
+      const rBlocked = within(group).getByRole('radio', { name: 'Recipient blocked' });
+      const rUnavailable = within(group).getByRole('radio', { name: 'Service unavailable' });
 
       expect(rNone).toBeChecked();
 

@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "test": "pnpm -r test",
     "test:property": "pnpm --filter @satjeet2005/safe-money-ui test:property",
-    "test:a11y": "pnpm --filter @satjeet2005/safe-money-ui test:a11y",
+    "test:a11y": "pnpm --filter @satjeet2005/safe-money-ui test:a11y && pnpm --filter transfer-demo test:a11y",
     "build": "pnpm --filter @satjeet2005/safe-money-ui build && pnpm --filter transfer-demo build",
     "size": "node scripts/size.mjs",
     "e2e": "echo \"e2e will be implemented in WP-24\"",
