@@ -2,12 +2,12 @@
 
 | key                    | value        | command that produced it | date (YYYY-MM-DD) |
 | ---------------------- | ------------ | ------------------------ | ----------------- |
-| tests_total            | 388          | pnpm test                | 2026-10-14        |
-| tests_passed           | 388          | pnpm test                | 2026-10-14        |
+| tests_total            | 401          | pnpm test                | 2026-10-14        |
+| tests_passed           | 401          | pnpm test                | 2026-10-14        |
 | property_runs          | 1000         | pnpm test:property       | 2026-10-14        |
-| mutation_score         | not measured | pnpm mutation            | 2026-10-12        |
-| mutants_killed         | not measured | pnpm mutation            | 2026-10-12        |
-| mutants_survived       | not measured | pnpm mutation            | 2026-10-12        |
+| mutation_score         | 90.63%       | pnpm mutation            | 2026-10-14        |
+| mutants_killed         | 522          | pnpm mutation            | 2026-10-14        |
+| mutants_survived       | 53           | pnpm mutation            | 2026-10-14        |
 | coverage_lines         | not measured | pnpm test --coverage     | 2026-10-12        |
 | coverage_branches      | not measured | pnpm test --coverage     | 2026-10-12        |
 | size_money_gz          | 737 B        | pnpm size                | 2026-10-14        |
@@ -21,4 +21,4 @@
 
 ## Equivalent Mutants
 
-None recorded yet.
+- `src/money/fee.ts:62`: `rawFeeBig <= minFeeBig` (mutated from `rawFeeBig < minFeeBig`). Reason: When `rawFeeBig === minFeeBig` (100n), both branches produce 100n, rendering `<=` functionally identical to `<` across all inputs.

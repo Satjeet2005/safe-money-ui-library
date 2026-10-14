@@ -169,3 +169,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** `jest-axe`, `cypress-axe`, WCAG 2.2 AA rule tags, React Testing Library.
 - **Concept:** Exhaustive automated accessibility verification across all primary component and application states with zero rule exclusions except jsdom's documented lack of layout engine for `color-contrast`.
 - **How it works:** Verified initial empty forms, active validation error states with linked focus targets, five variations of `MoneyInput`, `ErrorSummary` container semantics, default and banner-adorned review screens, and all terminal result states (succeeded, unconfirmed, and rejected), yielding zero Axe violations across both `pnpm test:a11y` and `pnpm e2e:a11y`.
+
+## WP-26: Mutation Testing with Stryker
+
+- **Tools used:** Stryker 8.x (`@stryker-mutator/core`, `@stryker-mutator/jest-runner`, `@stryker-mutator/typescript-checker`), Jest, Fast-Check.
+- **Concept:** Validating test suite discrimination power by systematically injecting syntactic and logical mutations into core money and submit modules.
+- **How it works:** Configured Stryker over `src/money/**/*.ts` and `src/submit/**/*.ts` using `perTest` coverage analysis and `FC_NUM_RUNS=50` to maintain deterministic property test execution within Stryker timeouts; resolved pnpm isolated package directory challenges by explicitly referencing plugin package names; added targeted unit tests for `SubmitRejection` identity, consecutive retry request IDs, listener unsubscribes, disposal idempotency, boundary ceiling math, and error message fallbacks, lifting mutation score from 82.78% to 90.63% (522 mutants killed, 53 survived, 1 equivalent mutant documented), comfortably exceeding the 80% break threshold.
