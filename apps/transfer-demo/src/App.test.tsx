@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createAppStore } from './store/store.js';
 import { setAccounts, setAccountsStatus, setRecipientsStatus } from './store/dataSlice.js';
 import { addEntry } from './store/historySlice.js';
+import { goToForm, goToReview, goToResult } from './store/flowSlice.js';
 import { App } from './App.js';
 import { DRAFT_STORAGE_KEY } from './persistence/draftStorage.js';
 import type { MockService } from './service/mockService.js';
@@ -119,4 +120,96 @@ describe('App shell and integration', () => {
     ).toBeInTheDocument();
     expect(sessionStorage.getItem(DRAFT_STORAGE_KEY)).toBeNull();
   });
+
+  describe('Document title and landmarks (AC-11)', () => {
+    it('sets HTML root language to "en"', () => {
+      const store = createAppStore({ service: dummyService });
+      render(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+      expect(document.documentElement.lang).toBe('en');
+    });
+
+    it('contains semantic header and main landmarks and demo notice aside', () => {
+      const store = createAppStore({ service: dummyService });
+      store.dispatch(setAccountsStatus('ready'));
+      store.dispatch(setRecipientsStatus('ready'));
+      render(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+
+      const headers = screen.getAllByRole('banner');
+      expect(headers).toHaveLength(1);
+
+      const mains = screen.getAllByRole('main');
+      expect(mains).toHaveLength(1);
+
+      const demoNotice = screen.getByRole('complementary', { name: 'Demo notice' });
+      expect(demoNotice).toBeInTheDocument();
+      expect(demoNotice.tagName.toLowerCase()).toBe('aside');
+    });
+
+    it('synchronizes document title with the active flow step', () => {
+      const store = createAppStore({ service: dummyService });
+      store.dispatch(setAccountsStatus('ready'));
+      store.dispatch(setRecipientsStatus('ready'));
+
+      const { rerender } = render(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+
+      // Default: form step
+      expect(document.title).toBe('Northwind Pay – Send money');
+
+      // Review step
+      act(() => {
+        store.dispatch(
+          goToReview({
+            recipientId: 'rcp-001',
+            quoteId: 'q-000001',
+            sourceCurrency: 'USD',
+            sourceMinor: 10000,
+            feeMinor: 200,
+            targetCurrency: 'EUR',
+            targetMinor: 9200,
+          }),
+        );
+      });
+      rerender(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+      expect(document.title).toBe('Northwind Pay – Review');
+
+      // Result step
+      act(() => {
+        store.dispatch(goToResult());
+      });
+      rerender(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+      expect(document.title).toBe('Northwind Pay – Result');
+
+      // Returning to form
+      act(() => {
+        store.dispatch(goToForm());
+      });
+      rerender(
+        <Provider store={store}>
+          <App />
+        </Provider>,
+      );
+      expect(document.title).toBe('Northwind Pay – Send money');
+    });
+  });
 });
+
