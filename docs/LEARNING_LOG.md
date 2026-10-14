@@ -175,3 +175,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Stryker 8.x (`@stryker-mutator/core`, `@stryker-mutator/jest-runner`, `@stryker-mutator/typescript-checker`), Jest, Fast-Check.
 - **Concept:** Validating test suite discrimination power by systematically injecting syntactic and logical mutations into core money and submit modules.
 - **How it works:** Configured Stryker over `src/money/**/*.ts` and `src/submit/**/*.ts` using `perTest` coverage analysis and `FC_NUM_RUNS=50` to maintain deterministic property test execution within Stryker timeouts; resolved pnpm isolated package directory challenges by explicitly referencing plugin package names; added targeted unit tests for `SubmitRejection` identity, consecutive retry request IDs, listener unsubscribes, disposal idempotency, boundary ceiling math, and error message fallbacks, lifting mutation score from 82.78% to 90.63% (522 mutants killed, 53 survived, 1 equivalent mutant documented), comfortably exceeding the 80% break threshold.
+
+## WP-27: Size Budgets, Budget Ratchet and Metrics Refresh
+
+- **Tools used:** Node.js `zlib.gzipSync` (level 9), `scripts/size.mjs`, Jest, `scripts/claims-check.mjs`.
+- **Concept:** One-time Phase 4 ratchet preventing size creep by clamping bundle allowances tightly to measured production outputs rather than leaving loose initial estimates.
+- **How it works:** Measured all 4 library ESM entry files and the combined app JS output using gzip level 9; applied the exact PRD formula `ceil((measured * 1.10) / 100) * 100` to establish permanent ceilings (money: 900 B, submit: 200 B, boundary: 400 B, react: 1,700 B, app: 88,900 B); verified that all targets pass with zero failures and that budgets can never be raised again; refreshed the complete metrics ledger in `docs/METRICS.md` with verified command outputs, dates, and equivalent mutants.
