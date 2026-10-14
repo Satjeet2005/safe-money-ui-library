@@ -217,3 +217,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Markdown structural validation, word count verification scripts, source code dependency tracing.
 - **Concept:** Translating codebase architecture, testing methodology, and failure modes into structured interview preparation resources.
 - **How it works:** Authored 13 deep-dive module explainers using strict 6-heading templates and <=12-step flows, created 24 first-person interview answers under 120 words grounded in real test IDs and metrics, and synthesized lessons learned across Redux Toolkit, Jest, and Cypress without rewriting historical records.
+
+## Visual Redesign Phase 1: Presentation Regression Tests and Visual Acceptance Map
+
+- **Tools used:** Testing Library, Jest, Cypress, axe-core, Markdown traceability matrix.
+- **Concept:** Establishing an immutable behavior and presentation regression safety net prior to any visual design or CSS modifications.
+- **How it works:** Reconciled Phase 0 E2E test counts across `pnpm e2e` (20 tests across 9 specs) and `pnpm e2e:a11y` (14 tests across 5 specs); created `docs/VISUAL_ACCEPTANCE.md` mapping all 14 visual PRD requirements (VIS-01 through VIS-14) to components and automated/manual tests; authored `apps/transfer-demo/src/presentation.test.tsx` containing 12 unit/integration presentation tests (PR-01 through PR-12) asserting landmark structure, form step controls, error summaries, review breakdown, chaos presets/radios/checkboxes, unconfirmed/rejected/succeeded states, and recent activity history without altering any runtime or styling code.
