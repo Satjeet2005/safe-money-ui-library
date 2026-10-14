@@ -172,7 +172,12 @@ export function TransferFlow({
   }
   const clock = injectedClock ?? store.extra?.clock ?? systemClock;
 
-  const { state: controllerState, submit } = useFlowController({
+  const {
+    state: controllerState,
+    submit,
+    retry,
+    reset,
+  } = useFlowController({
     service,
     scheduler,
     newKey,
@@ -205,6 +210,6 @@ export function TransferFlow({
         />
       );
     case 'result':
-      return <Result />;
+      return <Result state={controllerState} onRetry={retry} onReset={reset} />;
   }
 }

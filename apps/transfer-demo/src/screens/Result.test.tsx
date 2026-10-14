@@ -1,11 +1,10 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
 import { setAccounts, setRecipients } from '../store/dataSlice.js';
 import { setRecipient, setSourceCurrency, setAmountText } from '../store/draftSlice.js';
 import { goToReview, goToResult, type ReviewSnapshot } from '../store/flowSlice.js';
 import { Result } from './Result.js';
-import { TransferFlow } from './TransferFlow.js';
 import { SendForm } from './SendForm.js';
 import { Review } from './Review.js';
 import { COPY } from '../copy.js';
@@ -98,15 +97,18 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       const store = setupStore();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'succeeded',
-        input: sampleInput,
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
         result: sampleSuccessResult,
       };
 
-      render(
-        <Provider store={store}>
-          <Result state={state} onReset={jest.fn()} />
-        </Provider>,
-      );
+      act(() => {
+        render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} />
+          </Provider>,
+        );
+      });
 
       expect(
         screen.getByRole('heading', { level: 1, name: COPY['result.success.heading'] }),
@@ -122,7 +124,7 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       ).toBeInTheDocument();
     });
 
-    it('triggers exactly-once completed history entry, draft reset, storage cleared, and accounts reload', () => {
+    it('triggers exactly-once completed history entry, draft reset, storage cleared, and accounts reload', async () => {
       const store = setupStore();
       saveDraft({
         version: 1,
@@ -133,15 +135,20 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
 
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'succeeded',
-        input: sampleInput,
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
         result: sampleSuccessResult,
       };
 
-      const { rerender } = render(
-        <Provider store={store}>
-          <Result state={state} onReset={jest.fn()} />
-        </Provider>,
-      );
+      let rerenderFn: ((ui: React.ReactElement) => void) | null = null;
+      act(() => {
+        const { rerender } = render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} />
+          </Provider>,
+        );
+        rerenderFn = rerender;
+      });
 
       // Verify exactly one completed history entry was added
       expect(store.getState().history.entries).toHaveLength(1);
@@ -156,31 +163,42 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       expect(sessionStorage.getItem(DRAFT_STORAGE_KEY)).toBeNull();
 
       // Verify accounts reload was triggered
-      expect(dummyService.getAccounts).toHaveBeenCalled();
+      await act(async () => {
+        await waitFor(() => expect(dummyService.getAccounts).toHaveBeenCalled());
+      });
 
       // Rerender should not add another completed history entry
-      rerender(
-        <Provider store={store}>
-          <Result state={state} onReset={jest.fn()} />
-        </Provider>,
-      );
+      act(() => {
+        rerenderFn?.(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} />
+          </Provider>,
+        );
+      });
       expect(store.getState().history.entries).toHaveLength(1);
     });
 
-    it('clicking Send another resets controller, resets draft, clears storage, clears banner, and navigates to form', () => {
+    it('clicking Send another resets controller, resets draft, clears storage, clears banner, and navigates to form', async () => {
       const store = setupStore();
       const mockReset = jest.fn();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'succeeded',
-        input: sampleInput,
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
         result: sampleSuccessResult,
       };
 
-      render(
-        <Provider store={store}>
-          <Result state={state} onReset={mockReset} />
-        </Provider>,
-      );
+      act(() => {
+        render(
+          <Provider store={store}>
+            <Result state={state} onReset={mockReset} />
+          </Provider>,
+        );
+      });
+
+      await act(async () => {
+        await waitFor(() => expect(dummyService.getAccounts).toHaveBeenCalled());
+      });
 
       fireEvent.click(screen.getByRole('button', { name: COPY['result.success.another'] }));
 
@@ -202,6 +220,7 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       const mockReset = jest.fn();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'failed',
+        requestId: 1,
         input: sampleInput,
         idempotencyKey: 'idem-000001',
         attempt: 1,
@@ -244,6 +263,7 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       const mockReset = jest.fn();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'failed',
+        requestId: 1,
         input: sampleInput,
         idempotencyKey: 'idem-000001',
         attempt: 1,
@@ -288,6 +308,7 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       const mockReset = jest.fn();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'failed',
+        requestId: 1,
         input: sampleInput,
         idempotencyKey: 'idem-000001',
         attempt: 1,
@@ -362,15 +383,18 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       const store = setupStore();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'succeeded',
-        input: sampleInput,
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
         result: sampleSuccessResult,
       };
 
-      render(
-        <Provider store={store}>
-          <Result state={state} />
-        </Provider>,
-      );
+      act(() => {
+        render(
+          <Provider store={store}>
+            <Result state={state} />
+          </Provider>,
+        );
+      });
 
       const heading = screen.getByRole('heading', { level: 1, name: COPY['result.success.heading'] });
       expect(document.activeElement).toBe(heading);
@@ -426,6 +450,7 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
 
       const failedState: SubmitState<TransferInput, TransferResponsePayload> = {
         status: 'failed',
+        requestId: 2,
         input: sampleInput,
         idempotencyKey: 'idem-000001',
         attempt: 2,
