@@ -151,3 +151,10 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Cypress 13, `cypress-axe`, `cypress-real-events`, Node.js `http` static server.
 - **Concept:** End-to-end test infrastructure orchestrating production-built assets against a zero-backend deterministic environment with accessibility auditing and browser-level keyboard events.
 - **How it works:** Configures Cypress with 1280×800 viewport, video recordings, and failure screenshots; establishes `cy.visitDeterministic` with pre-load `sessionStorage` clearance and optional fake clock injection; provides typed helpers for `window.__smu` and execution-count validation; wires Axe checks with PRD WCAG tags and enables real keyboard events via `cy.realPress`; pipes `pnpm e2e` through an automated production build and static server pipeline.
+
+## WP-24B: Cypress Journeys J1–J4
+
+- **Tools used:** Cypress 13, `cypress-axe`, `cypress-real-events`, Sinon fake timers.
+- **Concept:** Real-browser end-to-end journey execution covering multi-currency happy paths, keyboard navigation, mobile responsiveness, input validation, duplicate submit mitigation, and network timeout recovery.
+- **How it works:** Proved `useSafeSubmit` and state machines prevent double submissions under synchronous same-tick Confirm clicks (`executedCount === 1`); verified idempotency key reuse during retry gracefully absorbs late responses without secondary execution; preserved active input focus during inline error correction by keeping `ErrorSummary` mounted across transient validation changes; and verified zero Axe violations under WCAG 2.2 AA tags at each flow checkpoint.
+
