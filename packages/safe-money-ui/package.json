@@ -17,6 +17,7 @@
     "test": "jest",
     "test:property": "FC_NUM_RUNS=1000 jest test/property",
     "test:a11y": "jest -t A11Y-",
+    "mutation": "FC_NUM_RUNS=50 stryker run",
     "build": "tsup",
     "prepublishOnly": "pnpm build && pnpm size"
   },
@@ -64,6 +65,9 @@
     }
   },
   "devDependencies": {
+    "@stryker-mutator/core": "^8.7.1",
+    "@stryker-mutator/jest-runner": "^8.7.1",
+    "@stryker-mutator/typescript-checker": "^8.7.1",
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.12",
     "react": "^18.3.1",

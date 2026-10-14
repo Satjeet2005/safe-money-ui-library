@@ -19,11 +19,14 @@
     "size": "node scripts/size.mjs",
     "e2e": "pnpm build && node scripts/run-e2e.mjs",
     "e2e:a11y": "pnpm build && node scripts/run-e2e.mjs --spec \"cypress/e2e/j1-happy-path.cy.ts,cypress/e2e/j2-invalid-input.cy.ts,cypress/e2e/j4-timeout-recover.cy.ts,cypress/e2e/j6-rejections.cy.ts,cypress/e2e/j8-bad-payloads.cy.ts\"",
-    "mutation": "echo \"mutation will be implemented in WP-26\"",
+    "mutation": "pnpm --filter @satjeet2005/safe-money-ui mutation",
     "claims:check": "node scripts/claims-check.mjs",
     "dev": "pnpm --filter transfer-demo dev"
   },
   "devDependencies": {
+    "@stryker-mutator/core": "^8.7.1",
+    "@stryker-mutator/jest-runner": "^8.7.1",
+    "@stryker-mutator/typescript-checker": "^8.7.1",
     "@swc/core": "^1.10.1",
     "@swc/jest": "^0.2.37",
     "@testing-library/jest-dom": "^6.6.3",
