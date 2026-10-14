@@ -211,3 +211,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Markdown table structure, PRD walkthrough timeline specification, `scripts/claims-check.mjs`.
 - **Concept:** Spoken-video walkthrough script authoring with precise timing, visual cues, and metrics grounding.
 - **How it works:** Authored `docs/WALKTHROUGH_SCRIPT.md` structuring the 5 required beats across 60–90 seconds (thesis, happy path, lost-response fault injection with idempotent recovery, pnpm verify with 90.63% mutation score, and limitations/next steps) using plain conversational language for Satjeet to record in his own voice.
+
+## WP-33: Technical Explainers and Interview Q&A
+
+- **Tools used:** Markdown structural validation, word count verification scripts, source code dependency tracing.
+- **Concept:** Translating codebase architecture, testing methodology, and failure modes into structured interview preparation resources.
+- **How it works:** Authored 13 deep-dive module explainers using strict 6-heading templates and <=12-step flows, created 24 first-person interview answers under 120 words grounded in real test IDs and metrics, and synthesized lessons learned across Redux Toolkit, Jest, and Cypress without rewriting historical records.
