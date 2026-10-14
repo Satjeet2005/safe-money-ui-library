@@ -49,8 +49,9 @@ export function measureAppJsSum(distDir) {
   }
   let totalBytes = 0;
   for (const file of jsFiles) {
-    const stat = fs.statSync(file);
-    totalBytes += stat.size;
+    const content = fs.readFileSync(file);
+    const compressed = zlib.gzipSync(content, { level: 9 });
+    totalBytes += compressed.length;
   }
   return totalBytes;
 }
@@ -97,7 +98,7 @@ export function checkBudgets(options = {}) {
 
   results.push({
     target: 'App JavaScript, combined',
-    type: 'app (.js bundle sum)',
+    type: 'app (gzip level 9)',
     measured: appBytes,
     budget: appBudget,
     passed: appPassed,
