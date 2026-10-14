@@ -1,2 +1,4 @@
-// Cypress support e2e - to be configured in WP-24
-import './commands.js';
+/// <reference types="cypress" />
+import 'cypress-axe';
+import 'cypress-real-events';
+import './commands';

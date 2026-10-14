@@ -17,7 +17,7 @@
     "test:a11y": "pnpm --filter @satjeet2005/safe-money-ui test:a11y && pnpm --filter transfer-demo test:a11y",
     "build": "pnpm --filter @satjeet2005/safe-money-ui build && pnpm --filter transfer-demo build",
     "size": "node scripts/size.mjs",
-    "e2e": "echo \"e2e will be implemented in WP-24\"",
+    "e2e": "pnpm build && node scripts/run-e2e.mjs",
     "e2e:a11y": "echo \"e2e:a11y will be implemented in WP-25\"",
     "mutation": "echo \"mutation will be implemented in WP-26\"",
     "claims:check": "node scripts/claims-check.mjs",
