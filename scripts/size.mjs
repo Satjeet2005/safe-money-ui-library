@@ -8,12 +8,34 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 
-export const BUDGETS = {
+export const INITIAL_BUDGETS = {
   money: 6144, // 6 KB (6,144 bytes)
   submit: 4096, // 4 KB (4,096 bytes)
   boundary: 1024, // 1 KB (1,024 bytes)
   react: 6144, // 6 KB (6,144 bytes)
   app: 204800, // 200 KB (204,800 bytes)
+};
+
+/**
+ * Calculates the ratcheted budget per PRD §17.3:
+ * ceil((measured * 1.10) / 100) * 100
+ */
+export function calculateRatchetedBudget(measuredBytes) {
+  if (typeof measuredBytes !== 'number' || measuredBytes < 0) {
+    throw new RangeError('measuredBytes must be a non-negative number');
+  }
+  return Math.ceil((measuredBytes * 1.1) / 100) * 100;
+}
+
+// Ratcheted budgets calculated at the end of Phase 4 (WP-27) per PRD §17.3:
+// ceil((measured * 1.10) / 100) * 100
+// Measured values: money=737, submit=155, boundary=320, react=1488, app=80771
+export const BUDGETS = {
+  money: 900, // ratcheted from 6144 B
+  submit: 200, // ratcheted from 4096 B
+  boundary: 400, // ratcheted from 1024 B
+  react: 1700, // ratcheted from 6144 B
+  app: 88900, // ratcheted from 204800 B
 };
 
 export function measureEsmGzip(filePath) {

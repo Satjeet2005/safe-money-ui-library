@@ -22,7 +22,7 @@ describe('Verification Scripts', () => {
 
   describe('scripts/size.mjs', () => {
     it('exports INITIAL_BUDGETS and ratcheted BUDGETS matching the ratchet formula', () => {
-      const { INITIAL_BUDGETS, BUDGETS, calculateRatchetedBudget } = JSON.parse(
+      const { INITIAL_BUDGETS, BUDGETS, tests } = JSON.parse(
         execFileSync(
           'node',
           [
@@ -65,7 +65,7 @@ describe('Verification Scripts', () => {
         app: 88900,
       });
 
-      expect(calculateRatchetedBudget.tests).toEqual({
+      expect(tests).toEqual({
         money: 900,
         submit: 200,
         boundary: 400,
