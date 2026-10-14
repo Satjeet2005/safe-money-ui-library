@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { render, screen, fireEvent, within, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createAppStore } from './store/store.js';
@@ -462,5 +464,34 @@ describe('Presentation Regression Safety Net (Phase 1)', () => {
     expect(
       within(mainArea).getByRole('button', { name: COPY['result.success.another'] }),
     ).toBeInTheDocument();
+  });
+
+  test('PR-13: First-screen shell exposes brand header, sandbox descriptor, simulated environment label, and simulation notice', () => {
+    renderApp();
+
+    expect(screen.getByRole('heading', { level: 1, name: COPY['app.title'] })).toBeInTheDocument();
+    expect(screen.getByText('Transfer sandbox')).toBeInTheDocument();
+    expect(screen.getByText('Simulated environment')).toBeInTheDocument();
+    const demoNotice = screen.getByLabelText(UI_LABELS.demoNotice);
+    expect(demoNotice).toBeInTheDocument();
+    expect(within(demoNotice).getByText(COPY['app.demoBanner'])).toBeInTheDocument();
+    expect(
+      within(demoNotice).getByText(/Transfers, tested against the unexpected/i),
+    ).toBeInTheDocument();
+  });
+
+  test('PR-14: Design tokens CSS file defines required semantic custom properties and tabular numbers', () => {
+    const cssPath = path.resolve(__dirname, 'tokens.css');
+    const cssContent = fs.readFileSync(cssPath, 'utf-8');
+
+    expect(cssContent).toContain('--color-canvas');
+    expect(cssContent).toContain('--color-surface');
+    expect(cssContent).toContain('--color-ink');
+    expect(cssContent).toContain('--color-muted');
+    expect(cssContent).toContain('--color-primary');
+    expect(cssContent).toContain('--color-danger-text');
+    expect(cssContent).toContain('--color-warning-text');
+    expect(cssContent).toContain('--color-success-text');
+    expect(cssContent).toContain('tabular-nums');
   });
 });
