@@ -139,3 +139,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** React 18, Redux Toolkit, jest-axe, HTML5 semantic landmarks, Clipboard API.
 - **Concept:** Accessible developer tooling and shell-level document metadata integrated without leaking service logic or violating accessibility rules.
 - **How it works:** `ChaosPanel` provides accessible controls (4 presets, 3 latency options, 4 server rejection choices, 7 fault checkboxes, simulate edit, double-click confirm, reset, and copy-link) with `aria-expanded` and `aria-controls` semantics and passes Axe audit `A11Y-10` with zero violations; `Banner` enforces strict role separation (`status` for informational/warning banners, `alert` for errors); `App` synchronizes document titles across flow steps and guarantees `<header>`, `<main>`, and `<aside aria-label="Demo notice">` landmarks.
+
+## WP-23: Webpack Application Build and SWC Compilation
+
+- **Tools used:** Webpack 5, `swc-loader`, `mini-css-extract-plugin`, `html-webpack-plugin`, `webpack-dev-server`.
+- **Concept:** Robust, production-grade application bundling configured with SWC transpilation, CSS extraction, deterministic dev server, and cross-toolchain path alias parity.
+- **How it works:** Configures Webpack with `swc-loader` targeting ES2022 and automatic React runtime; extracts styles with `MiniCssExtractPlugin` into separate stylesheets; mounts `HtmlWebpackPlugin` against `public/index.html`; configures `devServer` on port `5173` with `historyApiFallback`; maps all library entry points and `.js` extension aliases matching TypeScript and Jest contracts; builds cleanly with zero errors and zero warnings, meeting bundle budgets.
