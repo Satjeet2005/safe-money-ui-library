@@ -133,3 +133,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** React 18, Redux Toolkit, React Testing Library, accessible DOM focus management.
 - **Concept:** Terminal result screen handling all submission outcomes (succeeded, business rejected, unconfirmed) with exact-once side effects and accessible focus transitions.
 - **How it works:** `Result` renders success details (debited, credited, transfer ID), business rejections (with code-specific copy and Edit/Retry actions), and unconfirmed states (timeout, network, invalid_response with retry and leave options); `useSuccessSideEffect` executes exactly once per successful transfer ID to append a completed history entry, reset draft state, purge storage, and refresh account balances; leaving an unconfirmed outcome appends an unconfirmed entry keyed by the transfer's idempotency key and surfaces an unconfirmed banner.
+
+## WP-22: Chaos Panel, Banners, Document Title, and Semantic Landmarks
+
+- **Tools used:** React 18, Redux Toolkit, jest-axe, HTML5 semantic landmarks, Clipboard API.
+- **Concept:** Accessible developer tooling and shell-level document metadata integrated without leaking service logic or violating accessibility rules.
+- **How it works:** `ChaosPanel` provides accessible controls (4 presets, 3 latency options, 4 server rejection choices, 7 fault checkboxes, simulate edit, double-click confirm, reset, and copy-link) with `aria-expanded` and `aria-controls` semantics and passes Axe audit `A11Y-10` with zero violations; `Banner` enforces strict role separation (`status` for informational/warning banners, `alert` for errors); `App` synchronizes document titles across flow steps and guarantees `<header>`, `<main>`, and `<aside aria-label="Demo notice">` landmarks.
