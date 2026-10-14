@@ -10,7 +10,14 @@ import {
 } from '../store/dataSlice.js';
 import { setRecipient, setSourceCurrency, setAmountText } from '../store/draftSlice.js';
 import { setChaos } from '../store/chaosSlice.js';
-import { TransferFlow } from './TransferFlow.js';
+import {
+  TransferFlow,
+  resolveIdempotencyKeyGenerator,
+  executeTransferRun,
+  parseTransferResponse,
+  type TransferInput,
+  type TransferResponsePayload,
+} from './TransferFlow.js';
 import type { MockService } from '../service/mockService.js';
 import type { Clock, Scheduler } from '@satjeet2005/safe-money-ui/submit';
 import type { SubmitState } from '@satjeet2005/safe-money-ui/submit';
@@ -123,7 +130,7 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
   });
 
   it('TF-02: controller lifetime survives step navigation without resetting', async () => {
-    let capturedState: SubmitState<unknown, unknown> | null = null;
+    let capturedState: SubmitState<TransferInput, TransferResponsePayload> | null = null;
     const submitPromise = new Promise(() => {}); // never resolves to keep in submitting state
 
     const mockSubmit = jest.fn().mockReturnValue(submitPromise);
@@ -320,8 +327,28 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
     expect(capturedChaosInSubmit).toBe('SERVICE_UNAVAILABLE');
   });
 
+  it('TF-07: uses deterministic idempotency keys when ?deterministic=1 and uuid in normal mode', () => {
+    // Normal mode (default)
+    const normalKeyGen = resolveIdempotencyKeyGenerator();
+    const key1 = normalKeyGen();
+    const key2 = normalKeyGen();
+    expect(key1).toMatch(/^idem-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+    expect(key2).toMatch(/^idem-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+    expect(key1).not.toBe(key2);
+
+    // Deterministic mode (?deterministic=1)
+    window.history.pushState({}, '', '?deterministic=1');
+    try {
+      const detKeyGen = resolveIdempotencyKeyGenerator();
+      expect(detKeyGen()).toBe('idem-000001');
+      expect(detKeyGen()).toBe('idem-000002');
+    } finally {
+      window.history.pushState({}, '', '/');
+    }
+  });
+
   it('TF-08: classifies RejectionBody with SERVICE_UNAVAILABLE as retryable rejected error', async () => {
-    let capturedState: SubmitState<unknown, unknown> | null = null;
+    let capturedState: SubmitState<TransferInput, TransferResponsePayload> | null = null;
     const mockSubmit = jest.fn().mockResolvedValue({
       error: { code: 'SERVICE_UNAVAILABLE', message: 'Service unavailable.' },
     });
@@ -356,8 +383,9 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
       expect(capturedState?.status).toBe('failed');
     });
 
-    if (capturedState && capturedState.status === 'failed') {
-      expect(capturedState.error).toEqual({
+    const st = capturedState as SubmitState<TransferInput, TransferResponsePayload> | null;
+    if (st && st.status === 'failed') {
+      expect(st.error).toEqual({
         kind: 'rejected',
         code: 'SERVICE_UNAVAILABLE',
         retryable: true,
@@ -370,7 +398,7 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
   });
 
   it('TF-09: invalid/unknown rejection body is treated as invalid_response', async () => {
-    let capturedState: SubmitState<unknown, unknown> | null = null;
+    let capturedState: SubmitState<TransferInput, TransferResponsePayload> | null = null;
     const mockSubmit = jest.fn().mockResolvedValue({
       error: { code: 'UNKNOWN_SERVER_CODE', message: 'Unknown failure.' },
     });
@@ -405,16 +433,17 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
       expect(capturedState?.status).toBe('failed');
     });
 
-    if (capturedState && capturedState.status === 'failed') {
-      expect(capturedState.error.kind).toBe('invalid_response');
-      expect(capturedState.error.message).toBe(COPY['submit.invalid_response']);
+    const st = capturedState as SubmitState<TransferInput, TransferResponsePayload> | null;
+    if (st && st.status === 'failed') {
+      expect(st.error.kind).toBe('invalid_response');
+      expect(st.error.message).toBe(COPY['submit.invalid_response']);
     }
 
     expect(store.getState().flow.step).toBe('result');
   });
 
   it('TF-10: financially inconsistent response fails verifyTransfer and yields invalid_response', async () => {
-    let capturedState: SubmitState<unknown, unknown> | null = null;
+    let capturedState: SubmitState<TransferInput, TransferResponsePayload> | null = null;
     // Debited minor is 10201 instead of 10200 (sourceMinor 10000 + feeMinor 200)
     const mockSubmit = jest.fn().mockResolvedValue({
       transferId: 'TRF-000001',
@@ -454,16 +483,17 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
       expect(capturedState?.status).toBe('failed');
     });
 
-    if (capturedState && capturedState.status === 'failed') {
-      expect(capturedState.error.kind).toBe('invalid_response');
-      expect(capturedState.error.message).toBe(COPY['submit.invalid_response']);
+    const st = capturedState as SubmitState<TransferInput, TransferResponsePayload> | null;
+    if (st && st.status === 'failed') {
+      expect(st.error.kind).toBe('invalid_response');
+      expect(st.error.message).toBe(COPY['submit.invalid_response']);
     }
 
     expect(store.getState().flow.step).toBe('result');
   });
 
   it('TF-11: request timeout aborts signal and transitions to result with timeout error', async () => {
-    let capturedState: SubmitState<unknown, unknown> | null = null;
+    let capturedState: SubmitState<TransferInput, TransferResponsePayload> | null = null;
     let signalAborted = false;
 
     const mockSubmit = jest.fn().mockImplementation((_req, opts) => {
@@ -521,5 +551,53 @@ describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {
       }),
     );
     expect(store.getState().flow.step).toBe('result');
+  });
+
+  describe('executeTransferRun and parseTransferResponse unit helpers', () => {
+    it('executeTransferRun: throws SubmitRejection with retryable=false for non-unavailable rejection', async () => {
+      const mockService: MockService = {
+        getAccounts: jest.fn(),
+        getRecipients: jest.fn(),
+        getQuote: jest.fn(),
+        submitTransfer: jest.fn().mockResolvedValue({
+          error: { code: 'INSUFFICIENT_FUNDS', message: 'Insufficient funds.' },
+        }),
+        debug: { executedCount: () => 0, balances: () => ({}), transferIds: () => [] },
+      };
+
+      await expect(
+        executeTransferRun(
+          mockService,
+          { quoteId: 'q-1', recipientId: 'rcp-1', sourceCurrency: 'USD', sourceMinor: 100 },
+          { signal: new AbortController().signal, idempotencyKey: 'idem-1', attempt: 1 },
+        ),
+      ).rejects.toMatchObject({
+        name: 'SubmitRejection',
+        code: 'INSUFFICIENT_FUNDS',
+        retryable: false,
+      });
+    });
+
+    it('parseTransferResponse: returns ok: false if snapshot is null or raw response is malformed', () => {
+      const validPayload = {
+        transferId: 'TRF-000001',
+        status: 'completed',
+        debited: { currency: 'USD', minor: 10200 },
+        credited: { currency: 'EUR', minor: 9200 },
+        completedAtMs: 2000,
+      };
+
+      // Snapshot is null
+      expect(parseTransferResponse(validPayload, null)).toEqual({
+        ok: false,
+        message: COPY['submit.invalid_response'],
+      });
+
+      // Malformed raw response
+      expect(parseTransferResponse({ status: 'bad' }, sampleSnapshot)).toEqual({
+        ok: false,
+        message: COPY['submit.invalid_response'],
+      });
+    });
   });
 });
