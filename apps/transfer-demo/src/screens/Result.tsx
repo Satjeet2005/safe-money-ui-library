@@ -116,7 +116,7 @@ function ResultRejectedView({
     dispatch(goToForm());
   };
 
-  const copyKey = code ? ((`result.rejected.${code}`) as CopyKey) : null;
+  const copyKey = code ? (`result.rejected.${code}` as CopyKey) : null;
   const message = (copyKey && copyKey in COPY ? COPY[copyKey] : null) ?? fallbackMessage;
 
   return (
@@ -236,7 +236,10 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
     if (state.error.kind === 'rejected') {
       return (
         <main>
-          <StepHeading key={`rejected-${state.error.code ?? 'unknown'}`} title={COPY['result.rejected.heading']} />
+          <StepHeading
+            key={`rejected-${state.error.code ?? 'unknown'}`}
+            title={COPY['result.rejected.heading']}
+          />
           <ResultRejectedView
             code={state.error.code}
             retryable={state.error.retryable}
@@ -251,7 +254,10 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
 
     return (
       <main>
-        <StepHeading key={`unconfirmed-${state.error.kind}`} title={COPY['result.unconfirmed.heading']} />
+        <StepHeading
+          key={`unconfirmed-${state.error.kind}`}
+          title={COPY['result.unconfirmed.heading']}
+        />
         <ResultUnconfirmedView
           state={state}
           onRetry={onRetry}

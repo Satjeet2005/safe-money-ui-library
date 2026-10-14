@@ -215,45 +215,50 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       ['RECIPIENT_BLOCKED', COPY['result.rejected.RECIPIENT_BLOCKED']],
       ['QUOTE_EXPIRED', COPY['result.rejected.QUOTE_EXPIRED']],
       ['LIMIT_EXCEEDED', COPY['result.rejected.LIMIT_EXCEEDED']],
-    ])('renders rejected heading and specific copy for code %s with Edit action only', (code, expectedMsg) => {
-      const store = setupStore();
-      const mockReset = jest.fn();
-      const state: SubmitState<TransferInput, TransferResponsePayload> = {
-        status: 'failed',
-        requestId: 1,
-        input: sampleInput,
-        idempotencyKey: 'idem-000001',
-        attempt: 1,
-        error: {
-          kind: 'rejected',
-          code,
-          retryable: false,
-          message: expectedMsg,
-        },
-      };
+    ])(
+      'renders rejected heading and specific copy for code %s with Edit action only',
+      (code, expectedMsg) => {
+        const store = setupStore();
+        const mockReset = jest.fn();
+        const state: SubmitState<TransferInput, TransferResponsePayload> = {
+          status: 'failed',
+          requestId: 1,
+          input: sampleInput,
+          idempotencyKey: 'idem-000001',
+          attempt: 1,
+          error: {
+            kind: 'rejected',
+            code,
+            retryable: false,
+            message: expectedMsg,
+          },
+        };
 
-      render(
-        <Provider store={store}>
-          <Result state={state} onReset={mockReset} />
-        </Provider>,
-      );
+        render(
+          <Provider store={store}>
+            <Result state={state} onReset={mockReset} />
+          </Provider>,
+        );
 
-      expect(
-        screen.getByRole('heading', { level: 1, name: COPY['result.rejected.heading'] }),
-      ).toBeInTheDocument();
-      expect(screen.getByText(expectedMsg)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: COPY['result.edit'] })).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: COPY['result.retry'] })).not.toBeInTheDocument();
+        expect(
+          screen.getByRole('heading', { level: 1, name: COPY['result.rejected.heading'] }),
+        ).toBeInTheDocument();
+        expect(screen.getByText(expectedMsg)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: COPY['result.edit'] })).toBeInTheDocument();
+        expect(
+          screen.queryByRole('button', { name: COPY['result.retry'] }),
+        ).not.toBeInTheDocument();
 
-      // No history entry should be added
-      expect(store.getState().history.entries).toHaveLength(0);
+        // No history entry should be added
+        expect(store.getState().history.entries).toHaveLength(0);
 
-      // Clicking Edit resets controller, returns to form, and preserves draft
-      fireEvent.click(screen.getByRole('button', { name: COPY['result.edit'] }));
-      expect(mockReset).toHaveBeenCalledTimes(1);
-      expect(store.getState().flow.step).toBe('form');
-      expect(store.getState().draft.amountText).toBe('100.00');
-    });
+        // Clicking Edit resets controller, returns to form, and preserves draft
+        fireEvent.click(screen.getByRole('button', { name: COPY['result.edit'] }));
+        expect(mockReset).toHaveBeenCalledTimes(1);
+        expect(store.getState().flow.step).toBe('form');
+        expect(store.getState().draft.amountText).toBe('100.00');
+      },
+    );
   });
 
   describe('RES-03: Retryable business rejection (SERVICE_UNAVAILABLE)', () => {
@@ -302,57 +307,60 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
       ['timeout', COPY['controller.timeout']],
       ['network', COPY['controller.network']],
       ['invalid_response', COPY['submit.invalid_response']],
-    ])('renders unconfirmed heading, body, error message, Retry and Leave actions for %s', (kind, message) => {
-      const store = setupStore();
-      const mockRetry = jest.fn();
-      const mockReset = jest.fn();
-      const state: SubmitState<TransferInput, TransferResponsePayload> = {
-        status: 'failed',
-        requestId: 1,
-        input: sampleInput,
-        idempotencyKey: 'idem-000001',
-        attempt: 1,
-        error: {
-          kind: kind as 'timeout' | 'network' | 'invalid_response',
-          retryable: true,
-          message,
-        },
-      };
+    ])(
+      'renders unconfirmed heading, body, error message, Retry and Leave actions for %s',
+      (kind, message) => {
+        const store = setupStore();
+        const mockRetry = jest.fn();
+        const mockReset = jest.fn();
+        const state: SubmitState<TransferInput, TransferResponsePayload> = {
+          status: 'failed',
+          requestId: 1,
+          input: sampleInput,
+          idempotencyKey: 'idem-000001',
+          attempt: 1,
+          error: {
+            kind: kind as 'timeout' | 'network' | 'invalid_response',
+            retryable: true,
+            message,
+          },
+        };
 
-      render(
-        <Provider store={store}>
-          <Result state={state} onRetry={mockRetry} onReset={mockReset} />
-        </Provider>,
-      );
+        render(
+          <Provider store={store}>
+            <Result state={state} onRetry={mockRetry} onReset={mockReset} />
+          </Provider>,
+        );
 
-      expect(
-        screen.getByRole('heading', { level: 1, name: COPY['result.unconfirmed.heading'] }),
-      ).toBeInTheDocument();
-      expect(screen.getByText(COPY['result.unconfirmed.body'])).toBeInTheDocument();
-      expect(screen.getByText(message)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: COPY['result.retry'] })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: COPY['result.leave'] })).toBeInTheDocument();
+        expect(
+          screen.getByRole('heading', { level: 1, name: COPY['result.unconfirmed.heading'] }),
+        ).toBeInTheDocument();
+        expect(screen.getByText(COPY['result.unconfirmed.body'])).toBeInTheDocument();
+        expect(screen.getByText(message)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: COPY['result.retry'] })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: COPY['result.leave'] })).toBeInTheDocument();
 
-      // No history entry added on render
-      expect(store.getState().history.entries).toHaveLength(0);
+        // No history entry added on render
+        expect(store.getState().history.entries).toHaveLength(0);
 
-      // Clicking Leave adds unconfirmed history entry, resets controller, returns to form, and shows banner
-      fireEvent.click(screen.getByRole('button', { name: COPY['result.leave'] }));
-      expect(store.getState().history.entries).toHaveLength(1);
-      expect(store.getState().history.entries[0]).toEqual({
-        id: 'idem-000001',
-        kind: 'unconfirmed',
-        recipientName: 'Elena Rostova',
-        amountText: '$100.00',
-      });
-      expect(mockReset).toHaveBeenCalledTimes(1);
-      expect(store.getState().flow.step).toBe('form');
-      expect(store.getState().flow.banner).toEqual({
-        kind: 'warning',
-        copyKey: 'unconfirmed.banner',
-      });
-      expect(store.getState().draft.amountText).toBe('100.00');
-    });
+        // Clicking Leave adds unconfirmed history entry, resets controller, returns to form, and shows banner
+        fireEvent.click(screen.getByRole('button', { name: COPY['result.leave'] }));
+        expect(store.getState().history.entries).toHaveLength(1);
+        expect(store.getState().history.entries[0]).toEqual({
+          id: 'idem-000001',
+          kind: 'unconfirmed',
+          recipientName: 'Elena Rostova',
+          amountText: '$100.00',
+        });
+        expect(mockReset).toHaveBeenCalledTimes(1);
+        expect(store.getState().flow.step).toBe('form');
+        expect(store.getState().flow.banner).toEqual({
+          kind: 'warning',
+          copyKey: 'unconfirmed.banner',
+        });
+        expect(store.getState().draft.amountText).toBe('100.00');
+      },
+    );
 
     it('renders review.heading and role="status" submit.sending with no actions while submitting after a retry', () => {
       const store = setupStore();
@@ -396,7 +404,10 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
         );
       });
 
-      const heading = screen.getByRole('heading', { level: 1, name: COPY['result.success.heading'] });
+      const heading = screen.getByRole('heading', {
+        level: 1,
+        name: COPY['result.success.heading'],
+      });
       expect(document.activeElement).toBe(heading);
     });
 
