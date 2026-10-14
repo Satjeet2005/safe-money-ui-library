@@ -540,18 +540,19 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
     it('A11Y-08: Result, unconfirmed has zero axe violations', async () => {
       const store = setupStore();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
-        status: 'unconfirmed',
+        status: 'failed',
         requestId: 1,
         idempotencyKey: 'TRF-000001',
+        attempt: 1,
         input: sampleInput,
-        error: { kind: 'timeout', message: 'The request timed out.' },
+        error: { kind: 'timeout', message: COPY['controller.timeout'], retryable: true },
       };
 
       let container!: HTMLElement;
       act(() => {
         const utils = render(
           <Provider store={store}>
-            <Result state={state} onReset={jest.fn()} onRetry={jest.fn()} onLeave={jest.fn()} />
+            <Result state={state} onReset={jest.fn()} onRetry={jest.fn()} />
           </Provider>,
         );
         container = utils.container;
@@ -564,14 +565,15 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
     it('A11Y-09: Result, rejected non-retryable has zero axe violations', async () => {
       const store = setupStore();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
-        status: 'rejected',
+        status: 'failed',
         requestId: 1,
         idempotencyKey: 'TRF-000001',
+        attempt: 1,
         input: sampleInput,
         error: {
           kind: 'rejected',
           code: 'INSUFFICIENT_FUNDS',
-          message: COPY['result.rejection.INSUFFICIENT_FUNDS'],
+          message: COPY['result.rejected.INSUFFICIENT_FUNDS'],
           retryable: false,
         },
       };
@@ -593,14 +595,15 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
     it('A11Y-09: Result, rejected retryable has zero axe violations', async () => {
       const store = setupStore();
       const state: SubmitState<TransferInput, TransferResponsePayload> = {
-        status: 'rejected',
+        status: 'failed',
         requestId: 1,
         idempotencyKey: 'TRF-000001',
+        attempt: 1,
         input: sampleInput,
         error: {
           kind: 'rejected',
           code: 'SERVICE_UNAVAILABLE',
-          message: COPY['result.rejection.SERVICE_UNAVAILABLE'],
+          message: COPY['result.rejected.SERVICE_UNAVAILABLE'],
           retryable: true,
         },
       };
