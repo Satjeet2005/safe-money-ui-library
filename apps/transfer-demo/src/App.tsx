@@ -33,27 +33,10 @@ export function App(): JSX.Element {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <div className="app-header-top">
-          <div className="app-header-brand">
-            <h1 className="app-brand-title">{COPY['app.title']}</h1>
-            <span className="app-badge-sandbox">Transfer sandbox</span>
-          </div>
-          <div className="app-header-status">
-            <span className="app-badge-simulated" aria-hidden="true">
-              ●
-            </span>
-            <span className="app-header-simulated-label">Simulated environment</span>
-          </div>
-        </div>
-
-        <aside aria-label={UI_LABELS.demoNotice} className="app-demo-notice">
-          <div className="app-demo-notice-intro">
-            <strong className="app-demo-notice-heading">
-              Transfers, tested against the unexpected.
-            </strong>
-          </div>
-          <p className="app-demo-notice-text">{COPY['app.demoBanner']}</p>
+      <header>
+        <h1>{COPY['app.title']}</h1>
+        <aside aria-label={UI_LABELS.demoNotice}>
+          <p>{COPY['app.demoBanner']}</p>
         </aside>
       </header>
 
