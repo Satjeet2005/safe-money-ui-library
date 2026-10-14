@@ -21,6 +21,94 @@ describe('Verification Scripts', () => {
   });
 
   describe('scripts/size.mjs', () => {
+    it('exports INITIAL_BUDGETS and ratcheted BUDGETS matching the ratchet formula', () => {
+      const { INITIAL_BUDGETS, BUDGETS, calculateRatchetedBudget } = JSON.parse(
+        execFileSync(
+          'node',
+          [
+            '-e',
+            `
+            import { INITIAL_BUDGETS, BUDGETS, calculateRatchetedBudget } from './scripts/size.mjs';
+            console.log(JSON.stringify({
+              INITIAL_BUDGETS,
+              BUDGETS,
+              tests: {
+                money: calculateRatchetedBudget(737),
+                submit: calculateRatchetedBudget(155),
+                boundary: calculateRatchetedBudget(320),
+                react: calculateRatchetedBudget(1488),
+                app: calculateRatchetedBudget(80771),
+                boundaryExact: calculateRatchetedBudget(1000),
+                boundaryOver: calculateRatchetedBudget(1001),
+                zero: calculateRatchetedBudget(0),
+              }
+            }));
+          `,
+          ],
+          { cwd: REPO_ROOT, encoding: 'utf-8' },
+        ),
+      );
+
+      expect(INITIAL_BUDGETS).toEqual({
+        money: 6144,
+        submit: 4096,
+        boundary: 1024,
+        react: 6144,
+        app: 204800,
+      });
+
+      expect(BUDGETS).toEqual({
+        money: 900,
+        submit: 200,
+        boundary: 400,
+        react: 1700,
+        app: 88900,
+      });
+
+      expect(calculateRatchetedBudget.tests).toEqual({
+        money: 900,
+        submit: 200,
+        boundary: 400,
+        react: 1700,
+        app: 88900,
+        boundaryExact: 1100,
+        boundaryOver: 1200,
+        zero: 0,
+      });
+    });
+
+    it('enforces the ratcheted budget when artifact exceeds ratcheted budget even if under initial budget', () => {
+      const libDist = path.join(tmpDir, 'packages/safe-money-ui/dist');
+      fs.mkdirSync(path.join(libDist, 'money'), { recursive: true });
+
+      // Create an artifact of ~1000 bytes gzip: under initial 6144 B but over ratcheted 900 B
+      const mediumBuffer = Buffer.concat([
+        Buffer.from('export const test = "'),
+        crypto.randomBytes(1100),
+        Buffer.from('";'),
+      ]);
+      fs.writeFileSync(path.join(libDist, 'money/index.mjs'), mediumBuffer);
+
+      let failed = false;
+      try {
+        execFileSync(
+          'node',
+          [
+            '-e',
+            `
+            import { checkBudgets } from './scripts/size.mjs';
+            const { passed, results } = checkBudgets({ rootDir: ${JSON.stringify(tmpDir)} });
+            if (!passed) process.exit(1);
+          `,
+          ],
+          { cwd: REPO_ROOT, encoding: 'utf-8', stdio: 'pipe' },
+        );
+      } catch {
+        failed = true;
+      }
+      expect(failed).toBe(true);
+    });
+
     it('handles empty build outputs honestly without crashing', () => {
       const output = execFileSync('node', [SIZE_SCRIPT], {
         cwd: REPO_ROOT,
