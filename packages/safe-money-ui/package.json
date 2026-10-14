@@ -19,6 +19,7 @@
     "test:a11y": "jest -t A11Y-",
     "mutation": "FC_NUM_RUNS=50 stryker run",
     "build": "tsup",
+    "size": "node ../../scripts/size.mjs",
     "prepublishOnly": "pnpm build && pnpm size"
   },
   "sideEffects": [
@@ -50,7 +51,7 @@
       "import": "./dist/react/index.mjs",
       "require": "./dist/react/index.js"
     },
-    "./styles.css": "./src/react/styles.css"
+    "./styles.css": "./dist/styles.css"
   },
   "peerDependencies": {
     "react": "^18.3.0",

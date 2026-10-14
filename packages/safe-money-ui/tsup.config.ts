@@ -14,4 +14,8 @@ export default defineConfig({
   minify: true,
   treeshake: true,
   external: ['react', 'react-dom', 'zod'],
+  onSuccess: async () => {
+    const fs = await import('node:fs');
+    fs.copyFileSync('src/react/styles.css', 'dist/styles.css');
+  },
 });

@@ -193,3 +193,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** GitHub-flavored Markdown, PRD metric-markers specification, `scripts/claims-check.mjs`.
 - **Concept:** Reviewer-facing documentation architecture, metric marker tracking, and Honest Claims compliance.
 - **How it works:** Authored the 14-section root `README.md` following the exact PRD order with verifiable claims, exact metric comment markers matching `docs/METRICS.md`, verified three compiling code snippets, and authored `packages/safe-money-ui/README.md` with install guidelines and library examples.
+
+## WP-30: npm Packaging Dry Run and Release Checklist
+
+- **Tools used:** `pnpm publish --dry-run`, `tsup`, `vercel.json` verification.
+- **Concept:** Package distribution verification, monorepo artifact bundling, and human-in-the-loop release gating.
+- **How it works:** Updated `packages/safe-money-ui/package.json` with a dedicated size verification script and wired `tsup`'s `onSuccess` callback to ensure `dist/styles.css` is packaged into tarball outputs; proved packaging viability with a 34-file dry run; verified Vercel hosting settings; and authored `docs/RELEASE_CHECKLIST.md` covering all manual release steps while maintaining `Q-AI-001` as an explicit release blocker.
