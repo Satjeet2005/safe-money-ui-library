@@ -145,3 +145,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Webpack 5, `swc-loader`, `mini-css-extract-plugin`, `html-webpack-plugin`, `webpack-dev-server`.
 - **Concept:** Robust, production-grade application bundling configured with SWC transpilation, CSS extraction, deterministic dev server, and cross-toolchain path alias parity.
 - **How it works:** Configures Webpack with `swc-loader` targeting ES2022 and automatic React runtime; extracts styles with `MiniCssExtractPlugin` into separate stylesheets; mounts `HtmlWebpackPlugin` against `public/index.html`; configures `devServer` on port `5173` with `historyApiFallback`; maps all library entry points and `.js` extension aliases matching TypeScript and Jest contracts; builds cleanly with zero errors and zero warnings, meeting bundle budgets.
+
+## WP-24A: Cypress Infrastructure and Deterministic Journey Support
+
+- **Tools used:** Cypress 13, `cypress-axe`, `cypress-real-events`, Node.js `http` static server.
+- **Concept:** End-to-end test infrastructure orchestrating production-built assets against a zero-backend deterministic environment with accessibility auditing and browser-level keyboard events.
+- **How it works:** Configures Cypress with 1280×800 viewport, video recordings, and failure screenshots; establishes `cy.visitDeterministic` with pre-load `sessionStorage` clearance and optional fake clock injection; provides typed helpers for `window.__smu` and execution-count validation; wires Axe checks with PRD WCAG tags and enables real keyboard events via `cy.realPress`; pipes `pnpm e2e` through an automated production build and static server pipeline.

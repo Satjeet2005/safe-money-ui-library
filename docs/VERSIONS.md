@@ -41,3 +41,6 @@
 | css-loader                  | 7.1.5            | 2026-10-14     |
 | mini-css-extract-plugin     | 2.10.2           | 2026-10-14     |
 | swc-loader                  | 0.2.7            | 2026-10-14     |
+| cypress                     | 13.17.0          | 2026-10-14     |
+| cypress-axe                 | 1.7.0            | 2026-10-14     |
+| cypress-real-events         | 1.15.1           | 2026-10-14     |
