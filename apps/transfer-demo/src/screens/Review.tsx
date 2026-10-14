@@ -85,34 +85,36 @@ function ReviewDetails({
 
   return (
     <>
-      <dl className="review-summary">
+      <dl className="review-summary nw-receipt-list">
         <dt>{COPY['review.to']}</dt>
         <dd>
           {recipient ? `${recipient.name} · ${recipient.country} · ${recipient.accountHint}` : ''}
         </dd>
 
         <dt>{COPY['review.send']}</dt>
-        <dd>
+        <dd className="nw-tabular">
           {formatMoney({ currency: quote.source.currency, minor: quote.source.minor }, { locale })}
         </dd>
 
         <dt>{COPY['review.fee']}</dt>
-        <dd>
+        <dd className="nw-tabular">
           {formatMoney({ currency: quote.source.currency, minor: quote.feeMinor }, { locale })}
         </dd>
 
         <dt>{COPY['review.total']}</dt>
-        <dd>{formatMoney({ currency: quote.source.currency, minor: totalMinor }, { locale })}</dd>
+        <dd className="nw-tabular">
+          {formatMoney({ currency: quote.source.currency, minor: totalMinor }, { locale })}
+        </dd>
 
         <dt>{COPY['review.rate']}</dt>
-        <dd>{rateText}</dd>
+        <dd className="nw-tabular nw-font-mono">{rateText}</dd>
 
         <dt>{COPY['review.receive']}</dt>
-        <dd>
+        <dd className="nw-tabular">
           {formatMoney({ currency: quote.target.currency, minor: quote.target.minor }, { locale })}
         </dd>
       </dl>
-      <p className="rate-held">{COPY['review.rateHeld']}</p>
+      <p className="rate-held nw-amount-hint">{COPY['review.rateHeld']}</p>
     </>
   );
 }
@@ -223,7 +225,7 @@ export function Review({
   });
 
   return (
-    <main>
+    <main className="nw-review-container">
       <StepHeading title={COPY['review.heading']} />
 
       {flow.banner && (
@@ -232,14 +234,19 @@ export function Review({
         </Banner>
       )}
 
-      {submitting && <div role="status">{COPY['submit.sending']}</div>}
+      {submitting && (
+        <div role="status" className="nw-status-submitting">
+          {COPY['submit.sending']}
+        </div>
+      )}
 
       {quote && <ReviewDetails quote={quote} recipient={recipient} locale={draft.locale} />}
 
-      <div className="review-actions">
+      <div className="review-actions nw-review-actions">
         <button
           type="button"
           id="confirm-button"
+          className="nw-btn nw-btn-primary"
           aria-disabled={submitting ? 'true' : undefined}
           onClick={(e) => {
             if (submitting) {
@@ -249,11 +256,19 @@ export function Review({
             void handleConfirm();
           }}
         >
-          {submitting ? COPY['review.sending'] : COPY['review.confirm']}
+          {submitting ? (
+            <>
+              <span className="nw-spinner" aria-hidden="true" />
+              <span>{COPY['review.sending']}</span>
+            </>
+          ) : (
+            COPY['review.confirm']
+          )}
         </button>
 
         <button
           type="button"
+          className="nw-btn nw-btn-secondary"
           aria-disabled={submitting ? 'true' : undefined}
           onClick={(e) => {
             if (submitting) {

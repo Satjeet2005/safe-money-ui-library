@@ -18,26 +18,69 @@ import { setAmountText } from '../store/draftSlice.js';
 import type { RootState, AppDispatch } from '../store/store.js';
 
 function PresetsGroup({
+  activePreset,
   onSelect,
 }: {
+  activePreset: string | null;
   onSelect: (preset: Partial<ChaosConfigPayload>) => void;
 }): JSX.Element {
+  const presets: Array<{
+    id: string;
+    name: string;
+    desc: string;
+    config: Partial<ChaosConfigPayload>;
+  }> = [
+    {
+      id: 'slow',
+      name: COPY['chaos.preset.slow'],
+      desc: '3s delay testing pending submission guard.',
+      config: { latencyMs: 3000 },
+    },
+    {
+      id: 'timeout',
+      name: COPY['chaos.preset.timeout'],
+      desc: 'Hangs on first attempt into unconfirmed state, recovers on retry.',
+      config: { hangForever: true },
+    },
+    {
+      id: 'lost',
+      name: COPY['chaos.preset.lost'],
+      desc: 'Server completes transfer but response is lost.',
+      config: { loseResponse: true },
+    },
+    {
+      id: 'badPayload',
+      name: COPY['chaos.preset.badPayload'],
+      desc: 'Returns malformed payload to test validation & recovery.',
+      config: { malformedPayload: true },
+    },
+  ];
+
   return (
-    <fieldset className="chaos-group">
-      <legend>{COPY['chaos.presets.legend']}</legend>
-      <div className="chaos-actions">
-        <button type="button" onClick={() => onSelect({ latencyMs: 3000 })}>
-          {COPY['chaos.preset.slow']}
-        </button>
-        <button type="button" onClick={() => onSelect({ hangForever: true })}>
-          {COPY['chaos.preset.timeout']}
-        </button>
-        <button type="button" onClick={() => onSelect({ loseResponse: true })}>
-          {COPY['chaos.preset.lost']}
-        </button>
-        <button type="button" onClick={() => onSelect({ malformedPayload: true })}>
-          {COPY['chaos.preset.badPayload']}
-        </button>
+    <fieldset className="chaos-group nw-chaos-fieldset">
+      <legend className="nw-chaos-legend">{COPY['chaos.presets.legend']}</legend>
+      <div className="nw-preset-grid">
+        {presets.map((p) => {
+          const isActive = activePreset === p.name;
+          return (
+            <div key={p.id} className={`nw-preset-card ${isActive ? 'is-active' : ''}`}>
+              <div className="nw-preset-top">
+                <button
+                  type="button"
+                  className="nw-preset-btn"
+                  onClick={() => onSelect(p.config)}
+                  aria-pressed={isActive}
+                >
+                  {p.name}
+                </button>
+                <span className="nw-preset-indicator" aria-hidden="true">
+                  {isActive ? '✓' : '○'}
+                </span>
+              </div>
+              <p className="nw-preset-desc">{p.desc}</p>
+            </div>
+          );
+        })}
       </div>
     </fieldset>
   );
@@ -51,10 +94,10 @@ function LatencyGroup({
   onChange: (ms: 0 | 500 | 3000) => void;
 }): JSX.Element {
   return (
-    <fieldset className="chaos-group">
-      <legend>{COPY['chaos.latency.legend']}</legend>
+    <fieldset className="chaos-group nw-chaos-fieldset">
+      <legend className="nw-chaos-legend">{COPY['chaos.latency.legend']}</legend>
       <div className="chaos-radios">
-        <label htmlFor="chaos-latency-none">
+        <label htmlFor="chaos-latency-none" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-latency-none"
@@ -65,7 +108,7 @@ function LatencyGroup({
           />
           {COPY['chaos.latency.none']}
         </label>
-        <label htmlFor="chaos-latency-500">
+        <label htmlFor="chaos-latency-500" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-latency-500"
@@ -76,7 +119,7 @@ function LatencyGroup({
           />
           {COPY['chaos.latency.500ms']}
         </label>
-        <label htmlFor="chaos-latency-3000">
+        <label htmlFor="chaos-latency-3000" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-latency-3000"
@@ -100,10 +143,10 @@ function RejectionGroup({
   onChange: (code: ChaosConfigPayload['rejectWith']) => void;
 }): JSX.Element {
   return (
-    <fieldset className="chaos-group">
-      <legend>{COPY['chaos.rejection.legend']}</legend>
+    <fieldset className="chaos-group nw-chaos-fieldset">
+      <legend className="nw-chaos-legend">{COPY['chaos.rejection.legend']}</legend>
       <div className="chaos-radios">
-        <label htmlFor="chaos-reject-none">
+        <label htmlFor="chaos-reject-none" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-reject-none"
@@ -114,7 +157,7 @@ function RejectionGroup({
           />
           {COPY['chaos.rejection.none']}
         </label>
-        <label htmlFor="chaos-reject-funds">
+        <label htmlFor="chaos-reject-funds" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-reject-funds"
@@ -125,7 +168,7 @@ function RejectionGroup({
           />
           {COPY['chaos.rejection.insufficientFunds']}
         </label>
-        <label htmlFor="chaos-reject-blocked">
+        <label htmlFor="chaos-reject-blocked" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-reject-blocked"
@@ -136,7 +179,7 @@ function RejectionGroup({
           />
           {COPY['chaos.rejection.recipientBlocked']}
         </label>
-        <label htmlFor="chaos-reject-unavailable">
+        <label htmlFor="chaos-reject-unavailable" className="nw-checkbox-label">
           <input
             type="radio"
             id="chaos-reject-unavailable"
@@ -169,6 +212,60 @@ export function ChaosPanel(): JSX.Element {
     dispatch(resetChaos());
     dispatch(setChaos(preset));
   };
+
+  const isDefault =
+    chaos.latencyMs === 0 &&
+    !chaos.hangForever &&
+    chaos.lateResponseMs === 0 &&
+    !chaos.malformedPayload &&
+    !chaos.inconsistentPayload &&
+    chaos.rejectWith === 'none' &&
+    !chaos.loseResponse &&
+    !chaos.rateMoves &&
+    !chaos.corruptStorage;
+
+  const activePreset =
+    chaos.latencyMs === 3000 &&
+    !chaos.hangForever &&
+    chaos.lateResponseMs === 0 &&
+    !chaos.malformedPayload &&
+    !chaos.inconsistentPayload &&
+    chaos.rejectWith === 'none' &&
+    !chaos.loseResponse &&
+    !chaos.rateMoves &&
+    !chaos.corruptStorage
+      ? COPY['chaos.preset.slow']
+      : chaos.hangForever &&
+          chaos.latencyMs === 0 &&
+          chaos.lateResponseMs === 0 &&
+          !chaos.malformedPayload &&
+          !chaos.inconsistentPayload &&
+          chaos.rejectWith === 'none' &&
+          !chaos.loseResponse &&
+          !chaos.rateMoves &&
+          !chaos.corruptStorage
+        ? COPY['chaos.preset.timeout']
+        : chaos.loseResponse &&
+            chaos.latencyMs === 0 &&
+            !chaos.hangForever &&
+            chaos.lateResponseMs === 0 &&
+            !chaos.malformedPayload &&
+            !chaos.inconsistentPayload &&
+            chaos.rejectWith === 'none' &&
+            !chaos.rateMoves &&
+            !chaos.corruptStorage
+          ? COPY['chaos.preset.lost']
+          : chaos.malformedPayload &&
+              chaos.latencyMs === 0 &&
+              !chaos.hangForever &&
+              chaos.lateResponseMs === 0 &&
+              !chaos.inconsistentPayload &&
+              chaos.rejectWith === 'none' &&
+              !chaos.loseResponse &&
+              !chaos.rateMoves &&
+              !chaos.corruptStorage
+            ? COPY['chaos.preset.badPayload']
+            : null;
 
   const handleSimulateEdit = () => {
     const currency = (draft.sourceCurrency ?? 'USD') as CurrencyCode;
@@ -219,11 +316,11 @@ export function ChaosPanel(): JSX.Element {
   };
 
   return (
-    <div className="chaos-panel-container">
+    <div className="chaos-panel-container nw-chaos-console">
       <button
         type="button"
         id="chaos-toggle-button"
-        className="chaos-toggle-button"
+        className="chaos-toggle-button nw-btn nw-btn-secondary nw-btn-block"
         aria-expanded={chaos.panelOpen}
         aria-controls="chaos-panel"
         onClick={() => dispatch(togglePanel())}
@@ -233,20 +330,37 @@ export function ChaosPanel(): JSX.Element {
 
       {chaos.panelOpen && (
         <section id="chaos-panel" aria-labelledby="chaos-heading">
-          <h2 id="chaos-heading">{COPY['chaos.heading']}</h2>
-          <p>{COPY['chaos.helper']}</p>
+          <div className="nw-chaos-header" style={{ marginTop: '16px' }}>
+            <div className="nw-chaos-title-group">
+              <h2 id="chaos-heading" className="nw-chaos-title">
+                {COPY['chaos.heading']}
+              </h2>
+              <span
+                className={`nw-chaos-status-pill ${
+                  activePreset ? 'is-preset' : isDefault ? 'is-default' : 'is-custom'
+                }`}
+              >
+                {activePreset
+                  ? `Preset: ${activePreset}`
+                  : isDefault
+                    ? 'Normal operation (No faults)'
+                    : 'Custom fault configuration'}
+              </span>
+            </div>
+            <p className="nw-chaos-intro">{COPY['chaos.helper']}</p>
+          </div>
 
-          <PresetsGroup onSelect={applyPreset} />
+          <PresetsGroup activePreset={activePreset} onSelect={applyPreset} />
 
           <LatencyGroup
             latencyMs={chaos.latencyMs}
             onChange={(latencyMs) => dispatch(setChaos({ latencyMs }))}
           />
 
-          <fieldset className="chaos-group">
-            <legend>Faults</legend>
+          <fieldset className="chaos-group nw-chaos-fieldset">
+            <legend className="nw-chaos-legend">Faults</legend>
             <div className="chaos-checkboxes">
-              <label htmlFor="chaos-hang">
+              <label htmlFor="chaos-hang" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-hang"
@@ -256,7 +370,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.hang']}
               </label>
 
-              <label htmlFor="chaos-late">
+              <label htmlFor="chaos-late" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-late"
@@ -268,7 +382,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.late']}
               </label>
 
-              <label htmlFor="chaos-malformed">
+              <label htmlFor="chaos-malformed" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-malformed"
@@ -278,7 +392,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.malformed']}
               </label>
 
-              <label htmlFor="chaos-wrong-amounts">
+              <label htmlFor="chaos-wrong-amounts" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-wrong-amounts"
@@ -288,7 +402,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.wrongAmounts']}
               </label>
 
-              <label htmlFor="chaos-lost">
+              <label htmlFor="chaos-lost" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-lost"
@@ -298,7 +412,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.lost']}
               </label>
 
-              <label htmlFor="chaos-rate">
+              <label htmlFor="chaos-rate" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-rate"
@@ -308,7 +422,7 @@ export function ChaosPanel(): JSX.Element {
                 {COPY['chaos.rate']}
               </label>
 
-              <label htmlFor="chaos-corrupt-storage">
+              <label htmlFor="chaos-corrupt-storage" className="nw-checkbox-label">
                 <input
                   type="checkbox"
                   id="chaos-corrupt-storage"
@@ -331,21 +445,44 @@ export function ChaosPanel(): JSX.Element {
             onChange={(rejectWith) => dispatch(setChaos({ rejectWith }))}
           />
 
-          <div className="chaos-actions">
-            <button type="button" onClick={handleSimulateEdit}>
-              {COPY['chaos.edit']}
-            </button>
-            <button type="button" onClick={handleDoubleClickConfirm}>
-              {COPY['chaos.doubleClick']}
-            </button>
-            <button type="button" onClick={() => dispatch(resetChaos())}>
-              {COPY['chaos.reset']}
-            </button>
-            <button type="button" onClick={handleCopyLink}>
-              {COPY['chaos.copyLink']}
-            </button>
-            {copied && <span role="status">{COPY['chaos.copied']}</span>}
-          </div>
+          <fieldset className="chaos-group nw-chaos-fieldset">
+            <legend className="nw-chaos-legend">Simulation Triggers</legend>
+            <div className="chaos-actions nw-trigger-buttons">
+              <button
+                type="button"
+                className="nw-btn nw-btn-secondary nw-btn-sm"
+                onClick={handleSimulateEdit}
+              >
+                {COPY['chaos.edit']}
+              </button>
+              <button
+                type="button"
+                className="nw-btn nw-btn-secondary nw-btn-sm"
+                onClick={handleDoubleClickConfirm}
+              >
+                {COPY['chaos.doubleClick']}
+              </button>
+              <button
+                type="button"
+                className="nw-btn nw-btn-secondary nw-btn-sm"
+                onClick={() => dispatch(resetChaos())}
+              >
+                {COPY['chaos.reset']}
+              </button>
+              <button
+                type="button"
+                className="nw-btn nw-btn-secondary nw-btn-sm"
+                onClick={handleCopyLink}
+              >
+                {COPY['chaos.copyLink']}
+              </button>
+              {copied && (
+                <span role="status" className="nw-status-tag nw-tag-success">
+                  {COPY['chaos.copied']}
+                </span>
+              )}
+            </div>
+          </fieldset>
         </section>
       )}
     </div>

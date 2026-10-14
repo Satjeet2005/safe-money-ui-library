@@ -16,9 +16,12 @@ export function AccountSummary(): JSX.Element {
   const locale = useSelector((state: RootState) => state.draft.locale);
 
   return (
-    <section aria-label={UI_LABELS.accountSummary} className="account-summary">
+    <section
+      aria-label={UI_LABELS.accountSummary}
+      className="account-summary nw-card nw-account-card"
+    >
       {accounts?.map((acc) => (
-        <div key={acc.currency}>
+        <div key={acc.currency} className="nw-account-balance nw-tabular">
           {acc.currency} ·{' '}
           {formatMoney({ currency: acc.currency, minor: acc.balanceMinor }, { locale })}
         </div>

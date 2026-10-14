@@ -235,3 +235,17 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Git revert, Testing Library, Cypress, Axe accessibility audit.
 - **Concept:** Reversible UI iteration, isolating design aesthetic from presentation behavior, and explicit research gating.
 - **How it works:** The initial Phase 2 visual direction was rolled back to restore the verified pre-Phase-2 baseline so the demo can undergo dedicated design research and direction selection before another implementation attempt. The rollback safely restored the prior page shell and baseline styling while keeping the Phase 1 presentation regression safety net (`PR-01` through `PR-12`) and full functional verification intact. Tests specifically coupled to the rejected token names and header badges (`PR-13`, `PR-14`) were removed, and visual acceptance criteria were reset to pending design selection.
+
+## Visual UI & Motion Implementation (Northwind Pay)
+
+- **Tools used:** Plain CSS custom properties (`--nw-*`), React 18, Redux Toolkit, Cypress 13, cypress-axe, Jest, Webpack 5.
+- **Concept:** Complete semantic visual design system, epistemic tri-modal state representation, zero-dependency CSS architecture, and strict accessibility-preserving refactoring.
+- **How it works:** Implemented the full 9-phase visual overhaul across `tokens.css`, `App.tsx`, `SendForm.tsx`, `Review.tsx`, `Result.tsx`, `AccountSummary.tsx`, and `ChaosPanel.tsx`:
+  1. _Design Tokens & Base Typography_: Established `--nw-*` semantic tokens for canvas, surfaces, text, borders, actions, status tints, tabular numerals, focus rings, and reduced-motion overrides without third-party CSS dependencies.
+  2. _Page Shell & Navigation_: Built responsive 7:5 desktop workspace grid collapsing to 1fr on mobile, persistent `[SIMULATION ONLY]` disclaimer badge, step progress indicator, and mobile chaos quick banner.
+  3. _Transfer Workflow & Inputs_: Styled SendForm with focused hero input, aligned select controls, and full-width CTA while preserving all input IDs and keyboard behaviors.
+  4. _Receipt Snapshot & Spinner_: Designed review snapshot list with tabular figures and a dual-arc CSS spinner running at 800ms.
+  5. _Epistemic State Clarity_: Enforced tri-modal result styling: Succeeded (mint bg, emerald left bar, `✓`, tag `Confirmed`), Rejected (rose bg, crimson left bar, `⊘`, tag `Rejected`), and Unconfirmed (parchment amber bg, 2px dashed border with solid left bar, `◆`, tag `Outcome unconfirmed`).
+  6. _Account Summary & Ledger_: Enhanced account card with tabular numerals and recent activity history without altering test string bindings.
+  7. _Chaos Simulation Console_: Structured 2x2 failure preset cards with non-color indicators (`✓`/`○`), status pills, touch-friendly radios and checkboxes, and grouped fieldsets. Solved WCAG 2.5.3 (Label in Name) by strictly matching button accessible name to visible text.
+  8. _Motion & A11Y Verification_: Verified zero Axe violations across all E2E journeys (`pnpm e2e:a11y`), 100% passing Cypress tests (`20/20` across 9 specs), 400 passing unit/integration tests, and full CI verification (`pnpm verify`).

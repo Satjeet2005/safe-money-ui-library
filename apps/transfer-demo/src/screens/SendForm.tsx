@@ -99,7 +99,7 @@ export function SendForm(): JSX.Element {
   const showRecipientError = draft.showErrors && !draft.recipientId;
 
   return (
-    <main>
+    <main className="nw-form-viewport">
       <StepHeading title={COPY['form.heading']} />
 
       {renderBanner(
@@ -110,7 +110,9 @@ export function SendForm(): JSX.Element {
       )}
 
       {(data.accountsStatus === 'loading' || data.recipientsStatus === 'loading') && (
-        <div role="status">{COPY['load.loading']}</div>
+        <div role="status" className="nw-status-loading">
+          {COPY['load.loading']}
+        </div>
       )}
 
       {draft.showErrors && (
@@ -128,11 +130,14 @@ export function SendForm(): JSX.Element {
           handleReview();
         }}
       >
-        <fieldset disabled={isDisabled}>
-          <div className="smu-field">
-            <label htmlFor="recipient">{COPY['form.recipient.label']}</label>
+        <fieldset disabled={isDisabled} className="nw-fieldset">
+          <div className="nw-form-group smu-field">
+            <label htmlFor="recipient" className="nw-label">
+              {COPY['form.recipient.label']}
+            </label>
             <select
               id="recipient"
+              className="nw-select"
               value={draft.recipientId ?? ''}
               onChange={(e) => dispatch(setRecipient(e.target.value ? e.target.value : null))}
               aria-invalid={showRecipientError ? 'true' : undefined}
@@ -146,16 +151,19 @@ export function SendForm(): JSX.Element {
               ))}
             </select>
             {showRecipientError && (
-              <p id="recipient-error" className="smu-error-message">
+              <p id="recipient-error" className="nw-field-error smu-error-message">
                 {COPY['form.recipient.required']}
               </p>
             )}
           </div>
 
-          <div className="smu-field">
-            <label htmlFor="account">{COPY['form.account.label']}</label>
+          <div className="nw-form-group smu-field">
+            <label htmlFor="account" className="nw-label">
+              {COPY['form.account.label']}
+            </label>
             <select
               id="account"
+              className="nw-select nw-tabular"
               value={draft.sourceCurrency}
               onChange={(e) => dispatch(setSourceCurrency(e.target.value as SourceCurrency))}
             >
@@ -171,10 +179,13 @@ export function SendForm(): JSX.Element {
             </select>
           </div>
 
-          <div className="smu-field">
-            <label htmlFor="locale">{COPY['form.locale.label']}</label>
+          <div className="nw-form-group smu-field">
+            <label htmlFor="locale" className="nw-label">
+              {COPY['form.locale.label']}
+            </label>
             <select
               id="locale"
+              className="nw-select nw-tabular"
               value={draft.locale}
               onChange={(e) => dispatch(setLocale(e.target.value as LocaleCode))}
             >
@@ -214,6 +225,7 @@ export function SendForm(): JSX.Element {
 
           <button
             type="submit"
+            className="nw-btn nw-btn-primary nw-btn-block"
             aria-disabled={isQuoteLoading ? 'true' : undefined}
             onClick={(e) => {
               if (isQuoteLoading) {

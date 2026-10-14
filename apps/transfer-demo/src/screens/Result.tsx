@@ -80,19 +80,39 @@ function ResultSuccessView({
   };
 
   return (
-    <>
-      <dl className="result-details">
-        <dt>{COPY['result.success.id']}</dt>
-        <dd>{result.transferId}</dd>
-        <dt>{COPY['result.success.sent']}</dt>
-        <dd>{formatMoney(result.debited, { locale })}</dd>
-        <dt>{COPY['result.success.received']}</dt>
-        <dd>{formatMoney(result.credited, { locale })}</dd>
+    <div className="nw-result-card nw-result-success result-screen result-success">
+      <div className="nw-result-header">
+        <div className="nw-result-icon result-icon" aria-hidden="true">
+          &#10003;
+        </div>
+        <div>
+          <span className="nw-status-tag nw-tag-success">Confirmed</span>
+        </div>
+      </div>
+      <dl className="result-details nw-receipt-list">
+        <div className="nw-receipt-row">
+          <dt>{COPY['result.success.id']}</dt>
+          <dd>
+            <code className="nw-ref-badge">{result.transferId}</code>
+          </dd>
+        </div>
+        <div className="nw-receipt-row">
+          <dt>{COPY['result.success.sent']}</dt>
+          <dd className="nw-tabular">{formatMoney(result.debited, { locale })}</dd>
+        </div>
+        <div className="nw-receipt-row">
+          <dt>{COPY['result.success.received']}</dt>
+          <dd className="nw-tabular">{formatMoney(result.credited, { locale })}</dd>
+        </div>
       </dl>
-      <button type="button" onClick={handleSendAnother}>
+      <button
+        type="button"
+        className="nw-btn nw-btn-primary nw-btn-block"
+        onClick={handleSendAnother}
+      >
         {COPY['result.success.another']}
       </button>
-    </>
+    </div>
   );
 }
 
@@ -120,19 +140,30 @@ function ResultRejectedView({
   const message = (copyKey && copyKey in COPY ? COPY[copyKey] : null) ?? fallbackMessage;
 
   return (
-    <>
-      <p>{message}</p>
-      <div className="result-actions">
+    <div className="nw-result-card nw-result-rejected result-screen result-rejected">
+      <div className="nw-result-header">
+        <div className="nw-result-icon result-icon" aria-hidden="true">
+          &#8856;
+        </div>
+        <div>
+          <span className="nw-status-tag nw-tag-error">
+            {retryable ? 'Rejected — Temporary issue' : 'Rejected — Action required'}
+          </span>
+        </div>
+      </div>
+      <p className="nw-result-reason">{message}</p>
+      <p className="nw-result-subtext">No funds were deducted from your account.</p>
+      <div className="result-actions nw-review-actions">
         {retryable && (
-          <button type="button" onClick={onRetry}>
+          <button type="button" className="nw-btn nw-btn-primary" onClick={onRetry}>
             {COPY['result.retry']}
           </button>
         )}
-        <button type="button" onClick={handleEdit}>
+        <button type="button" className="nw-btn nw-btn-secondary" onClick={handleEdit}>
           {COPY['result.edit']}
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -179,18 +210,28 @@ function ResultUnconfirmedView({
   };
 
   return (
-    <>
-      <p>{COPY['result.unconfirmed.body']}</p>
-      <p>{state.error.message}</p>
-      <div className="result-actions">
-        <button type="button" onClick={onRetry}>
+    <div className="nw-result-card nw-result-unconfirmed result-screen result-unconfirmed">
+      <div className="nw-result-header">
+        <div className="nw-result-icon result-icon" aria-hidden="true">
+          &#9670;
+        </div>
+        <div>
+          <span className="nw-status-tag nw-tag-uncertain">Outcome unconfirmed</span>
+        </div>
+      </div>
+      <div className="nw-uncertain-explanation">
+        <p>{COPY['result.unconfirmed.body']}</p>
+        <p>{state.error.message}</p>
+      </div>
+      <div className="result-actions nw-review-actions">
+        <button type="button" className="nw-btn nw-btn-primary" onClick={onRetry}>
           {COPY['result.retry']}
         </button>
-        <button type="button" onClick={handleLeave}>
+        <button type="button" className="nw-btn nw-btn-secondary" onClick={handleLeave}>
           {COPY['result.leave']}
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -211,7 +252,7 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
 
   if (state?.status === 'succeeded') {
     return (
-      <main>
+      <main className="nw-result-viewport">
         <StepHeading key="succeeded" title={COPY['result.success.heading']} />
         <ResultSuccessView
           result={state.result}
@@ -225,9 +266,11 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
 
   if (state?.status === 'submitting') {
     return (
-      <main>
+      <main className="nw-result-viewport">
         <StepHeading key="submitting" title={COPY['review.heading']} />
-        <div role="status">{COPY['submit.sending']}</div>
+        <div role="status" className="nw-status-submitting">
+          {COPY['submit.sending']}
+        </div>
       </main>
     );
   }
@@ -235,7 +278,7 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
   if (state?.status === 'failed') {
     if (state.error.kind === 'rejected') {
       return (
-        <main>
+        <main className="nw-result-viewport">
           <StepHeading
             key={`rejected-${state.error.code ?? 'unknown'}`}
             title={COPY['result.rejected.heading']}
@@ -253,7 +296,7 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
     }
 
     return (
-      <main>
+      <main className="nw-result-viewport">
         <StepHeading
           key={`unconfirmed-${state.error.kind}`}
           title={COPY['result.unconfirmed.heading']}
@@ -272,7 +315,7 @@ export function Result({ state, onRetry, onReset }: ResultProps = {}): JSX.Eleme
   }
 
   return (
-    <main>
+    <main className="nw-result-viewport">
       <StepHeading key="default" title={COPY['result.success.heading']} />
     </main>
   );
