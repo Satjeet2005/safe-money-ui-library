@@ -127,3 +127,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** React 18, Redux Toolkit, useSafeSubmit, dependency injection, Jest.
 - **Concept:** Centralizing transfer flow step ownership and stateful submit lifecycle above individual screen boundaries to prevent state resets.
 - **How it works:** `TransferFlow` acts as the single step owner reading Redux `flow.step` and instantiates the `useSafeSubmit` controller; coordinates mock service operations with controller idempotency keys and abort signals; classifies service rejections with exact retryability; verifies raw responses against both boundary schemas and financial snapshot invariants before advancing to the result step.
+
+## WP-21B: Result Screen and Recent Activity History
+
+- **Tools used:** React 18, Redux Toolkit, React Testing Library, accessible DOM focus management.
+- **Concept:** Terminal result screen handling all submission outcomes (succeeded, business rejected, unconfirmed) with exact-once side effects and accessible focus transitions.
+- **How it works:** `Result` renders success details (debited, credited, transfer ID), business rejections (with code-specific copy and Edit/Retry actions), and unconfirmed states (timeout, network, invalid_response with retry and leave options); `useSuccessSideEffect` executes exactly once per successful transfer ID to append a completed history entry, reset draft state, purge storage, and refresh account balances; leaving an unconfirmed outcome appends an unconfirmed entry keyed by the transfer's idempotency key and surfaces an unconfirmed banner.
