@@ -229,3 +229,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** CSS custom properties, WCAG contrast calculation, Testing Library, Webpack MiniCssExtractPlugin.
 - **Concept:** Establishing a restrained semantic design system and calm page shell foundation while enforcing zero bundle creep and WCAG 2.1 AA compliance.
 - **How it works:** Implemented semantic plain-CSS design tokens in `apps/transfer-demo/src/tokens.css` covering canvas (`#F5F7F6`), surface (`#FFFFFF`), ink (`#14231F`), primary action (`#146B57`), semantic status colors, spacing scale, elevation shadows, tabular numerals, and reduced-motion overrides; restructured the page header in `App.tsx` with a quiet Northwind Pay brand mark, "Transfer sandbox" descriptor, simulated environment indicator, and prominent simulation notice; verified all color pairs meet WCAG AA contrast (normal text >= 4.5:1, UI boundaries >= 3:1); added `PR-13` and `PR-14` tests; and verified that `pnpm size` passes with App JS at 80,944 B within the 88,900 B budget.
+
+## Visual Redesign: Phase 2 Rollback and Design Direction Reset
+
+- **Tools used:** Git revert, Testing Library, Cypress, Axe accessibility audit.
+- **Concept:** Reversible UI iteration, isolating design aesthetic from presentation behavior, and explicit research gating.
+- **How it works:** The initial Phase 2 visual direction was rolled back to restore the verified pre-Phase-2 baseline so the demo can undergo dedicated design research and direction selection before another implementation attempt. The rollback safely restored the prior page shell and baseline styling while keeping the Phase 1 presentation regression safety net (`PR-01` through `PR-12`) and full functional verification intact. Tests specifically coupled to the rejected token names and header badges (`PR-13`, `PR-14`) were removed, and visual acceptance criteria were reset to pending design selection.
