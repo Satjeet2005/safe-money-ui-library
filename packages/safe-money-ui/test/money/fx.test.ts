@@ -82,18 +82,42 @@ describe('convert - Invariants and edge cases', () => {
     expect(result).toEqual({ currency: 'USD', minor: 100 });
   });
 
+  it('converts to exactly MAX_MINOR without throwing', () => {
+    // 230_000_000_000 EUR converts to exactly 1_000_000_000_000 PLN (MAX_MINOR)
+    const source = createMoney('EUR', 230_000_000_000);
+    const result = convert(source, 'PLN');
+    expect(result).toEqual({ currency: 'PLN', minor: MAX_MINOR });
+  });
+
   it('throws RangeError if conversion result exceeds MAX_MINOR', () => {
     // USD -> JPY rate multiplies by 150. Converting MAX_MINOR USD yields 150 * MAX_MINOR
     const largeMoney = createMoney('USD', MAX_MINOR);
-    expect(() => convert(largeMoney, 'JPY')).toThrow(RangeError);
+    expect(() => convert(largeMoney, 'JPY')).toThrow(
+      /exceeds MAX_MINOR limit \(1000000000000\)/,
+    );
   });
 
   it('throws RangeError on invalid source money or unsupported currency', () => {
-    expect(() => convert(null as unknown as Money, 'EUR')).toThrow(RangeError);
-    expect(() => convert({ currency: 'INVALID' as CurrencyCode, minor: 100 }, 'EUR')).toThrow(
-      RangeError,
+    expect(() => convert(null as unknown as Money, 'EUR')).toThrow(
+      'source must be a valid Money object',
     );
-    expect(() => convert(createMoney('USD', 100), 'INVALID' as CurrencyCode)).toThrow(RangeError);
-    expect(() => convert({ currency: 'USD', minor: -10 }, 'EUR')).toThrow(RangeError);
+    expect(() => convert('not-an-object' as unknown as Money, 'EUR')).toThrow(
+      'source must be a valid Money object',
+    );
+    expect(() => convert({ currency: 'INVALID' as CurrencyCode, minor: 100 }, 'EUR')).toThrow(
+      'Unsupported source currency: INVALID',
+    );
+    expect(() => convert(createMoney('USD', 100), 'INVALID' as CurrencyCode)).toThrow(
+      'Unsupported target currency: INVALID',
+    );
+    expect(() => convert({ currency: 'USD', minor: -10 }, 'EUR')).toThrow(
+      'Invalid minor amount: -10. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() => convert({ currency: 'USD', minor: 1.5 }, 'EUR')).toThrow(
+      'Invalid minor amount: 1.5. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() => convert({ currency: 'USD', minor: MAX_MINOR + 1 }, 'EUR')).toThrow(
+      'Invalid minor amount: 1000000000001. Must be a safe non-negative integer <= 1000000000000.',
+    );
   });
 });

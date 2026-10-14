@@ -383,4 +383,173 @@ describe('Submit Controller (PRD §9.3 & Action Plan CT-01..CT-09)', () => {
       jest.useRealTimers();
     }
   });
+
+  test('CT-extra: subscribe returns unsubscribe function which removes listener', () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => deferred.promise,
+      parseResponse: defaultParse,
+      newKey: () => 'key-sub',
+      scheduler,
+    });
+
+    const listener = jest.fn();
+    const unsubscribe = controller.subscribe(listener);
+
+    controller.submit({ amount: 10 });
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    unsubscribe();
+    deferred.resolve({ id: 'done' });
+    expect(listener).toHaveBeenCalledTimes(1);
+    controller.dispose();
+  });
+
+  test('CT-extra: retry() when not failed or when error is not retryable is a no-op', async () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+    let runCalls = 0;
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => {
+        runCalls++;
+        return deferred.promise;
+      },
+      parseResponse: defaultParse,
+      newKey: () => 'key-non-retryable',
+      scheduler,
+    });
+
+    // In idle: retry() does nothing
+    controller.retry();
+    expect(runCalls).toBe(0);
+    expect(controller.getState().status).toBe('idle');
+
+    controller.submit({ amount: 100 });
+    expect(runCalls).toBe(1);
+
+    // Reject with non-retryable error
+    deferred.reject(new SubmitRejection('Terminal error', 'ERR_TERMINAL', false));
+    await Promise.resolve();
+    expect(controller.getState().status).toBe('failed');
+
+    // Calling retry() on non-retryable failed state does nothing
+    controller.retry();
+    expect(runCalls).toBe(1);
+    expect(controller.getState().status).toBe('failed');
+    controller.dispose();
+  });
+
+  test('CT-extra: dispose() is idempotent and disables submit, retry, and reset', async () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+    let runCalls = 0;
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => {
+        runCalls++;
+        return deferred.promise;
+      },
+      parseResponse: defaultParse,
+      newKey: () => 'key-disp',
+      scheduler,
+    });
+
+    controller.dispose();
+    // Calling dispose second time
+    expect(() => controller.dispose()).not.toThrow();
+
+    // Calling submit after dispose does nothing
+    controller.submit({ amount: 50 });
+    expect(runCalls).toBe(0);
+    expect(controller.getState().status).toBe('idle');
+
+    // Calling retry after dispose does nothing
+    controller.retry();
+    expect(runCalls).toBe(0);
+
+    // Calling reset after dispose does nothing
+    controller.reset();
+    expect(controller.getState().status).toBe('idle');
+  });
+
+  test('CT-extra: non-Error rejection and empty parseResponse message fallback to default messages', async () => {
+    const scheduler = createFakeScheduler();
+    let deferred = createDeferred<unknown>();
+
+    // 1. Non-Error rejection falls back to default networkMessage
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: () => deferred.promise,
+      parseResponse: () => ({ ok: false, message: '' }),
+      newKey: () => 'key-err',
+      scheduler,
+    });
+
+    controller.submit({ amount: 10 });
+    deferred.reject('string error without message');
+    await Promise.resolve();
+
+    let state = controller.getState();
+    expect(state.status).toBe('failed');
+    if (state.status === 'failed') {
+      expect(state.error.kind).toBe('network');
+      expect(state.error.message).toBe('The network request failed.');
+    }
+
+    // Reset and test invalid_response empty message fallback
+    controller.reset();
+    deferred = createDeferred<unknown>();
+    controller.submit({ amount: 20 });
+    deferred.resolve({ arbitrary: true });
+    await Promise.resolve();
+
+    state = controller.getState();
+    expect(state.status).toBe('failed');
+    if (state.status === 'failed') {
+      expect(state.error.kind).toBe('invalid_response');
+      expect(state.error.message).toBe('The response could not be understood.');
+    }
+
+    controller.dispose();
+  });
+
+  test('CT-extra: rejection after abortController signal is aborted is ignored', async () => {
+    const scheduler = createFakeScheduler();
+    const deferred = createDeferred<unknown>();
+    let abortObserved = false;
+
+    const controller = createSubmitController<TestIn, TestOut>({
+      run: (_input, ctx) => {
+        ctx.signal.addEventListener('abort', () => {
+          abortObserved = true;
+        });
+        return deferred.promise;
+      },
+      parseResponse: defaultParse,
+      newKey: () => 'key-abort',
+      timeoutMs: 500,
+      scheduler,
+    });
+
+    controller.submit({ amount: 10 });
+    expect(controller.getState().status).toBe('submitting');
+
+    // Trigger timeout -> timer aborts signal
+    scheduler.advance(500);
+    await Promise.resolve();
+
+    expect(abortObserved).toBe(true);
+    expect(controller.getState().status).toBe('failed');
+
+    // Later rejection on the aborted signal should return early (signal.aborted === true)
+    deferred.reject(new Error('late failure after abort'));
+    await Promise.resolve();
+
+    // State remains the timeout failure
+    const state = controller.getState();
+    expect(state.status).toBe('failed');
+    if (state.status === 'failed') {
+      expect(state.error.kind).toBe('timeout');
+    }
+    controller.dispose();
+  });
 });

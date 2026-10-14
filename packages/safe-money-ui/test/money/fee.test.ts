@@ -63,14 +63,35 @@ describe('computeFee - Invariants and edge cases', () => {
     expect(feeInKwd.minor).toBe(250);
   });
 
+  it('handles MAX_MINOR amount without throwing', () => {
+    const maxSource = createMoney('USD', 1_000_000_000_000);
+    expect(computeFee(maxSource, 'USD')).toEqual({ currency: 'USD', minor: 0 });
+    const feeCross = computeFee(maxSource, 'EUR');
+    expect(feeCross.currency).toBe('USD');
+    expect(feeCross.minor).toBe(5_000_000_000);
+  });
+
   it('throws RangeError on invalid source money or unsupported currency', () => {
-    expect(() => computeFee(null as unknown as Money, 'EUR')).toThrow(RangeError);
+    expect(() => computeFee(null as unknown as Money, 'EUR')).toThrow(
+      'source must be a valid Money object',
+    );
+    expect(() => computeFee('not-an-object' as unknown as Money, 'EUR')).toThrow(
+      'source must be a valid Money object',
+    );
     expect(() => computeFee({ currency: 'INVALID' as CurrencyCode, minor: 100 }, 'EUR')).toThrow(
-      RangeError,
+      'Unsupported source currency: INVALID',
     );
     expect(() => computeFee(createMoney('USD', 100), 'INVALID' as CurrencyCode)).toThrow(
-      RangeError,
+      'Unsupported target currency: INVALID',
     );
-    expect(() => computeFee({ currency: 'USD', minor: -10 }, 'EUR')).toThrow(RangeError);
+    expect(() => computeFee({ currency: 'USD', minor: -10 }, 'EUR')).toThrow(
+      'Invalid minor amount: -10. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() => computeFee({ currency: 'USD', minor: 1.5 }, 'EUR')).toThrow(
+      'Invalid minor amount: 1.5. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() => computeFee({ currency: 'USD', minor: 1_000_000_000_000 + 1 }, 'EUR')).toThrow(
+      'Invalid minor amount: 1000000000001. Must be a safe non-negative integer <= 1000000000000.',
+    );
   });
 });

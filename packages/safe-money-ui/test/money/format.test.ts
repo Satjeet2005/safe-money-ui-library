@@ -55,6 +55,7 @@ describe('formatMoney - Options and edge cases', () => {
   it('formats zero amounts across currencies with correct decimals', () => {
     expect(normalizeSpaces(formatMoney(createMoney('USD', 0), { locale: 'en-US' }))).toBe('$0.00');
     expect(normalizeSpaces(formatMoney(createMoney('JPY', 0), { locale: 'en-US' }))).toBe('¥0');
+    expect(normalizeSpaces(formatMoney(createMoney('JPY', 1234), { locale: 'en-US' }))).toBe('¥1,234');
     expect(
       normalizeSpaces(formatMoney(createMoney('KWD', 0), { locale: 'en-US', display: 'code' })),
     ).toBe('KWD 0.000');
@@ -85,12 +86,28 @@ describe('formatMoney - Options and edge cases', () => {
 
   it('throws RangeError for invalid minor amount or missing options', () => {
     expect(() => formatMoney({ currency: 'USD', minor: -1 }, { locale: 'en-US' })).toThrow(
-      RangeError,
+      'Invalid minor amount: -1. Must be a safe non-negative integer <= 1000000000000.',
     );
-
+    expect(() => formatMoney({ currency: 'USD', minor: 1.5 }, { locale: 'en-US' })).toThrow(
+      'Invalid minor amount: 1.5. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() =>
+      formatMoney({ currency: 'USD', minor: 1_000_000_000_000 + 1 }, { locale: 'en-US' }),
+    ).toThrow(
+      'Invalid minor amount: 1000000000001. Must be a safe non-negative integer <= 1000000000000.',
+    );
+    expect(() => formatMoney(null as unknown as Money, { locale: 'en-US' })).toThrow(
+      'money must be a valid Money object',
+    );
+    expect(() => formatMoney('string' as unknown as Money, { locale: 'en-US' })).toThrow(
+      'money must be a valid Money object',
+    );
     expect(() =>
       formatMoney(createMoney('USD', 100), null as unknown as { locale: LocaleCode }),
-    ).toThrow(RangeError);
+    ).toThrow('options must be an object');
+    expect(() =>
+      formatMoney(createMoney('USD', 100), { locale: 'invalid-locale' as LocaleCode }),
+    ).toThrow('Unsupported locale: invalid-locale');
   });
 });
 

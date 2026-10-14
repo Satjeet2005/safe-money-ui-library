@@ -58,7 +58,9 @@ describe('createMoney factory', () => {
 
   describe('invalid input - throws RangeError', () => {
     it('throws RangeError for negative integers', () => {
-      expect(() => createMoney('USD', -1)).toThrow(RangeError);
+      expect(() => createMoney('USD', -1)).toThrow(
+        'Invalid minor amount: -1. Must be a safe non-negative integer <= 1000000000000.',
+      );
       expect(() => createMoney('USD', -1000)).toThrow(RangeError);
     });
 

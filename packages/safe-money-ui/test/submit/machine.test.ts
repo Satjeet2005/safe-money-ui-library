@@ -152,6 +152,21 @@ describe('Submit Machine Reducer (PRD §9.2 Transition Table)', () => {
       input,
       attempt: 2,
     });
+
+    const failedAgain = machine.reduce(retried, {
+      type: 'REJECT',
+      requestId: 2,
+      error: retryableError,
+    });
+    const retriedSecondTime = machine.reduce(failedAgain, { type: 'RETRY' });
+
+    expect(retriedSecondTime).toEqual({
+      status: 'submitting',
+      requestId: 3,
+      idempotencyKey: 'key-1',
+      input,
+      attempt: 3,
+    });
   });
 
   it('failed (non-retryable) + RETRY -> ignored (returns same state reference)', () => {

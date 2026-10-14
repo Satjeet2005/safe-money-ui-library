@@ -379,18 +379,28 @@ describe('parseAmount - Algorithm edge cases and validation order', () => {
         currency: 'CAD' as unknown as CurrencyCode,
         locale: 'en-US',
       }),
-    ).toThrow(RangeError);
+    ).toThrow('Unsupported currency: CAD');
 
     expect(() =>
       parseAmount('100', {
         currency: 'USD',
         locale: 'fr-FR' as unknown as LocaleCode,
       }),
-    ).toThrow(RangeError);
+    ).toThrow('Unsupported locale: fr-FR');
 
     expect(() =>
       parseAmount('100', null as unknown as { currency: CurrencyCode; locale: LocaleCode }),
-    ).toThrow(RangeError);
+    ).toThrow('opts must be an options object');
+
+    expect(() =>
+      parseAmount('100', 'not-an-object' as unknown as { currency: CurrencyCode; locale: LocaleCode }),
+    ).toThrow('opts must be an options object');
+
+    // non-string input falls back to empty string
+    expect(parseAmount(123 as unknown as string, { currency: 'USD', locale: 'en-US' })).toEqual({
+      ok: false,
+      error: { code: 'EMPTY' },
+    });
   });
 
   it('rejects numbers with more than 13 integer digits as UNSAFE_MAGNITUDE at step 9', () => {
@@ -398,6 +408,15 @@ describe('parseAmount - Algorithm edge cases and validation order', () => {
     expect(parseAmount('10000000000000', { currency: 'USD', locale: 'en-US' })).toEqual({
       ok: false,
       error: { code: 'UNSAFE_MAGNITUDE' },
+    });
+  });
+
+  it('strips multiple leading zeros so numbers with <= 13 significant integer digits pass step 9', () => {
+    // 14 leading zeros + digit 1: total 15 characters, but normalized is length 1
+    const res = parseAmount('000000000000001', { currency: 'USD', locale: 'en-US' });
+    expect(res).toEqual({
+      ok: true,
+      money: { currency: 'USD', minor: 100 },
     });
   });
 });
