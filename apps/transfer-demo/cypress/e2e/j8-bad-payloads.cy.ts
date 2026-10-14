@@ -105,9 +105,7 @@ describe('J8 — Invalid and corrupted data recovery', () => {
     cy.reload();
 
     // 5. Assert banner reads "Your saved draft was unreadable, so we cleared it."
-    cy.contains(
-      'Your saved draft was unreadable, so we cleared it.',
-    ).should('be.visible');
+    cy.contains('Your saved draft was unreadable, so we cleared it.').should('be.visible');
     cy.checkAppA11y();
 
     // 6. Assert form is empty
