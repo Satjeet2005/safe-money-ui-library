@@ -393,7 +393,10 @@ describe('parseAmount - Algorithm edge cases and validation order', () => {
     ).toThrow('opts must be an options object');
 
     expect(() =>
-      parseAmount('100', 'not-an-object' as unknown as { currency: CurrencyCode; locale: LocaleCode }),
+      parseAmount(
+        '100',
+        'not-an-object' as unknown as { currency: CurrencyCode; locale: LocaleCode },
+      ),
     ).toThrow('opts must be an options object');
 
     // non-string input falls back to empty string

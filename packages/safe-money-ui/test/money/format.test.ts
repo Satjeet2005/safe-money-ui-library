@@ -55,7 +55,9 @@ describe('formatMoney - Options and edge cases', () => {
   it('formats zero amounts across currencies with correct decimals', () => {
     expect(normalizeSpaces(formatMoney(createMoney('USD', 0), { locale: 'en-US' }))).toBe('$0.00');
     expect(normalizeSpaces(formatMoney(createMoney('JPY', 0), { locale: 'en-US' }))).toBe('¥0');
-    expect(normalizeSpaces(formatMoney(createMoney('JPY', 1234), { locale: 'en-US' }))).toBe('¥1,234');
+    expect(normalizeSpaces(formatMoney(createMoney('JPY', 1234), { locale: 'en-US' }))).toBe(
+      '¥1,234',
+    );
     expect(
       normalizeSpaces(formatMoney(createMoney('KWD', 0), { locale: 'en-US', display: 'code' })),
     ).toBe('KWD 0.000');

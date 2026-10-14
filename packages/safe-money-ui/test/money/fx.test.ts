@@ -92,9 +92,7 @@ describe('convert - Invariants and edge cases', () => {
   it('throws RangeError if conversion result exceeds MAX_MINOR', () => {
     // USD -> JPY rate multiplies by 150. Converting MAX_MINOR USD yields 150 * MAX_MINOR
     const largeMoney = createMoney('USD', MAX_MINOR);
-    expect(() => convert(largeMoney, 'JPY')).toThrow(
-      /exceeds MAX_MINOR limit \(1000000000000\)/,
-    );
+    expect(() => convert(largeMoney, 'JPY')).toThrow(/exceeds MAX_MINOR limit \(1000000000000\)/);
   });
 
   it('throws RangeError on invalid source money or unsupported currency', () => {
