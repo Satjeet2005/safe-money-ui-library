@@ -163,3 +163,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** Cypress 13, `cypress-axe`, `cypress-real-events`, sessionStorage inspection, fake clock timers.
 - **Concept:** Critical edge-case and fault tolerance verification across idempotent lost response recovery, server rejections, stale quotes/rates, malformed payloads, and corrupt storage recovery, concluding Phase 3 Minimum Complete Release.
 - **How it works:** Verified idempotent retry upon lost responses with unchanged idempotency keys and exactly one backend execution (`executedCount === 1`); verified non-retryable vs. retryable server rejections (`INSUFFICIENT_FUNDS`, `RECIPIENT_BLOCKED`, `SERVICE_UNAVAILABLE`) preserving form state on "Edit details"; handled server quote expiration and rate shifts (+0.5%) prompting user re-acceptance; validated retry loops for malformed/tampered payloads; and proved corrupted `sessionStorage` drafts are gracefully discarded with an accessible notification banner, passing all Axe accessibility checkpoints with zero violations.
+
+## WP-25: Automated Accessibility Checks (A11Y-01 through A11Y-10)
+
+- **Tools used:** `jest-axe`, `cypress-axe`, WCAG 2.2 AA rule tags, React Testing Library.
+- **Concept:** Exhaustive automated accessibility verification across all primary component and application states with zero rule exclusions except jsdom's documented lack of layout engine for `color-contrast`.
+- **How it works:** Verified initial empty forms, active validation error states with linked focus targets, five variations of `MoneyInput`, `ErrorSummary` container semantics, default and banner-adorned review screens, and all terminal result states (succeeded, unconfirmed, and rejected), yielding zero Axe violations across both `pnpm test:a11y` and `pnpm e2e:a11y`.
