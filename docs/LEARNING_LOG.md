@@ -121,3 +121,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** React 18, Redux Toolkit, injected Clock helper, React Testing Library.
 - **Concept:** Critical transfer confirmation screen combining review-guard snapshot verification, quote expiry re-validation, and safe single-submit dispatch.
 - **How it works:** `Review` verifies live Redux draft values against the review snapshot; redirects back to form if values drifted; checks quote expiration against the clock and automatically refreshes rate quote if expired; halts submission and presents localized warning banners whenever parameters or rates change, requiring user re-confirmation before final submission.
+
+## WP-21A: TransferFlow Ownership and Controller Integration
+
+- **Tools used:** React 18, Redux Toolkit, useSafeSubmit, dependency injection, Jest.
+- **Concept:** Centralizing transfer flow step ownership and stateful submit lifecycle above individual screen boundaries to prevent state resets.
+- **How it works:** `TransferFlow` acts as the single step owner reading Redux `flow.step` and instantiates the `useSafeSubmit` controller; coordinates mock service operations with controller idempotency keys and abort signals; classifies service rejections with exact retryability; verifies raw responses against both boundary schemas and financial snapshot invariants before advancing to the result step.
