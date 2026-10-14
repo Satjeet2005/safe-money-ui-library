@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
 import { setAccounts, setRecipients } from '../store/dataSlice.js';
@@ -498,6 +499,124 @@ describe('Result Screen and Recent Activity History (WP-21B)', () => {
         name: COPY['result.unconfirmed.heading'],
       });
       expect(document.activeElement).toBe(unconfirmedHeading);
+    });
+  });
+
+  describe('A11Y-07, A11Y-08, A11Y-09: Result accessibility', () => {
+    const AXE_OPTIONS = {
+      runOnly: {
+        type: 'tag' as const,
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+      },
+      rules: {
+        // Disable color-contrast in jsdom as specified by PRD §15.2 (jsdom has no layout/rendering engine)
+        'color-contrast': { enabled: false },
+      },
+    };
+
+    it('A11Y-07: Result, succeeded has zero axe violations', async () => {
+      const store = setupStore();
+      const state: SubmitState<TransferInput, TransferResponsePayload> = {
+        status: 'succeeded',
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
+        result: sampleSuccessResult,
+      };
+
+      let container!: HTMLElement;
+      await act(async () => {
+        const utils = render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} />
+          </Provider>,
+        );
+        container = utils.container;
+      });
+
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-08: Result, unconfirmed has zero axe violations', async () => {
+      const store = setupStore();
+      const state: SubmitState<TransferInput, TransferResponsePayload> = {
+        status: 'unconfirmed',
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
+        input: sampleInput,
+        error: { kind: 'timeout', message: 'The request timed out.' },
+      };
+
+      let container!: HTMLElement;
+      act(() => {
+        const utils = render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} onRetry={jest.fn()} onLeave={jest.fn()} />
+          </Provider>,
+        );
+        container = utils.container;
+      });
+
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-09: Result, rejected non-retryable has zero axe violations', async () => {
+      const store = setupStore();
+      const state: SubmitState<TransferInput, TransferResponsePayload> = {
+        status: 'rejected',
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
+        input: sampleInput,
+        error: {
+          kind: 'rejected',
+          code: 'INSUFFICIENT_FUNDS',
+          message: COPY['result.rejection.INSUFFICIENT_FUNDS'],
+          retryable: false,
+        },
+      };
+
+      let container!: HTMLElement;
+      act(() => {
+        const utils = render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} />
+          </Provider>,
+        );
+        container = utils.container;
+      });
+
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-09: Result, rejected retryable has zero axe violations', async () => {
+      const store = setupStore();
+      const state: SubmitState<TransferInput, TransferResponsePayload> = {
+        status: 'rejected',
+        requestId: 1,
+        idempotencyKey: 'TRF-000001',
+        input: sampleInput,
+        error: {
+          kind: 'rejected',
+          code: 'SERVICE_UNAVAILABLE',
+          message: COPY['result.rejection.SERVICE_UNAVAILABLE'],
+          retryable: true,
+        },
+      };
+
+      let container!: HTMLElement;
+      act(() => {
+        const utils = render(
+          <Provider store={store}>
+            <Result state={state} onReset={jest.fn()} onRetry={jest.fn()} />
+          </Provider>,
+        );
+        container = utils.container;
+      });
+
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
     });
   });
 });

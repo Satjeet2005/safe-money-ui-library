@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
 import { setAccounts, setRecipients } from '../store/dataSlice.js';
@@ -184,5 +185,32 @@ describe('SendForm (FORM-01..FORM-06)', () => {
     // Must contain USD $5,000.00 and must not use EUR symbol or recipient currency
     expect(summary).toHaveTextContent('Available: $5,000.00.');
     expect(summary.textContent).not.toContain('€');
+  });
+
+  describe('A11Y-01 and A11Y-02: SendForm accessibility', () => {
+    const AXE_OPTIONS = {
+      runOnly: {
+        type: 'tag' as const,
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+      },
+      rules: {
+        // Disable color-contrast in jsdom as specified by PRD §15.2 (jsdom has no layout/rendering engine)
+        'color-contrast': { enabled: false },
+      },
+    };
+
+    it('A11Y-01: SendForm, loaded, empty has zero axe violations', async () => {
+      const { container } = setup();
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-02: SendForm after a failed review attempt has zero axe violations', async () => {
+      const { container } = setup();
+      const reviewButton = screen.getByRole('button', { name: 'Review transfer' });
+      fireEvent.click(reviewButton);
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
   });
 });

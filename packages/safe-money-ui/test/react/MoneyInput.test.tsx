@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import { MoneyInput, type MoneyInputProps } from '../../src/react/MoneyInput.js';
 import type { CurrencyCode, ParseError, ParseErrorCode } from '../../src/money/types.js';
 
@@ -295,5 +296,61 @@ describe('MoneyInput (MI-01..MI-10)', () => {
       />,
     );
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  describe('A11Y-03: MoneyInput alone', () => {
+    const AXE_OPTIONS = {
+      runOnly: {
+        type: 'tag' as const,
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+      },
+      rules: {
+        // Disable color-contrast in jsdom as specified by PRD §15.2 (jsdom has no layout/rendering engine)
+        'color-contrast': { enabled: false },
+      },
+    };
+
+    it('A11Y-03: default MoneyInput has zero axe violations', async () => {
+      const { container } = render(<MoneyInput {...defaultProps()} />);
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-03: MoneyInput with hint has zero axe violations', async () => {
+      const { container } = render(
+        <MoneyInput {...defaultProps({ hint: 'Enter an amount between 1 and 1000' })} />,
+      );
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-03: MoneyInput with parse error has zero axe violations', async () => {
+      const { container } = render(
+        <MoneyInput {...defaultProps({ value: 'invalid', showErrors: true })} />,
+      );
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-03: MoneyInput with external error has zero axe violations', async () => {
+      const { container } = render(
+        <MoneyInput
+          {...defaultProps({
+            externalError: 'Insufficient funds in selected account',
+            showErrors: true,
+          })}
+        />,
+      );
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-03: disabled MoneyInput has zero axe violations', async () => {
+      const { container } = render(
+        <MoneyInput {...defaultProps({ disabled: true, value: '100' })} />,
+      );
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
   });
 });

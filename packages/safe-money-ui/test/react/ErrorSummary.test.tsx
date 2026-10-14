@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { ErrorSummary, type ErrorSummaryProps } from '../../src/react/ErrorSummary.js';
 
 function defaultProps(overrides: Partial<ErrorSummaryProps> = {}): ErrorSummaryProps {
@@ -86,5 +87,30 @@ describe('ErrorSummary (ES-01..ES-04)', () => {
     expect(() => {
       fireEvent.click(links[1]!);
     }).not.toThrow();
+  });
+
+  describe('A11Y-04: ErrorSummary with two errors', () => {
+    const AXE_OPTIONS = {
+      runOnly: {
+        type: 'tag' as const,
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+      },
+      rules: {
+        // Disable color-contrast in jsdom as specified by PRD §15.2 (jsdom has no layout/rendering engine)
+        'color-contrast': { enabled: false },
+      },
+    };
+
+    it('A11Y-04: ErrorSummary with two errors has zero axe violations', async () => {
+      const { container } = render(
+        <div>
+          <ErrorSummary {...defaultProps()} />
+          <input id="recipient" aria-label="Recipient" />
+          <input id="amount" aria-label="Amount" />
+        </div>,
+      );
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
   });
 });

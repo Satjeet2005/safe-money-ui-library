@@ -18,7 +18,7 @@
     "build": "pnpm --filter @satjeet2005/safe-money-ui build && pnpm --filter transfer-demo build",
     "size": "node scripts/size.mjs",
     "e2e": "pnpm build && node scripts/run-e2e.mjs",
-    "e2e:a11y": "echo \"e2e:a11y will be implemented in WP-25\"",
+    "e2e:a11y": "pnpm build && node scripts/run-e2e.mjs --spec \"cypress/e2e/j1-happy-path.cy.ts,cypress/e2e/j2-invalid-input.cy.ts,cypress/e2e/j4-timeout-recover.cy.ts,cypress/e2e/j6-rejections.cy.ts,cypress/e2e/j8-bad-payloads.cy.ts\"",
     "mutation": "echo \"mutation will be implemented in WP-26\"",
     "claims:check": "node scripts/claims-check.mjs",
     "dev": "pnpm --filter transfer-demo dev"

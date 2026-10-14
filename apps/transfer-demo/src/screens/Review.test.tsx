@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { Provider } from 'react-redux';
 import { createAppStore } from '../store/store.js';
 import {
@@ -7,8 +8,13 @@ import {
   setAccountsStatus,
   setRecipientsStatus,
 } from '../store/dataSlice.js';
+import {
+  goToReview,
+  setBanner,
+  type ReviewSnapshot,
+  type QuotePayload,
+} from '../store/flowSlice.js';
 import { setRecipient, setSourceCurrency, setAmountText } from '../store/draftSlice.js';
-import { goToReview, type ReviewSnapshot, type QuotePayload } from '../store/flowSlice.js';
 import { Review } from './Review.js';
 import type { MockService } from '../service/mockService.js';
 import type { Clock } from '@satjeet2005/safe-money-ui/submit';
@@ -262,5 +268,42 @@ describe('Review Screen (REV-01..REV-06)', () => {
 
     fireEvent.click(confirmButton);
     expect(submitMock).not.toHaveBeenCalled();
+  });
+
+  describe('A11Y-05 and A11Y-06: Review accessibility', () => {
+    const AXE_OPTIONS = {
+      runOnly: {
+        type: 'tag' as const,
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+      },
+      rules: {
+        // Disable color-contrast in jsdom as specified by PRD §15.2 (jsdom has no layout/rendering engine)
+        'color-contrast': { enabled: false },
+      },
+    };
+
+    it('A11Y-05: Review, default has zero axe violations', async () => {
+      const { container } = setup();
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-06: Review with info banner has zero axe violations', async () => {
+      const { container, store } = setup();
+      act(() => {
+        store.dispatch(setBanner({ kind: 'info', copyKey: 'review.rateRefreshed' }));
+      });
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('A11Y-06: Review with warning banner has zero axe violations', async () => {
+      const { container, store } = setup();
+      act(() => {
+        store.dispatch(setBanner({ kind: 'warning', copyKey: 'review.changed' }));
+      });
+      const results = await axe(container, AXE_OPTIONS);
+      expect(results).toHaveNoViolations();
+    });
   });
 });
