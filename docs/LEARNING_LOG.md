@@ -205,3 +205,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** `wc -w`, `scripts/claims-check.mjs`, markdown drafting.
 - **Concept:** Technical case-study authoring, strict word budgeting, and honest limitation reporting.
 - **How it works:** Authored `docs/CASE_STUDY.md` under 600 words (546 words) following the exact PRD section order; omitted the unrecorded bug heading per PRD rules; detailed the idempotent key reuse trade-off; verified metric markers against `docs/METRICS.md`; and passed all claims verification checks.
+
+## WP-32: Walkthrough Script
+
+- **Tools used:** Markdown table structure, PRD walkthrough timeline specification, `scripts/claims-check.mjs`.
+- **Concept:** Spoken-video walkthrough script authoring with precise timing, visual cues, and metrics grounding.
+- **How it works:** Authored `docs/WALKTHROUGH_SCRIPT.md` structuring the 5 required beats across 60–90 seconds (thesis, happy path, lost-response fault injection with idempotent recovery, pnpm verify with 90.63% mutation score, and limitations/next steps) using plain conversational language for Satjeet to record in his own voice.
