@@ -45,7 +45,13 @@ describe('J1 — Happy path', () => {
       cy.contains('dt', 'You send').next('dd').should('have.text', send);
       cy.contains('dt', 'Fee').next('dd').should('have.text', fee);
       cy.contains('dt', 'Total from your account').next('dd').should('have.text', total);
-      cy.contains('dt', 'They receive').next('dd').should('have.text', receive);
+      cy.contains('dt', 'They receive')
+        .next('dd')
+        .invoke('text')
+        .then((text) => {
+          const normalized = text.replace(/\u00a0/g, ' ');
+          cy.wrap(normalized).should('equal', receive);
+        });
       cy.checkAppA11y();
 
       // Confirm

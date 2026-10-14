@@ -16,11 +16,14 @@ describe('J3 — Duplicate Confirm in the same tick', () => {
     // 4. Activate Double-click Confirm
     cy.contains('button', 'Double-click Confirm').click();
 
-    // 5. Advance fake clock by exactly 500 ms
+    // 5. Advance fake clock by exactly 500 ms for submit
     cy.tick(500);
 
     // 6. Assert Result heading is Transfer sent
     cy.contains('h1', 'Transfer sent').should('be.visible');
+
+    // Advance clock by 500 ms to allow loadAccounts to complete with latency
+    cy.tick(500);
 
     // 7. Assert window.__smu.executedCount() equals 1
     cy.assertExecutedCount(1);

@@ -58,9 +58,40 @@ Cypress.Commands.add('assertExecutedCount', (expected: number) => {
 
 Cypress.Commands.add('checkAppA11y', (context, options) => {
   cy.injectAxe();
-  cy.checkA11y(context, {
-    ...AXE_CONFIG,
-    ...options,
+  cy.window({ log: false }).then((win) => {
+    const isFakeTimer =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Boolean((win.setTimeout as any)?.clock) ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Boolean((win.setTimeout as any)?.isSinonProxy) ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Boolean((win.Date as any)?.isSinonProxy);
+
+    if (isFakeTimer) {
+      const fakeSetTimeout = win.setTimeout;
+      const fakeClearTimeout = win.clearTimeout;
+      const nativeSetTimeout = window.top?.setTimeout.bind(window.top) ?? fakeSetTimeout;
+      const nativeClearTimeout = window.top?.clearTimeout.bind(window.top) ?? fakeClearTimeout;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      win.setTimeout = nativeSetTimeout as any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      win.clearTimeout = nativeClearTimeout as any;
+
+      cy.checkA11y(context, {
+        ...AXE_CONFIG,
+        ...options,
+      });
+      return cy.then(() => {
+        win.setTimeout = fakeSetTimeout;
+        win.clearTimeout = fakeClearTimeout;
+      });
+    }
+
+    return cy.checkA11y(context, {
+      ...AXE_CONFIG,
+      ...options,
+    });
   });
 });
 

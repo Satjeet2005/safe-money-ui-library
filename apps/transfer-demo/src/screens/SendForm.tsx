@@ -113,7 +113,7 @@ export function SendForm(): JSX.Element {
         <div role="status">{COPY['load.loading']}</div>
       )}
 
-      {draft.showErrors && errors.length > 0 && (
+      {draft.showErrors && (
         <ErrorSummary
           id="error-summary"
           title={formatSummaryTitle(errors.length)}
