@@ -9,7 +9,7 @@
       "@satjeet2005/safe-money-ui/*": ["../../packages/safe-money-ui/src/*/index.ts"],
       "@satjeet2005/safe-money-ui": ["../../packages/safe-money-ui/src/money/index.ts"]
     },
-    "types": ["jest", "@testing-library/jest-dom"]
+    "types": ["node", "jest", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*", "cypress/**/*"]
 }

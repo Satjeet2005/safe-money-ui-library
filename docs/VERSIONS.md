@@ -34,3 +34,10 @@
 | jest-axe                    | 9.0.0            | 2026-10-12     |
 | jest-environment-jsdom      | 29.7.0           | 2026-10-12     |
 | ts-node                     | 10.9.2           | 2026-10-12     |
+| webpack                     | 5.111.1          | 2026-10-14     |
+| webpack-cli                 | 5.1.4            | 2026-10-14     |
+| webpack-dev-server          | 5.2.6            | 2026-10-14     |
+| html-webpack-plugin         | 5.6.8            | 2026-10-14     |
+| css-loader                  | 7.1.5            | 2026-10-14     |
+| mini-css-extract-plugin     | 2.10.2           | 2026-10-14     |
+| swc-loader                  | 0.2.7            | 2026-10-14     |
