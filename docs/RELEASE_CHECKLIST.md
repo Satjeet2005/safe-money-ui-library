@@ -54,11 +54,7 @@ The following automated prerequisites are verified and passing locally:
 - [x] **Update Package Scope:** Updated `name` in `packages/safe-money-ui/package.json` to `@satjeetsingh1/safe-money-ui` and updated all workspace imports/aliases.
 - [x] **Authenticate npm:** Verified via CLI (`npm whoami` -> `satjeetsingh1`).
 - [x] **Pre-Publish Dry Run:** Ran packaging check (`pnpm publish --dry-run`) and isolated consumer test of packed tarball with ESM, CJS, TS types, and CSS verification.
-- [ ] **Publish Package:** Publish the package with public access:
-  ```bash
-  cd packages/safe-money-ui
-  pnpm publish --access public
-  ```
+- [x] **Publish Package:** Published `@satjeetsingh1/safe-money-ui@0.1.1` to npm registry with public access and verified canonical repository links.
 
 ---
 

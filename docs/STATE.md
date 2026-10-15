@@ -50,3 +50,4 @@ EXTERNAL_CODE_COPIED: none
 - Visual Phase 2 attempted 2026-10-14 753dc49
 - Visual Phase 2 rolled back (design reset pending) 2026-10-14 a5d6256
 - Visual UI Implementation (Phases 1–9) done 2026-10-14
+- Release @satjeetsingh1/safe-money-ui@0.1.1 published 2026-10-15
