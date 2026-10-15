@@ -23,12 +23,12 @@ The following automated prerequisites are verified and passing locally:
 
 ### Phase A: Repository and Hosting Setup
 
-- [ ] **GitHub Repository:** Confirm the public repository exists at `https://github.com/Satjeet2005/safe-money-ui` and matches local `main`.
+- [ ] **GitHub Repository:** Confirm the public repository exists at `https://github.com/Satjeet2005/safe-money-ui-library` and matches local `main`.
 - [ ] **Push Commits:** Manually push the reviewed local branch to remote `main`:
   ```bash
-  git push origin main
+  git push push-repo main
   ```
-- [ ] **Connect Vercel:** Log in to Vercel and import the `Satjeet2005/safe-money-ui` repository.
+- [ ] **Connect Vercel:** Log in to Vercel and import the `Satjeet2005/safe-money-ui-library` repository.
 - [ ] **Deploy & Verify Settings:** Ensure Vercel uses root directory `./` and respects `vercel.json`:
   - Build Command: `pnpm build`
   - Output Directory: `apps/transfer-demo/dist`

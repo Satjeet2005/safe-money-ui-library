@@ -126,7 +126,7 @@ export function useTransferSubmit() {
 
 ## Repository
 
-Source code and chaos demo application: [https://github.com/Satjeet2005/safe-money-ui](https://github.com/Satjeet2005/safe-money-ui)
+Source code and chaos demo application: [https://github.com/Satjeet2005/safe-money-ui-library](https://github.com/Satjeet2005/safe-money-ui-library)
 
 ## Licence
 

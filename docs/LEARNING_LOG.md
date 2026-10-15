@@ -255,3 +255,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
 - **Tools used:** pnpm workspaces, npm registry CLI (`npm view`, `npm publish`), tarball isolated consumer test, Git.
 - **Concept:** Scoped package publishing from a monorepo workspace to the official npm registry with zero-defect gates, license packaging, and consumer validation.
 - **How it works:** Verified authenticated identity (`satjeetsingh1`), updated library package name to `@satjeetsingh1/safe-money-ui@0.1.0`, packaged the MIT license notice into `packages/safe-money-ui/LICENSE`, validated isolated consumer imports across ESM, CJS, TypeScript types, and extracted CSS (`styles.css`), and confirmed all size budgets, property tests, unit tests, and Cypress E2E tests pass cleanly before release.
+
+## Release Patch v0.1.1: Canonical Repository Metadata Correction
+
+- **Tools used:** npm package manifest (`repository`, `homepage`, `bugs`), `npm pack --dry-run`, Git.
+- **Concept:** Narrowly-scoped metadata patch adhering to semantic versioning to correct canonical GitHub repository URLs on npm and documentation.
+- **How it works:** Incremented library version to `0.1.1`, configured git+https repository URL (`git+https://github.com/Satjeet2005/safe-money-ui-library.git`), homepage (`#readme`), and bug tracker (`/issues`) in `packages/safe-money-ui/package.json`, and updated all public CI and documentation links to point to the canonical `safe-money-ui-library` repository without altering any runtime or API code.
