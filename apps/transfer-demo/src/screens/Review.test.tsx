@@ -17,7 +17,7 @@ import {
 import { setRecipient, setSourceCurrency, setAmountText } from '../store/draftSlice.js';
 import { Review } from './Review.js';
 import type { MockService } from '../service/mockService.js';
-import type { Clock } from '@satjeet2005/safe-money-ui/submit';
+import type { Clock } from '@satjeetsingh1/safe-money-ui/submit';
 
 describe('Review Screen (REV-01..REV-06)', () => {
   const getAccountsMock = jest.fn();

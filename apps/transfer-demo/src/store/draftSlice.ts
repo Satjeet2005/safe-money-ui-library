@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { LocaleCode } from '@satjeet2005/safe-money-ui/money';
+import type { LocaleCode } from '@satjeetsingh1/safe-money-ui/money';
 import type { z } from 'zod';
 import type { SourceCurrency } from '../service/schemas.js';
 

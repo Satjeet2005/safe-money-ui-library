@@ -1,4 +1,4 @@
-import { parseAmount, formatMoney, computeFee } from '@satjeet2005/safe-money-ui/money';
+import { parseAmount, formatMoney, computeFee } from '@satjeetsingh1/safe-money-ui/money';
 import { COPY, createMoneyInputMessages, interpolate } from '../copy.js';
 import type { Account, Recipient } from '../store/dataSlice.js';
 import type { DraftState } from '../store/draftSlice.js';

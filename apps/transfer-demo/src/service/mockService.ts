@@ -1,10 +1,10 @@
-import type { Clock } from '@satjeet2005/safe-money-ui/submit';
+import type { Clock } from '@satjeetsingh1/safe-money-ui/submit';
 import {
   convert,
   computeFee,
   PER_USD_MICRO,
   type CurrencyCode,
-} from '@satjeet2005/safe-money-ui/money';
+} from '@satjeetsingh1/safe-money-ui/money';
 import { TransferRequest, type ChaosConfigPayload } from './schemas.js';
 import { FIXTURES } from './fixtures.js';
 import { mulDivHalfEven } from './math.js';

@@ -19,8 +19,8 @@ import {
   type TransferResponsePayload,
 } from './TransferFlow.js';
 import type { MockService } from '../service/mockService.js';
-import type { Clock, Scheduler } from '@satjeet2005/safe-money-ui/submit';
-import type { SubmitState } from '@satjeet2005/safe-money-ui/submit';
+import type { Clock, Scheduler } from '@satjeetsingh1/safe-money-ui/submit';
+import type { SubmitState } from '@satjeetsingh1/safe-money-ui/submit';
 import { COPY } from '../copy.js';
 
 describe('TransferFlow Integration and Controller Ownership (WP-21A)', () => {

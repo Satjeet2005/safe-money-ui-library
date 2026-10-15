@@ -1,4 +1,4 @@
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import { PersistedDraft } from '../service/schemas.js';
 
 export const DRAFT_STORAGE_KEY = 'smu.draft.v1';

@@ -14,7 +14,7 @@
 | size_submit_gz         | 155 B   | pnpm size                | 2026-10-14        |
 | size_boundary_gz       | 320 B   | pnpm size                | 2026-10-14        |
 | size_react_gz          | 1488 B  | pnpm size                | 2026-10-14        |
-| size_app_gz            | 80771 B | pnpm size                | 2026-10-14        |
+| size_app_gz            | 82372 B | pnpm size                | 2026-10-15        |
 | axe_violations_jest    | 0       | pnpm test:a11y           | 2026-10-14        |
 | axe_violations_cypress | 0       | pnpm e2e:a11y            | 2026-10-14        |
 | journeys_passed        | 8       | pnpm e2e                 | 2026-10-14        |
@@ -31,4 +31,4 @@ Formula: `ceil((measured * 1.10) / 100) * 100`
 - `./submit`: measured 155 B (initial budget 4,096 B) -> ratcheted budget 200 B (PASS)
 - `./boundary`: measured 320 B (initial budget 1,024 B) -> ratcheted budget 400 B (PASS)
 - `./react`: measured 1,488 B (initial budget 6,144 B) -> ratcheted budget 1,700 B (PASS)
-- App JavaScript (combined): measured 80,771 B (initial budget 204,800 B) -> ratcheted budget 88,900 B (PASS)
+- App JavaScript (combined): measured 82,372 B (initial budget 204,800 B) -> ratcheted budget 88,900 B (PASS)

@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as MoneyEntry from '../../src/money/index.js';
 
-describe('Public Money Entry Point (@satjeet2005/safe-money-ui/money)', () => {
+describe('Public Money Entry Point (@satjeetsingh1/safe-money-ui/money)', () => {
   it('exports exactly the 9 runtime members specified in PRD §8.1', () => {
     const expectedRuntimeExports = [
       'CURRENCIES',

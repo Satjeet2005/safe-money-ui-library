@@ -1,4 +1,4 @@
-import { CURRENCIES } from '@satjeet2005/safe-money-ui/money';
+import { CURRENCIES } from '@satjeetsingh1/safe-money-ui/money';
 import {
   Currency,
   SourceCurrency,

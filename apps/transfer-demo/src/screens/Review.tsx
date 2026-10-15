@@ -1,8 +1,8 @@
 import { useEffect, type JSX } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatMoney, parseAmount } from '@satjeet2005/safe-money-ui/money';
-import { useReviewGuard } from '@satjeet2005/safe-money-ui/react';
-import type { Clock } from '@satjeet2005/safe-money-ui/submit';
+import { formatMoney, parseAmount } from '@satjeetsingh1/safe-money-ui/money';
+import { useReviewGuard } from '@satjeetsingh1/safe-money-ui/react';
+import type { Clock } from '@satjeetsingh1/safe-money-ui/submit';
 import { Banner } from '../components/Banner.js';
 import { StepHeading } from '../components/StepHeading.js';
 import { COPY, createMoneyInputMessages } from '../copy.js';

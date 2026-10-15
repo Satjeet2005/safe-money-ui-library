@@ -1,7 +1,7 @@
 import { useEffect, useRef, type JSX } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatMoney, type CurrencyCode } from '@satjeet2005/safe-money-ui/money';
-import type { SubmitState } from '@satjeet2005/safe-money-ui/submit';
+import { formatMoney, type CurrencyCode } from '@satjeetsingh1/safe-money-ui/money';
+import type { SubmitState } from '@satjeetsingh1/safe-money-ui/submit';
 import { StepHeading } from '../components/StepHeading.js';
 import { COPY, type CopyKey } from '../copy.js';
 import { addEntry } from '../store/historySlice.js';

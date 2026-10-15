@@ -46,7 +46,7 @@ The root `.` entry re-exports everything from `./money` and nothing else.
 ### 1. Locale-aware parsing (`parseAmount`)
 
 ```typescript
-import { parseAmount } from '@satjeet2005/safe-money-ui/money';
+import { parseAmount } from '@satjeetsingh1/safe-money-ui/money';
 
 const result = parseAmount('1,234.50', {
   currency: 'USD',
@@ -68,8 +68,8 @@ if (result.ok) {
 
 ```tsx
 import { useState, type JSX } from 'react';
-import { MoneyInput } from '@satjeet2005/safe-money-ui/react';
-import type { ParseError, ParseErrorCode, CurrencyCode } from '@satjeet2005/safe-money-ui/money';
+import { MoneyInput } from '@satjeetsingh1/safe-money-ui/react';
+import type { ParseError, ParseErrorCode, CurrencyCode } from '@satjeetsingh1/safe-money-ui/money';
 
 const messages: Record<ParseErrorCode, (ctx: ParseError & { currency: CurrencyCode }) => string> = {
   EMPTY: () => 'Enter an amount to continue.',
@@ -108,8 +108,8 @@ export function AmountField(): JSX.Element {
 ### 3. Safe submission lifecycle (`useSafeSubmit`)
 
 ```tsx
-import { useSafeSubmit } from '@satjeet2005/safe-money-ui/react';
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+import { useSafeSubmit } from '@satjeetsingh1/safe-money-ui/react';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import { z } from 'zod';
 
 const TransferResponseSchema = z.object({
@@ -166,7 +166,7 @@ The table below reports measured evidence collected directly from local command 
 | Bundle size `./submit` (gzip level 9)          | <!-- metric:size_submit_gz -->155 B<!-- /metric -->     | `pnpm size` (budget 200 B)                  |
 | Bundle size `./boundary` (gzip level 9)        | <!-- metric:size_boundary_gz -->320 B<!-- /metric -->   | `pnpm size` (budget 400 B)                  |
 | Bundle size `./react` (gzip level 9)           | <!-- metric:size_react_gz -->1488 B<!-- /metric -->     | `pnpm size` (budget 1700 B)                 |
-| Combined application JavaScript (gzip level 9) | <!-- metric:size_app_gz -->80771 B<!-- /metric -->      | `pnpm size` (budget 88900 B)                |
+| Combined application JavaScript (gzip level 9) | <!-- metric:size_app_gz -->82372 B<!-- /metric -->      | `pnpm size` (budget 88900 B)                |
 | Component accessibility violations (Axe)       | <!-- metric:axe_violations_jest -->0<!-- /metric -->    | `pnpm test:a11y` (A11Y-01 through A11Y-10)  |
 | End-to-end accessibility violations (Axe)      | <!-- metric:axe_violations_cypress -->0<!-- /metric --> | `pnpm e2e:a11y` (Cypress Axe WCAG AA tags)  |
 | Real-browser end-to-end journeys               | <!-- metric:journeys_passed -->8<!-- /metric -->        | `pnpm e2e` (J1 through J8 in Cypress)       |
@@ -213,7 +213,7 @@ The table below reports measured evidence collected directly from local command 
 
 ## Disclosures
 
-This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.
+This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.
 
 Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.
 

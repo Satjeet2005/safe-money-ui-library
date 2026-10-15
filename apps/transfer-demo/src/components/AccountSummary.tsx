@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { useSelector } from 'react-redux';
-import { formatMoney } from '@satjeet2005/safe-money-ui/money';
+import { formatMoney } from '@satjeetsingh1/safe-money-ui/money';
 import type { RootState } from '../store/store.js';
 import { UI_LABELS } from '../copy.js';
 

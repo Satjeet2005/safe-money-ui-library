@@ -20,7 +20,7 @@ import { App } from './App.js';
 import { Result } from './screens/Result.js';
 import { COPY, UI_LABELS } from './copy.js';
 import type { MockService } from './service/mockService.js';
-import type { SubmitState } from '@satjeet2005/safe-money-ui/submit';
+import type { SubmitState } from '@satjeetsingh1/safe-money-ui/submit';
 import type { TransferInput, TransferResponsePayload } from './screens/TransferFlow.js';
 
 describe('Presentation Regression Safety Net (Phase 1)', () => {

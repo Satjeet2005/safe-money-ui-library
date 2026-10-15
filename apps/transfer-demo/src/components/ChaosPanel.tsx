@@ -5,7 +5,7 @@ import {
   parseAmount,
   CURRENCIES,
   type CurrencyCode,
-} from '@satjeet2005/safe-money-ui/money';
+} from '@satjeetsingh1/safe-money-ui/money';
 import { COPY } from '../copy.js';
 import {
   setChaos,

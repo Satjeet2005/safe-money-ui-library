@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
-import { parseAmount, type CurrencyCode } from '@satjeet2005/safe-money-ui/money';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
+import { parseAmount, type CurrencyCode } from '@satjeetsingh1/safe-money-ui/money';
 import type { CopyKey } from '../copy.js';
 import { QuoteResponse } from '../service/schemas.js';
 import type { z } from 'zod';

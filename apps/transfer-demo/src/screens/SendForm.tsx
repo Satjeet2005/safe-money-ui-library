@@ -1,7 +1,7 @@
 import { useMemo, type JSX } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MoneyInput, ErrorSummary } from '@satjeet2005/safe-money-ui/react';
-import { formatMoney, type LocaleCode } from '@satjeet2005/safe-money-ui/money';
+import { MoneyInput, ErrorSummary } from '@satjeetsingh1/safe-money-ui/react';
+import { formatMoney, type LocaleCode } from '@satjeetsingh1/safe-money-ui/money';
 import { Banner } from '../components/Banner.js';
 import { StepHeading } from '../components/StepHeading.js';
 import { COPY, formatSummaryTitle, createMoneyInputMessages, interpolate } from '../copy.js';

@@ -1,27 +1,25 @@
-# @satjeet2005/safe-money-ui
+# @satjeetsingh1/safe-money-ui
 
 Money-correct, failure-tolerant UI primitives for React and TypeScript.
 
 This library provides domain primitives for handling monetary amounts in integer minor units, locale-aware parsing and formatting, a pure submit state machine, review mismatch guards, and safe runtime boundaries.
 
-> **Note on Package Name:** `@satjeet2005/safe-money-ui` is the declared workspace package name. It is not currently published to the public npm registry (publication is planned for later phases).
-
 ## Installation
 
 ```bash
-pnpm add @satjeet2005/safe-money-ui
+pnpm add @satjeetsingh1/safe-money-ui
 ```
 
 Peer dependencies: `react` (^18.3.0) and `zod` (^3.23.0).
 
-Default styles for components are available at `@satjeet2005/safe-money-ui/styles.css`.
+Default styles for components are available at `@satjeetsingh1/safe-money-ui/styles.css`.
 
 ## Usage
 
 ### 1. Locale-aware parsing (`parseAmount`)
 
 ```typescript
-import { parseAmount } from '@satjeet2005/safe-money-ui/money';
+import { parseAmount } from '@satjeetsingh1/safe-money-ui/money';
 
 const result = parseAmount('1,234.50', {
   currency: 'USD',
@@ -43,8 +41,8 @@ if (result.ok) {
 
 ```tsx
 import { useState, type JSX } from 'react';
-import { MoneyInput } from '@satjeet2005/safe-money-ui/react';
-import type { ParseError, ParseErrorCode, CurrencyCode } from '@satjeet2005/safe-money-ui/money';
+import { MoneyInput } from '@satjeetsingh1/safe-money-ui/react';
+import type { ParseError, ParseErrorCode, CurrencyCode } from '@satjeetsingh1/safe-money-ui/money';
 
 const messages: Record<ParseErrorCode, (ctx: ParseError & { currency: CurrencyCode }) => string> = {
   EMPTY: () => 'Enter an amount to continue.',
@@ -83,8 +81,8 @@ export function AmountField(): JSX.Element {
 ### 3. Safe submission lifecycle (`useSafeSubmit`)
 
 ```tsx
-import { useSafeSubmit } from '@satjeet2005/safe-money-ui/react';
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+import { useSafeSubmit } from '@satjeetsingh1/safe-money-ui/react';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import { z } from 'zod';
 
 const TransferResponseSchema = z.object({

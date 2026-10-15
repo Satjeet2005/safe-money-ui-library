@@ -1,10 +1,10 @@
 # Project State
 
 APPLICATION_SUBMITTED: no
-REPO_URL: <unset>
+REPO_URL: https://github.com/Satjeet2005/safe-money-ui-library.git
 DEMO_URL: <unset>
 VIDEO_URL: <unset>
-NPM_SCOPE: <unset>
+NPM_SCOPE: @satjeetsingh1
 CURRENT_WP: WP-34
 EXTERNAL_CODE_COPIED: none
 

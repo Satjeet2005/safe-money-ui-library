@@ -249,3 +249,9 @@ Record of technical concepts, tools, and lessons learned across each work packag
   6. _Account Summary & Ledger_: Enhanced account card with tabular numerals and recent activity history without altering test string bindings.
   7. _Chaos Simulation Console_: Structured 2x2 failure preset cards with non-color indicators (`✓`/`○`), status pills, touch-friendly radios and checkboxes, and grouped fieldsets. Solved WCAG 2.5.3 (Label in Name) by strictly matching button accessible name to visible text.
   8. _Motion & A11Y Verification_: Verified zero Axe violations across all E2E journeys (`pnpm e2e:a11y`), 100% passing Cypress tests (`20/20` across 9 specs), 400 passing unit/integration tests, and full CI verification (`pnpm verify`).
+
+## Release & npm Package Publication: `@satjeetsingh1/safe-money-ui`
+
+- **Tools used:** pnpm workspaces, npm registry CLI (`npm view`, `npm publish`), tarball isolated consumer test, Git.
+- **Concept:** Scoped package publishing from a monorepo workspace to the official npm registry with zero-defect gates, license packaging, and consumer validation.
+- **How it works:** Verified authenticated identity (`satjeetsingh1`), updated library package name to `@satjeetsingh1/safe-money-ui@0.1.0`, packaged the MIT license notice into `packages/safe-money-ui/LICENSE`, validated isolated consumer imports across ESM, CJS, TypeScript types, and extracted CSS (`styles.css`), and confirmed all size budgets, property tests, unit tests, and Cypress E2E tests pass cleanly before release.

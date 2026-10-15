@@ -33,7 +33,7 @@ export const FORBIDDEN_PHRASES = [
 ];
 
 export const DISCLOSURE_SENTENCES = [
-  'This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.',
+  'This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.',
   'Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.',
 ];
 

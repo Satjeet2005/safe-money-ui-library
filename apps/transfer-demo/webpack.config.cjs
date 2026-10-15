@@ -24,6 +24,34 @@ module.exports = (env = {}, argv = {}) => {
         '.mjs': ['.mts', '.mjs'],
       },
       alias: {
+        '@satjeetsingh1/safe-money-ui/styles.css': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/react/styles.css',
+        ),
+        '@satjeetsingh1/safe-money-ui/money': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/money/index.ts',
+        ),
+        '@satjeetsingh1/safe-money-ui/submit': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/submit/index.ts',
+        ),
+        '@satjeetsingh1/safe-money-ui/boundary': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/boundary/index.ts',
+        ),
+        '@satjeetsingh1/safe-money-ui/react': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/react/index.ts',
+        ),
+        '@satjeetsingh1/safe-money-ui$': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/money/index.ts',
+        ),
+        '@satjeetsingh1/safe-money-ui': path.resolve(
+          __dirname,
+          '../../packages/safe-money-ui/src/money/index.ts',
+        ),
         '@satjeet2005/safe-money-ui/styles.css': path.resolve(
           __dirname,
           '../../packages/safe-money-ui/src/react/styles.css',

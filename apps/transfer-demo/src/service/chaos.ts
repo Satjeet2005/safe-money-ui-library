@@ -1,4 +1,4 @@
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import { ChaosConfig, type ChaosConfigPayload } from './schemas.js';
 
 export const DEFAULT_CHAOS_CONFIG: ChaosConfigPayload = {

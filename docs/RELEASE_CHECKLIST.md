@@ -50,14 +50,10 @@ The following automated prerequisites are verified and passing locally:
 
 ### Phase C: Package Identity & npm Publication
 
-- [ ] **Confirm npm Scope:** Confirm whether to use `@satjeet2005/safe-money-ui` or a different npm scope/package name (Decision D-19 / Action U-05).
-- [ ] **Update Package Scope (if modified):** If changing from `@satjeet2005/safe-money-ui`, update `name` in `packages/safe-money-ui/package.json` and all workspace imports/aliases.
-- [ ] **Authenticate npm:** Log in to npm via CLI (`npm login`).
-- [ ] **Pre-Publish Dry Run:** Run a final packaging check from the package directory:
-  ```bash
-  cd packages/safe-money-ui
-  pnpm publish --dry-run
-  ```
+- [x] **Confirm npm Scope:** Confirmed scope `@satjeetsingh1` matching authenticated npm username `satjeetsingh1` (Decision D-19 / Action U-05).
+- [x] **Update Package Scope:** Updated `name` in `packages/safe-money-ui/package.json` to `@satjeetsingh1/safe-money-ui` and updated all workspace imports/aliases.
+- [x] **Authenticate npm:** Verified via CLI (`npm whoami` -> `satjeetsingh1`).
+- [x] **Pre-Publish Dry Run:** Ran packaging check (`pnpm publish --dry-run`) and isolated consumer test of packed tarball with ESM, CJS, TS types, and CSS verification.
 - [ ] **Publish Package:** Publish the package with public access:
   ```bash
   cd packages/safe-money-ui
@@ -68,12 +64,11 @@ The following automated prerequisites are verified and passing locally:
 
 ### Phase D: Claims, Accessibility, and Final Release Gate
 
-- [ ] **Resolve AI-Assistance Disclosure (Q-AI-001):**
-  - **Release Blocker:** `README.md` currently contains the PRD's placeholder Claude attribution to satisfy exact-string claims-checking.
-  - Satjeet must review and approve the final attribution wording accurately reflecting the tools used.
-  - Update `scripts/claims-check.mjs` `DISCLOSURE_SENTENCES` if Satjeet changes the required first disclosure sentence, keeping the second fictional-brand sentence verbatim.
-  - Mark `Q-AI-001` resolved in `docs/OPEN_QUESTIONS.md`.
-- [ ] **Verify Metric Markers:** Confirm that all `<!-- metric:KEY -->` markers in `README.md` match `docs/METRICS.md`.
+- [x] **Resolve AI-Assistance Disclosure (Q-AI-001):**
+  - Updated `README.md`, `scripts/claims-check.mjs`, and test suites to `Gemini Flash, by Google`.
+  - Preserved fictional-brand and simulation-only statements verbatim.
+  - Marked `Q-AI-001` resolved in `docs/OPEN_QUESTIONS.md`.
+- [x] **Verify Metric Markers:** Confirmed that all `<!-- metric:KEY -->` markers in `README.md` match `docs/METRICS.md`.
 - [ ] **Manual Accessibility Results (`docs/A11Y_MANUAL.md`):**
   - Execute the 6 manual checks on real screen readers (NVDA/VoiceOver), keyboard, and physical mobile phone.
   - Fill the result column for all 6 rows in `docs/A11Y_MANUAL.md`. (Release gate blocks if any result cell is blank).

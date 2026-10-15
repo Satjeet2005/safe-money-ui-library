@@ -201,7 +201,7 @@ describe('Verification Scripts', () => {
       fs.writeFileSync(
         path.join(tmpDir, 'README.md'),
         '<!-- metric:tests_total -->99<!-- /metric -->\n' +
-          'This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
+          'This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
           'Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.',
       );
 
@@ -231,7 +231,7 @@ describe('Verification Scripts', () => {
       fs.writeFileSync(
         path.join(tmpDir, 'README.md'),
         'We ran 100 tests and achieved 99% coverage.\n' +
-          'This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
+          'This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
           'Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.',
       );
 
@@ -261,7 +261,7 @@ describe('Verification Scripts', () => {
       fs.writeFileSync(
         path.join(tmpDir, 'README.md'),
         'This library is production-ready and fully accessible.\n' +
-          'This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
+          'This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
           'Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.',
       );
 
@@ -290,7 +290,7 @@ describe('Verification Scripts', () => {
       fs.writeFileSync(path.join(tmpDir, 'docs/METRICS.md'), '| key | value | command | date |\n');
       fs.writeFileSync(
         path.join(tmpDir, 'README.md'),
-        'This project was built with AI coding assistance (Claude, by Anthropic). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
+        'This project was built with AI coding assistance (Gemini Flash, by Google). The design decisions, review and testing were directed by the author, and the test-first order is visible in the commit history.\n' +
           'Northwind Pay is a fictional brand. This is an independent project and is not affiliated with, endorsed by or sponsored by any bank, payments company or employer.',
       );
       fs.writeFileSync(

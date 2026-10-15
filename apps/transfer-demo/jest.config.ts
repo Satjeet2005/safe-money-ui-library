@@ -23,6 +23,10 @@ const config: Config = {
   },
   setupFilesAfterEnv: ['<rootDir>/../../packages/safe-money-ui/test/helpers/setup.ts'],
   moduleNameMapper: {
+    '^@satjeetsingh1/safe-money-ui/styles\\.css$':
+      '<rootDir>/../../packages/safe-money-ui/src/react/styles.css',
+    '^@satjeetsingh1/safe-money-ui/(.*)$': '<rootDir>/../../packages/safe-money-ui/src/$1/index.ts',
+    '^@satjeetsingh1/safe-money-ui$': '<rootDir>/../../packages/safe-money-ui/src/money/index.ts',
     '^@satjeet2005/safe-money-ui/styles\\.css$':
       '<rootDir>/../../packages/safe-money-ui/src/react/styles.css',
     '^@satjeet2005/safe-money-ui/(.*)$': '<rootDir>/../../packages/safe-money-ui/src/$1/index.ts',

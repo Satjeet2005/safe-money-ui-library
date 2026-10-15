@@ -8,7 +8,7 @@ import { createMockService, type MockService } from '../service/mockService.js';
 import { systemClock } from '../service/clock.js';
 import { createIdGenerator } from '../service/ids.js';
 import { setupDeterministicDebugHook } from '../service/chaos.js';
-import type { Clock } from '@satjeet2005/safe-money-ui/submit';
+import type { Clock } from '@satjeetsingh1/safe-money-ui/submit';
 
 export type ThunkExtra = {
   service: MockService;

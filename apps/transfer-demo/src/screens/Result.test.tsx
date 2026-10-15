@@ -11,7 +11,7 @@ import { Review } from './Review.js';
 import { COPY } from '../copy.js';
 import { DRAFT_STORAGE_KEY, saveDraft } from '../persistence/draftStorage.js';
 import type { MockService } from '../service/mockService.js';
-import type { SubmitState } from '@satjeet2005/safe-money-ui/submit';
+import type { SubmitState } from '@satjeetsingh1/safe-money-ui/submit';
 import type { TransferInput, TransferResponsePayload } from './TransferFlow.js';
 
 describe('Result Screen and Recent Activity History (WP-21B)', () => {

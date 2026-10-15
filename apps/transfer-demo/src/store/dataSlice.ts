@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import { AccountsResponse, RecipientsResponse } from '../service/schemas.js';
 import { setBanner } from './flowSlice.js';
 import type { z } from 'zod';

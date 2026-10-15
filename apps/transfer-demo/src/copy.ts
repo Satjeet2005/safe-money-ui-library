@@ -1,10 +1,10 @@
-import { formatMoney } from '@satjeet2005/safe-money-ui/money';
+import { formatMoney } from '@satjeetsingh1/safe-money-ui/money';
 import type {
   CurrencyCode,
   LocaleCode,
   ParseError,
   ParseErrorCode,
-} from '@satjeet2005/safe-money-ui/money';
+} from '@satjeetsingh1/safe-money-ui/money';
 
 export const COPY = {
   'app.title': 'Northwind Pay',

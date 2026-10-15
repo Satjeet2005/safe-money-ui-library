@@ -9,3 +9,6 @@ cypress/screenshots/
 pnpm-lock.yaml
 PRD safe-money-ui + Chaos Harness.md
 safe-money-ui_Coding_Agent_Action_Plan.md
+safe-money-ui-*.md
+coding_agent_phased_prompt.md
+ui_implementation_action_plan*.md

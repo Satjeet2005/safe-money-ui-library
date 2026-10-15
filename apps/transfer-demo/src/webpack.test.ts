@@ -106,22 +106,23 @@ describe('Webpack configuration (WP-23)', () => {
     expect(prodConfig.resolve?.alias).toBeDefined();
     const alias = prodConfig.resolve.alias;
     const repoRoot = path.resolve(__dirname, '../../..');
-    expect(alias['@satjeet2005/safe-money-ui/styles.css']).toBe(
+    expect(alias['@satjeetsingh1/safe-money-ui/styles.css']).toBe(
       path.resolve(repoRoot, 'packages/safe-money-ui/src/react/styles.css'),
     );
-    expect(alias['@satjeet2005/safe-money-ui/money']).toBe(
+    expect(alias['@satjeetsingh1/safe-money-ui/money']).toBe(
       path.resolve(repoRoot, 'packages/safe-money-ui/src/money/index.ts'),
     );
-    expect(alias['@satjeet2005/safe-money-ui/submit']).toBe(
+    expect(alias['@satjeetsingh1/safe-money-ui/submit']).toBe(
       path.resolve(repoRoot, 'packages/safe-money-ui/src/submit/index.ts'),
     );
-    expect(alias['@satjeet2005/safe-money-ui/boundary']).toBe(
+    expect(alias['@satjeetsingh1/safe-money-ui/boundary']).toBe(
       path.resolve(repoRoot, 'packages/safe-money-ui/src/boundary/index.ts'),
     );
-    expect(alias['@satjeet2005/safe-money-ui/react']).toBe(
+    expect(alias['@satjeetsingh1/safe-money-ui/react']).toBe(
       path.resolve(repoRoot, 'packages/safe-money-ui/src/react/index.ts'),
     );
-    const rootAlias = alias['@satjeet2005/safe-money-ui'] || alias['@satjeet2005/safe-money-ui$'];
+    const rootAlias =
+      alias['@satjeetsingh1/safe-money-ui'] || alias['@satjeetsingh1/safe-money-ui$'];
     expect(rootAlias).toBe(path.resolve(repoRoot, 'packages/safe-money-ui/src/money/index.ts'));
   });
 });

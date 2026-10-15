@@ -1,13 +1,13 @@
 import { useEffect, useRef, type JSX } from 'react';
 import { useSelector, useDispatch, useStore } from 'react-redux';
-import { useSafeSubmit } from '@satjeet2005/safe-money-ui/react';
+import { useSafeSubmit } from '@satjeetsingh1/safe-money-ui/react';
 import {
   SubmitRejection,
   type Clock,
   type Scheduler,
   type SubmitState,
-} from '@satjeet2005/safe-money-ui/submit';
-import { parseBoundary } from '@satjeet2005/safe-money-ui/boundary';
+} from '@satjeetsingh1/safe-money-ui/submit';
+import { parseBoundary } from '@satjeetsingh1/safe-money-ui/boundary';
 import type { RootState, AppDispatch, AppStore, ThunkExtra } from '../store/store.js';
 import { goToResult, type ReviewSnapshot } from '../store/flowSlice.js';
 import { SendForm } from './SendForm.js';

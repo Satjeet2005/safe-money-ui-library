@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",
-    "@satjeet2005/safe-money-ui": "workspace:*",
+    "@satjeetsingh1/safe-money-ui": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
