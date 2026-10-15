@@ -23,20 +23,20 @@ The following automated prerequisites are verified and passing locally:
 
 ### Phase A: Repository and Hosting Setup
 
-- [ ] **GitHub Repository:** Confirm the public repository exists at `https://github.com/Satjeet2005/safe-money-ui-library` and matches local `main`.
-- [ ] **Push Commits:** Manually push the reviewed local branch to remote `main`:
+- [x] **GitHub Repository:** Confirm the public repository exists at `https://github.com/Satjeet2005/safe-money-ui-library` and matches local `main`.
+- [x] **Push Commits:** Manually push the reviewed local branch to remote `main`:
   ```bash
   git push push-repo main
   ```
-- [ ] **Connect Vercel:** Log in to Vercel and import the `Satjeet2005/safe-money-ui-library` repository.
-- [ ] **Deploy & Verify Settings:** Ensure Vercel uses root directory `./` and respects `vercel.json`:
+- [x] **Connect Vercel:** Log in to Vercel and import the `Satjeet2005/safe-money-ui-library` repository.
+- [x] **Deploy & Verify Settings:** Ensure Vercel uses root directory `./` and respects `vercel.json`:
   - Build Command: `pnpm build`
   - Output Directory: `apps/transfer-demo/dist`
   - Install Command: `corepack enable && pnpm install --frozen-lockfile`
-- [ ] **Live App Sanity Check:** Open the deployed Vercel URL in a browser and verify:
+- [x] **Live App Sanity Check:** Open the deployed Vercel URL in a browser and verify:
   - Form navigation and review screens load correctly.
   - Chaos Panel toggle opens and presets (e.g. `Lost response`, `Timeout then recover`) function live.
-- [ ] **Update Demo Link:** Replace `<DEMO_URL>` placeholder in `README.md` and `docs/STATE.md` with the verified production URL.
+- [x] **Update Demo Link:** Replaced `<DEMO_URL>` placeholder in `README.md` and `docs/STATE.md` with verified production URL: `https://safe-money-ui-library.vercel.app/`.
 
 ---
 

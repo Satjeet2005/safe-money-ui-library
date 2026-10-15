@@ -6,7 +6,7 @@ _Money-correct, failure-tolerant UI primitives for React and TypeScript, with a 
 
 _a payment UI can be built so that malformed input, duplicate clicks, slow or lost responses, stale data and bad payloads never produce a false success or a double submission, and every one of those claims is backed by a test a reviewer can run in under five minutes._
 
-- Live demo: `<DEMO_URL>`
+- Live demo: https://safe-money-ui-library.vercel.app/
 - Walkthrough video: `<VIDEO_URL>`
 
 ## Quick start
