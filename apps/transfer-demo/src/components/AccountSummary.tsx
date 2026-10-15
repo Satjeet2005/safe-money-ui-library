@@ -18,10 +18,10 @@ export function AccountSummary(): JSX.Element {
   return (
     <section
       aria-label={UI_LABELS.accountSummary}
-      className="account-summary nw-card nw-account-card"
+      className="account-summary nw-card nw-account-card nw-balance-bar nw-account-balances"
     >
       {accounts?.map((acc) => (
-        <div key={acc.currency} className="nw-account-balance nw-tabular">
+        <div key={acc.currency} className="nw-balance-item nw-account-balance nw-tabular">
           {acc.currency} ·{' '}
           {formatMoney({ currency: acc.currency, minor: acc.balanceMinor }, { locale })}
         </div>

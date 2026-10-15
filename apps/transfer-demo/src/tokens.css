@@ -1,68 +1,93 @@
 /* ==========================================================================
-   NORTHWIND PAY DESIGN SYSTEM TOKENS & STYLESHEET (Direction A: Warm Ledger)
+   NORTHWIND PAY STUDIO DESIGN TOKENS & STYLESHEET
+   Sources: Stripe DESIGN.md, Vercel Geist, Josh Comeau HSL Shadows, Emil Kowalski
    ========================================================================== */
 :root {
-  /* Surface & Canvas Tokens */
-  --nw-bg-canvas: #f7f6f2; /* Warm stone neutral background */
-  --nw-surface-primary: #ffffff; /* Crisp white primary card surface */
-  --nw-surface-console: #eef2f6; /* Cool technical slate diagnostic console */
-  --nw-surface-console-group: #f8fafc; /* Subtle inner fieldset card surface */
-  --nw-surface-subtle: #f9fafb; /* Read-only row or secondary block fill */
+  /* 1. Canvas & Surface Hierarchy */
+  --nw-bg-canvas: #f7f6f2; /* Warm stone alabaster canvas */
+  --nw-surface-primary: #ffffff; /* Crisp white primary task card */
+  --nw-surface-subtle: #f8fafc; /* Cool alabaster for inner callouts/previews */
+  --nw-surface-console: #eef2f6; /* Recessed diagnostic slate for Chaos Console */
+  --nw-surface-console-group: #f8fafc; /* Inner fieldset card surface inside Chaos Console */
+  --nw-surface-track: #e2e8f0; /* Recessed track for segmented radio controls */
 
-  /* Text & Ink Tokens (WCAG 2.2 AAA Contrast) */
-  --nw-text-primary: #111827; /* Near-black slate ink (17.74:1 on white) */
-  --nw-text-secondary: #374151; /* Deep slate for secondary labels (10.31:1) */
-  --nw-text-muted: #4b5563; /* Accessible muted gray for hints (7.56:1) */
-  --nw-text-inverse: #ffffff; /* White text on dark buttons */
+  /* 2. Chromatic Navy & Slate Typography Ink (Stripe Palette — WCAG AAA) */
+  --nw-text-primary: #061b31; /* Deep navy-slate ink (17.2:1 on white) */
+  --nw-text-secondary: #273951; /* Rich slate for labels & receipt keys (11.4:1) */
+  --nw-text-muted: #475569; /* Accessible muted slate for hints (7.5:1) */
+  --nw-text-inverse: #ffffff; /* Crisp white on primary buttons */
 
-  /* Structural & Control Borders (WCAG 2.2 SC 1.4.11 >= 3:1) */
-  --nw-border-subtle: #d1d5db; /* 1px divider and outer card border */
-  --nw-border-console: #cbd5e1; /* Slate border for diagnostic console */
-  --nw-border-control: #6b7280; /* 1px border for inputs/buttons (4.83:1 on white) */
-  --nw-border-control-console: #64748b; /* 1px border for console switches (4.23:1) */
+  /* 3. Borders & Hairlines (WCAG 2.2 SC 1.4.11 >= 3:1 Non-Text Contrast) */
+  --nw-border-hairline: #e2e8f0; /* 1px internal receipt & activity row divider */
+  --nw-border-card: rgba(15, 23, 42, 0.08); /* Sub-pixel card ring */
+  --nw-border-subtle: #cbd5e1; /* Card divider / hairline */
+  --nw-border-console: #cbd5e1; /* Outer perimeter of Chaos Console */
+  --nw-border-control: #64748b; /* Input, select, and secondary button border (4.5:1) */
+  --nw-border-control-hover: #334155; /* Hovered input/button border (10.1:1) */
+  --nw-border-control-console: #64748b; /* Console switch border */
 
-  /* Primary Interactive Brand Accent */
-  --nw-action-primary: #0f4c81; /* Northwind Slate Blue (8.86:1 on white) */
-  --nw-action-primary-hover: #0b3961; /* Hover state darkening (11.85:1) */
-  --nw-action-primary-active: #082845; /* Active/pressed state */
-  --nw-focus-ring: #0f4c81; /* High-contrast focus outline */
+  /* 4. Primary Brand & Interactive Accent (Northwind Slate Blue) */
+  --nw-action-primary: #0f4c81; /* Primary CTA fill (8.86:1 contrast with white) */
+  --nw-action-primary-hover: #0b3961; /* Hover fill (11.85:1) */
+  --nw-action-primary-active: #082845; /* Pressed fill */
+  --nw-action-gradient: linear-gradient(180deg, #125691 0%, #0f4c81 100%);
+  --nw-action-gradient-hover: linear-gradient(180deg, #0f4c81 0%, #0b3961 100%);
+  --nw-focus-ring: #0f4c81; /* Universal keyboard focus ring */
+  --nw-focus-halo: rgba(15, 76, 129, 0.14); /* 4px soft focus-within outer glow */
 
-  /* Semantic Outcome: Succeeded (Confirmed) */
-  --nw-status-success-bg: #ecfdf5; /* Mint surface */
-  --nw-status-success-text: #065f46; /* Deep emerald text (7.29:1) */
-  --nw-status-success-border: #047857; /* 4px accent bar & icon fill (5.21:1) */
-  --nw-status-success-badge-bg: #d1fae5; /* Completed tag fill */
+  /* 5. Tri-Modal Epistemic Outcome Tokens */
+  /* Outcome A: Succeeded / Confirmed (Emerald) */
+  --nw-status-success-bg: #ecfdf5;
+  --nw-status-success-text: #065f46; /* 7.29:1 on #ECFDF5 */
+  --nw-status-success-border: #047857; /* 5.21:1 on #ECFDF5 */
+  --nw-status-success-badge-bg: #d1fae5;
 
-  /* Semantic Outcome: Rejected (Failed / Error) */
-  --nw-status-error-bg: #fef2f2; /* Rose surface */
-  --nw-status-error-text: #991b1b; /* Deep crimson text (7.60:1) */
-  --nw-status-error-border: #b91c1c; /* 4px accent bar & invalid input border (6.47:1) */
-  --nw-status-error-badge-bg: #fee2e2; /* Rejected tag fill */
+  /* Outcome B: Rejected / Error (Crimson) */
+  --nw-status-error-bg: #fef2f2;
+  --nw-status-error-text: #991b1b; /* 7.60:1 on #FEF2F2 */
+  --nw-status-error-border: #b91c1c; /* 6.47:1 on #FFFFFF */
+  --nw-status-error-badge-bg: #fee2e2;
 
-  /* Semantic Outcome: Uncertain / Unconfirmed (Lost response / Timeout / Corrupt) */
-  --nw-status-uncertain-bg: #fffbeb; /* Warm parchment amber */
-  --nw-status-uncertain-text: #78350f; /* Deep umber-brown text (8.75:1) */
-  --nw-status-uncertain-border: #b45309; /* 2px dashed border & 4px bar (4.84:1) */
-  --nw-status-uncertain-badge-bg: #fde68a; /* Unconfirmed tag fill */
+  /* Outcome C: Unconfirmed / Uncertain (Parchment Amber + Dashed Geometry) */
+  --nw-status-uncertain-bg: #fffbeb;
+  --nw-status-uncertain-text: #78350f; /* 8.75:1 on #FFFBEB */
+  --nw-status-uncertain-border: #b45309; /* 4.84:1 on #FFFBEB */
+  --nw-status-uncertain-badge-bg: #fde68a;
 
   /* Semantic In-Flight / Informational */
-  --nw-status-pending-bg: #eff6ff; /* Calm blue tint */
-  --nw-status-pending-text: #1e3a8a; /* Deep navy text (9.52:1) */
-  --nw-status-pending-border: #1d4ed8; /* Blue border (6.16:1) */
+  --nw-status-pending-bg: #eff6ff;
+  --nw-status-pending-text: #1e3a8a;
+  --nw-status-pending-border: #1d4ed8;
 
-  /* Chaos Diagnostic Active Selection */
-  --nw-chaos-active-bg: #eef2ff; /* Indigo-slate diagnostic tint */
-  --nw-chaos-active-text: #312e81; /* Deep indigo text (10.22:1) */
-  --nw-chaos-active-border: #4338ca; /* Active preset border (7.07:1) */
+  /* 6. Chaos Diagnostic Active Selection (Indigo-Slate) */
+  --nw-chaos-active-bg: #eef2ff;
+  --nw-chaos-active-text: #312e81; /* 10.22:1 on #EEF2FF */
+  --nw-chaos-active-border: #4338ca; /* 7.07:1 on #EEF2FF */
 
-  /* Typography Stacks */
+  /* 7. Vercel Geist + Josh Comeau HSL Layered Shadows */
+  --nw-shadow-color: 215deg 35% 18%;
+  --nw-shadow-card:
+    0px 0px 0px 1px rgba(15, 23, 42, 0.07), 0px 1px 2px hsl(var(--nw-shadow-color) / 0.04),
+    0px 4px 8px -2px hsl(var(--nw-shadow-color) / 0.06),
+    0px 12px 20px -4px hsl(var(--nw-shadow-color) / 0.05);
+  --nw-shadow-balance-strip:
+    0px 0px 0px 1px rgba(15, 23, 42, 0.07), 0px 1px 3px hsl(var(--nw-shadow-color) / 0.05);
+  --nw-shadow-input: 0px 1px 2px rgba(6, 27, 49, 0.04);
+  --nw-shadow-pill:
+    0px 1px 3px rgba(6, 27, 49, 0.1), 0px 1px 2px rgba(6, 27, 49, 0.06),
+    0px 0px 0px 1px rgba(6, 27, 49, 0.04);
+  --nw-shadow-btn-primary:
+    0px 1px 2px rgba(6, 27, 49, 0.18), inset 0px 1px 0px rgba(255, 255, 255, 0.16);
+  --nw-shadow-btn-primary-hover:
+    0px 4px 10px -2px rgba(15, 76, 129, 0.35), inset 0px 1px 0px rgba(255, 255, 255, 0.22);
+
+  /* 8. Typography & Spacing Scale */
   --nw-font-sans:
     Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
     sans-serif;
   --nw-font-mono:
     ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
-  /* Spacing Scale (4px Base Unit) */
   --nw-space-1: 4px;
   --nw-space-2: 8px;
   --nw-space-3: 12px;
@@ -72,27 +97,23 @@
   --nw-space-8: 32px;
   --nw-space-10: 40px;
 
-  /* Radii */
-  --nw-radius-sm: 4px; /* Badges, tags, checkboxes */
-  --nw-radius-md: 6px; /* Buttons, inputs, preset cards, banners */
-  --nw-radius-lg: 8px; /* Outer cards, console frame */
+  --nw-radius-sm: 5px;
+  --nw-radius-md: 8px;
+  --nw-radius-lg: 12px;
+  --nw-radius-pill: 9999px;
 
-  /* Shadows (Subtle, Restrained Micro-Elevation) */
-  --nw-shadow-card: 0 1px 3px rgba(17, 24, 39, 0.05), 0 1px 2px rgba(17, 24, 39, 0.03);
-  --nw-shadow-card-hover:
-    0 4px 6px -1px rgba(17, 24, 39, 0.07), 0 2px 4px -1px rgba(17, 24, 39, 0.04);
-  --nw-shadow-dropdown:
-    0 10px 15px -3px rgba(17, 24, 39, 0.08), 0 4px 6px -2px rgba(17, 24, 39, 0.04);
-
-  /* Motion & Easing Tokens */
+  /* 9. Emil Kowalski & Josh Comeau Motion Tokens */
   --nw-duration-instant: 0ms;
   --nw-duration-fast: 120ms;
-  --nw-duration-base: 160ms;
-  --nw-duration-moderate: 200ms;
-  --nw-duration-spinner: 800ms;
+  --nw-duration-base: 180ms;
+  --nw-duration-leave: 300ms;
+  --nw-duration-spinner: 750ms;
+
+  --nw-spring-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --nw-spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --nw-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nw-ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
   --nw-ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --nw-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --nw-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
 
   /* Legacy Backward-Compatibility Aliases */
   --color-bg: var(--nw-bg-canvas);
@@ -112,12 +133,45 @@
   --font-base: var(--nw-font-sans);
 }
 
-/* Reduced Motion Fallback */
+/* Global Tabular Numerals Enforcement (Rauno Freiberg Invisible Details Rule) */
+.nw-tabular,
+.nw-amount-input,
+.nw-money-display,
+.nw-rate-display,
+.nw-balance-display,
+.nw-history-amount,
+.nw-balance-amount,
+.nw-quote-preview,
+.nw-conversion-preview,
+.nw-activity-amount,
+.smu-preview,
+input[type='text'],
+input[inputmode='decimal'],
+select,
+dd {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings:
+    'tnum' 1,
+    'lnum' 1;
+}
+
+/* Universal WCAG 2.2 SC 2.4.13 Focus Ring (0ms instant application) */
+:focus-visible {
+  outline: 2px solid var(--nw-focus-ring) !important;
+  outline-offset: 2px !important;
+  box-shadow:
+    0 0 0 2px var(--nw-surface-primary),
+    0 0 0 4px var(--nw-focus-ring) !important;
+  transition: none !important;
+}
+
+/* Strict Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --nw-duration-fast: 0ms;
-    --nw-duration-base: 0ms;
-    --nw-duration-moderate: 0ms;
+    --nw-duration-fast: 0.01ms;
+    --nw-duration-base: 0.01ms;
+    --nw-duration-leave: 0.01ms;
+    --nw-duration-spinner: 0.01ms;
   }
   *,
   *::before,
@@ -139,26 +193,6 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Tabular Numerals on all monetary and quantitative data */
-.nw-tabular,
-.nw-amount-input,
-.nw-money-display,
-.nw-rate-display,
-.nw-balance-display,
-.nw-history-amount {
-  font-variant-numeric: tabular-nums lining-nums;
-  font-feature-settings:
-    'tnum' 1,
-    'lnum' 1;
-}
-
-/* Universal Accessible Focus Ring (WCAG 2.2 SC 2.4.13) */
-:focus-visible {
-  outline: 2px solid var(--nw-focus-ring) !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px var(--nw-surface-primary) !important;
 }
 
 /* Button & Interactive Resets */
@@ -214,7 +248,24 @@ select:disabled {
 .nw-brand-cluster {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+
+/* NP Brand Emblem in Northwind Slate Blue */
+.nw-brand-mark {
+  background: linear-gradient(135deg, #125691 0%, #0f4c81 100%) !important;
+  color: #ffffff !important;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 2px rgba(6, 27, 49, 0.15);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .nw-brand-logo {
@@ -222,12 +273,18 @@ select:disabled {
   flex-shrink: 0;
 }
 
+.nw-brand-copy {
+  display: flex;
+  flex-direction: column;
+}
+
 .nw-brand-name {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--nw-text-primary);
+  line-height: 1.2;
 }
 
 .nw-brand-divider {
@@ -235,25 +292,32 @@ select:disabled {
 }
 
 .nw-brand-subtitle {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--nw-text-muted);
+  line-height: 1.2;
 }
 
-.nw-simulation-badge-group {
+.nw-simulation-badge-group,
+.nw-sim-aside {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Vercel Geist Technical Pill */
 .nw-sim-badge {
-  background-color: #e2e8f0;
-  color: #334155;
-  border: 1px solid #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 2px 8px;
-  border-radius: var(--nw-radius-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1e293b;
+  background-color: #e2e8f0;
+  border: 1px solid #94a3b8;
+  border-radius: var(--nw-radius-pill);
+  flex-shrink: 0;
 }
 
 .nw-sim-text {
@@ -278,15 +342,15 @@ select:disabled {
   font-weight: 600;
 }
 
-/* Main Workspace Grid */
+/* Main Workspace Grid (7fr : 5fr, Max 1200px) */
 .nw-workspace-container {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 24px 24px 48px;
+  padding: 20px 24px 48px;
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(360px, 5fr);
+  grid-template-columns: minmax(0, 7fr) minmax(380px, 5fr);
   gap: 24px;
   align-items: start;
 }
@@ -299,20 +363,20 @@ select:disabled {
   min-width: 0;
 }
 
-/* Card Foundation */
+/* Card Foundation with Vercel Geist + Josh Comeau HSL Layered Shadows */
 .nw-card {
   background-color: var(--nw-surface-primary);
-  border: 1px solid var(--nw-border-subtle);
   border-radius: var(--nw-radius-lg);
   box-shadow: var(--nw-shadow-card);
-  padding: 24px;
+  border: none; /* Replaced by shadow-as-border */
+  padding: 24px 28px;
   margin-bottom: 20px;
   box-sizing: border-box;
 }
 
-/* Step Progress Indicator */
+/* Step Progress Indicator (Breadcrumbs) */
 .nw-step-indicator {
-  border-bottom: 1px solid var(--nw-border-subtle);
+  border-bottom: 1px solid var(--nw-border-hairline);
   padding-bottom: 16px;
   margin-bottom: 24px;
 }
@@ -322,41 +386,44 @@ select:disabled {
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 24px;
+  gap: 12px;
 }
 
 .nw-step-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--nw-text-muted);
-}
-
-.nw-step-item.is-active {
-  color: var(--nw-action-primary);
-  font-weight: 600;
+  gap: 6px;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--nw-radius-pill);
+  padding: 3px 11px;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: all var(--nw-duration-fast) var(--nw-ease-out);
 }
 
 .nw-step-item.is-complete {
-  color: var(--nw-text-secondary);
+  background-color: #eff6ff;
+  color: #0f4c81;
+  border: 1px solid #bfdbfe;
+  font-weight: 600;
+}
+
+.nw-step-item.is-active {
+  background-color: #0f4c81;
+  color: #ffffff;
+  border-color: #0f4c81;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 76, 129, 0.25);
 }
 
 .nw-step-num {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1px solid currentColor;
   font-size: 12px;
-}
-
-.nw-step-item.is-active .nw-step-num {
-  background-color: var(--nw-action-primary);
-  color: var(--nw-text-inverse);
-  border-color: var(--nw-action-primary);
+  font-weight: 700;
 }
 
 /* Responsive Collapse (< 1024px) */
@@ -379,8 +446,152 @@ select:disabled {
 }
 
 /* ==========================================================================
-   PHASE 3: FORM CONTROLS & MONEY INPUT
+   PHASE 3: MULTI-CURRENCY BALANCE STRIP & RECENT ACTIVITY
    ========================================================================== */
+/* Outer 3-Currency Wallet Balance Container */
+.nw-balance-bar,
+.nw-account-balances,
+.account-summary {
+  background-color: var(--nw-surface-primary);
+  border-radius: var(--nw-radius-lg);
+  box-shadow: var(--nw-shadow-balance-strip);
+  border: none;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Each Currency Item Pill (USD, EUR, GBP) */
+.nw-balance-item,
+.account-summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background-color: var(--nw-surface-subtle);
+  border: 1px solid var(--nw-border-hairline);
+  border-radius: var(--nw-radius-md);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.nw-balance-item.is-active,
+.account-summary > div.is-active {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #0f4c81;
+}
+
+@media (max-width: 640px) {
+  .nw-balance-bar,
+  .nw-account-balances,
+  .account-summary {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* Recent Activity Card */
+.nw-history-card {
+  background-color: var(--nw-surface-primary);
+  border-radius: var(--nw-radius-lg);
+  box-shadow: var(--nw-shadow-card);
+  border: none;
+  padding: 20px 24px;
+}
+
+.nw-section-heading {
+  margin: 0 0 14px 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--nw-text-primary);
+}
+
+.nw-empty-text {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--nw-radius-md);
+  padding: 16px;
+  text-align: center;
+  color: #475569;
+  font-size: 13.5px;
+  margin: 0;
+}
+
+.nw-activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nw-activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nw-border-hairline);
+  font-size: 14px;
+  color: var(--nw-text-primary);
+}
+
+.nw-activity-item:last-child {
+  border-bottom: none;
+}
+
+.nw-activity-text {
+  font-weight: 500;
+}
+
+/* Activity Status Badges */
+.nw-activity-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.nw-activity-completed {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #047857;
+}
+
+.nw-activity-unconfirmed {
+  background-color: #fffbeb;
+  color: #78350f;
+  border: 1px dashed #b45309;
+}
+
+/* ==========================================================================
+   PHASE 4: FORM CONTROLS & HERO MONEY INPUT (SendForm.tsx)
+   ========================================================================== */
+.nw-transfer-card {
+  background-color: var(--nw-surface-primary);
+  border-radius: var(--nw-radius-lg);
+  box-shadow: var(--nw-shadow-card);
+  border: none;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
 .nw-form-group,
 .smu-field {
   margin-bottom: 20px;
@@ -395,113 +606,213 @@ select:disabled {
   margin-bottom: 6px;
 }
 
+/* Custom SVG-Caret <select> Dropdowns */
+select,
 .nw-select,
-.smu-field select,
-select {
+.smu-field select {
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
-  height: 44px;
-  padding: 0 12px;
-  background-color: var(--nw-surface-primary);
-  border: 1px solid var(--nw-border-control);
-  border-radius: var(--nw-radius-md);
-  color: var(--nw-text-primary);
-  font-size: 15px;
-  box-sizing: border-box;
-}
-
-.nw-segmented-control {
-  display: flex;
-  background-color: var(--nw-surface-console);
-  border: 1px solid var(--nw-border-console);
-  border-radius: var(--nw-radius-md);
-  padding: 3px;
-  gap: 4px;
-}
-
-.nw-segment-label {
-  flex: 1;
-  text-align: center;
-  padding: 6px 8px;
-  font-size: 13px;
+  min-height: 46px;
+  padding: 9px 40px 9px 14px;
+  font-family: var(--nw-font-sans);
+  font-size: 14.5px;
   font-weight: 500;
-  color: var(--nw-text-secondary);
-  border-radius: var(--nw-radius-sm);
-  cursor: pointer;
-  transition: background-color var(--nw-duration-fast) var(--nw-ease-standard);
-}
-
-.nw-segment-label.is-selected {
+  color: var(--nw-text-primary);
   background-color: var(--nw-surface-primary);
-  color: var(--nw-action-primary);
-  font-weight: 700;
-  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.08);
-}
-
-.nw-money-input-wrapper {
-  display: flex;
-  align-items: stretch;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
   border: 1px solid var(--nw-border-control);
   border-radius: var(--nw-radius-md);
-  background-color: var(--nw-surface-primary);
-  transition: border-color var(--nw-duration-fast) var(--nw-ease-standard);
+  box-shadow: var(--nw-shadow-input);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    border-color var(--nw-duration-fast) var(--nw-ease-out),
+    box-shadow var(--nw-duration-fast) var(--nw-spring-snappy);
 }
 
-.nw-money-input-wrapper:focus-within {
-  border-color: var(--nw-action-primary);
-  outline: 2px solid var(--nw-focus-ring);
-  outline-offset: 1px;
+select:hover:not(:disabled),
+.nw-select:hover:not(:disabled),
+.smu-field select:hover:not(:disabled) {
+  border-color: var(--nw-border-control-hover);
 }
 
-.has-error .nw-money-input-wrapper {
-  border-color: var(--nw-status-error-border);
-  border-width: 2px;
+select:focus-visible,
+.nw-select:focus-visible,
+.smu-field select:focus-visible {
+  border-color: var(--nw-focus-ring);
+  box-shadow: 0 0 0 4px var(--nw-focus-halo) !important;
 }
 
-.nw-currency-affix {
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  background-color: var(--nw-surface-console);
-  border-right: 1px solid var(--nw-border-subtle);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--nw-text-secondary);
-}
-
+/* 1. Hero Money Input (#amount) */
+input#amount,
 .nw-amount-input,
 .smu-input {
-  flex: 1;
-  border: 1px solid var(--nw-border-control);
-  background: var(--nw-surface-primary);
-  border-radius: var(--nw-radius-md);
-  padding: 0 14px;
-  height: 48px;
-  font-size: 20px;
-  font-weight: 600;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 16px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--nw-text-primary);
+  background-color: var(--nw-surface-primary);
+  border: 1px solid var(--nw-border-control);
+  border-radius: var(--nw-radius-md);
+  box-shadow: var(--nw-shadow-input);
+  font-variant-numeric: tabular-nums lining-nums;
+  box-sizing: border-box;
+  transition:
+    border-color var(--nw-duration-fast) var(--nw-ease-out),
+    box-shadow var(--nw-duration-fast) var(--nw-spring-snappy);
+}
+
+input#amount:hover:not(:disabled),
+.nw-amount-input:hover:not(:disabled),
+.smu-input:hover:not(:disabled) {
+  border-color: var(--nw-border-control-hover);
+}
+
+input#amount:focus-visible,
+.nw-amount-input:focus-visible,
+.smu-input:focus-visible {
+  border-color: var(--nw-focus-ring);
+  box-shadow: 0 0 0 4px var(--nw-focus-halo) !important;
+}
+
+input#amount[aria-invalid='true'],
+.nw-amount-input[aria-invalid='true'],
+.smu-input[aria-invalid='true'] {
+  border: 2px solid var(--nw-status-error-border);
+  background-color: #fffbfb;
+}
+
+/* 2. Live Quote / Conversion Preview Strip (SOLID BORDER — NEVER DASHED!) */
+.smu-preview,
+.nw-quote-preview,
+.nw-conversion-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1 !important; /* MUST BE SOLID, NEVER DASHED */
+  border-left: 3px solid var(--nw-action-primary) !important;
+  border-radius: var(--nw-radius-md);
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--nw-text-primary);
+  font-size: 14px;
   box-sizing: border-box;
 }
 
-.nw-amount-hint,
 .smu-hint {
-  padding-top: 6px;
   font-size: 13px;
   color: var(--nw-text-muted);
+  margin-top: 4px;
 }
 
-.nw-field-error,
-.smu-error-message {
-  margin: 6px 0 0 0;
+.smu-error-message,
+.nw-field-error {
+  color: var(--nw-status-error-text);
   font-size: 13px;
   font-weight: 600;
-  color: var(--nw-status-error-text);
+  margin-top: 6px;
 }
 
-/* Error Summary */
+/* Primary CTA Button ("Review transfer", "Confirm", "Try again") */
+.nw-btn-primary,
+button[type='submit'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--nw-text-inverse);
+  background: var(--nw-action-gradient);
+  border: 1px solid #0b3961;
+  border-radius: var(--nw-radius-md);
+  box-shadow: var(--nw-shadow-btn-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+  /* Josh Comeau Asymmetric Leave Transition (300ms) */
+  transition:
+    background 300ms ease-out,
+    box-shadow 300ms ease-out,
+    transform 120ms var(--nw-spring-snappy);
+}
+
+.nw-btn-primary:hover:not(:disabled),
+button[type='submit']:hover:not(:disabled) {
+  background: var(--nw-action-gradient-hover);
+  box-shadow: var(--nw-shadow-btn-primary-hover);
+  /* Josh Comeau Asymmetric Enter Transition (120ms) */
+  transition:
+    background 120ms ease-out,
+    box-shadow 120ms ease-out,
+    transform 120ms var(--nw-spring-snappy);
+}
+
+.nw-btn-primary:active:not(:disabled),
+button[type='submit']:active:not(:disabled) {
+  transform: scale(0.985) translateY(0.5px);
+}
+
+.nw-btn-block {
+  width: 100%;
+}
+
+.nw-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Secondary Button ("Edit details", "Leave transfer unconfirmed") */
+.nw-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 18px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--nw-text-primary);
+  background-color: var(--nw-surface-primary);
+  border: 1px solid var(--nw-border-control);
+  border-radius: var(--nw-radius-md);
+  box-shadow: var(--nw-shadow-input);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 100ms var(--nw-spring-snappy);
+}
+
+.nw-btn-secondary:hover:not(:disabled) {
+  background-color: #f8fafc;
+  border-color: var(--nw-text-primary);
+}
+
+.nw-btn-secondary:active:not(:disabled) {
+  transform: scale(0.985) translateY(0.5px);
+}
+
+/* ErrorSummary Focusable Box */
 .nw-error-summary,
 .smu-error-summary {
   background-color: var(--nw-status-error-bg);
-  border: 1px solid var(--nw-status-error-border);
+  border: 1px solid #fecaca;
   border-left: 4px solid var(--nw-status-error-border);
   border-radius: var(--nw-radius-md);
   padding: 16px 20px;
@@ -509,7 +820,7 @@ select {
 }
 
 .nw-error-summary-title,
-.smu-error-summary h2 {
+.smu-error-summary-title {
   margin: 0 0 8px 0;
   font-size: 16px;
   font-weight: 700;
@@ -517,87 +828,155 @@ select {
 }
 
 .nw-error-summary-list,
-.smu-error-summary ul {
+.smu-error-summary-list {
   margin: 0;
   padding-left: 20px;
   color: var(--nw-status-error-text);
+  font-size: 14px;
+}
+
+.nw-error-summary-list li,
+.smu-error-summary-list li,
+.smu-error-summary-item {
+  margin-bottom: 6px;
 }
 
 .nw-error-summary-list a,
-.smu-error-summary a {
+.smu-error-summary-list a,
+.smu-error-summary-link {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
   color: var(--nw-status-error-text);
   font-weight: 600;
   text-decoration: underline;
 }
 
-/* Buttons */
-.nw-btn,
-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 20px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: var(--nw-radius-md);
-  border: 1px solid transparent;
-  transition:
-    background-color var(--nw-duration-fast) var(--nw-ease-standard),
-    transform 80ms var(--nw-ease-standard);
-  text-decoration: none;
-  background-color: var(--nw-action-primary);
-  color: var(--nw-text-inverse);
-  box-sizing: border-box;
+/* ==========================================================================
+   PHASE 5: REVIEW RECEIPT & SPINNER (Review.tsx & Banner.tsx)
+   ========================================================================== */
+.nw-review-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.nw-btn:active:not(:disabled),
-button:active:not(:disabled) {
-  transform: translateY(0.5px);
-}
-
-.nw-btn-primary,
-button[type='submit'] {
-  background-color: var(--nw-action-primary);
-  color: var(--nw-text-inverse);
-}
-
-.nw-btn-primary:hover:not(:disabled),
-button[type='submit']:hover:not(:disabled) {
-  background-color: var(--nw-action-primary-hover);
-}
-
-.nw-btn-secondary,
-button[type='button'] {
-  background-color: var(--nw-surface-primary);
-  border: 1px solid var(--nw-border-control);
+.nw-screen-title,
+.step-heading {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   color: var(--nw-text-primary);
 }
 
-.nw-btn-secondary:hover:not(:disabled),
-button[type='button']:hover:not(:disabled) {
-  background-color: var(--nw-surface-subtle);
-  border-color: var(--nw-text-primary);
+.nw-screen-subtitle {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: var(--nw-text-muted);
 }
 
-.nw-btn-block {
-  width: 100%;
-}
-
-.nw-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
+.nw-receipt-list,
+.review-snapshot {
+  margin: 0 0 20px 0;
   padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+  border-top: 1px solid var(--nw-border-hairline);
 }
 
-/* ==========================================================================
-   PHASE 4: REVIEW & SNAPSHOT STYLES
-   ========================================================================== */
+.nw-receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nw-border-hairline);
+  font-size: 14px;
+}
+
+.nw-receipt-row dt {
+  color: var(--nw-text-secondary);
+  font-weight: 500;
+}
+
+.nw-receipt-row dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--nw-text-primary);
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.nw-receipt-row-total {
+  font-size: 16px;
+  border-top: 2px solid var(--nw-text-primary);
+  border-bottom: 2px solid var(--nw-text-primary);
+  padding: 14px 0;
+}
+
+.nw-receipt-row-total dd {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Recipient Receives Callout Box */
+.nw-receive-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  margin: 16px 0 24px;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid var(--nw-action-primary);
+  border-radius: var(--nw-radius-md);
+  box-sizing: border-box;
+}
+
+.nw-receive-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nw-text-secondary);
+}
+
+.nw-receive-amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--nw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.nw-review-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.nw-review-actions .nw-btn-secondary {
+  flex: 1;
+}
+
+.nw-review-actions .nw-btn-primary {
+  flex: 2;
+}
+
+/* Dual-Arc Compositor SVG Spinner (750ms) */
+.nw-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  border-right-color: #ffffff;
+  animation: nw-spin var(--nw-duration-spinner) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+@keyframes nw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Warning & Informational Banners (Banner.tsx) */
 .nw-banner,
 .banner {
   display: flex;
@@ -606,6 +985,7 @@ button[type='button']:hover:not(:disabled) {
   padding: 14px 16px;
   border-radius: var(--nw-radius-md);
   margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .nw-banner-warning,
@@ -630,158 +1010,44 @@ button[type='button']:hover:not(:disabled) {
   color: var(--nw-status-error-text);
 }
 
-.nw-screen-title,
-.step-heading {
-  margin: 0 0 6px 0;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  color: var(--nw-text-primary);
-}
-
-.nw-screen-subtitle {
-  margin: 0 0 20px 0;
-  font-size: 14px;
-  color: var(--nw-text-muted);
-}
-
-.nw-receipt-list,
-.review-snapshot {
-  margin: 0 0 20px 0;
-  padding: 0;
-  border-top: 1px solid var(--nw-border-subtle);
-}
-
-.nw-receipt-row,
-.review-snapshot > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--nw-border-subtle);
-  font-size: 14px;
-}
-
-.nw-receipt-row dt,
-.review-snapshot dt {
-  color: var(--nw-text-secondary);
-}
-
-.nw-receipt-row dd,
-.review-snapshot dd {
-  margin: 0;
-  font-weight: 600;
-  color: var(--nw-text-primary);
-  text-align: right;
-}
-
-.nw-receipt-row-total {
-  font-size: 16px;
-  border-top: 2px solid var(--nw-text-primary);
-  border-bottom: 2px solid var(--nw-text-primary);
-  padding: 14px 0;
-}
-
-.nw-receipt-row-total dd {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.nw-receive-callout {
-  background-color: var(--nw-surface-subtle);
-  border: 1px solid var(--nw-border-console);
-  border-radius: var(--nw-radius-md);
-  padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.nw-receive-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--nw-text-secondary);
-}
-
-.nw-receive-amount {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--nw-text-primary);
-}
-
-.nw-review-actions,
-.review-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.nw-review-actions .nw-btn-secondary,
-.review-actions button[type='button'] {
-  flex: 1;
-}
-
-.nw-review-actions .nw-btn-primary,
-.review-actions button[type='submit'] {
-  flex: 2;
-}
-
-/* Dual-Arc SVG Spinner */
-.nw-spinner {
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: nw-spin var(--nw-duration-spinner) linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-@keyframes nw-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* ==========================================================================
-   PHASE 5: RESULT TRI-MODAL STATES
+   PHASE 6: EPISTEMIC TRI-MODAL RESULT CARDS (Result.tsx)
    ========================================================================== */
 .nw-result-card,
-.result-screen {
-  padding: 24px;
+.result-card {
   border-radius: var(--nw-radius-md);
-  margin-bottom: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
   box-sizing: border-box;
 }
 
 .nw-result-header {
   display: flex;
   gap: 16px;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
 }
 
 .nw-result-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
 .nw-result-title {
   margin: 4px 0 0 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
-/* Succeeded */
+/* Succeeded / Confirmed */
 .nw-result-success,
 .result-success {
   background-color: var(--nw-status-success-bg);
@@ -789,69 +1055,70 @@ button[type='button']:hover:not(:disabled) {
   border-left: 4px solid var(--nw-status-success-border);
 }
 
-.nw-result-success .nw-result-icon,
-.result-success .result-icon {
+.nw-result-success .nw-result-icon {
   background-color: var(--nw-status-success-border);
   color: var(--nw-text-inverse);
+  animation: nw-scale-pop 240ms var(--nw-spring-bounce) both;
 }
 
-.nw-result-success .nw-result-title,
-.result-success h2 {
+.nw-result-success .nw-result-title {
   color: var(--nw-status-success-text);
 }
 
-/* Rejected */
+/* Rejected / Error */
 .nw-result-rejected,
 .result-rejected {
   background-color: var(--nw-status-error-bg);
   border: 1px solid #fecaca;
   border-left: 4px solid var(--nw-status-error-border);
+  animation: none !important;
+  transition: none !important;
 }
 
-.nw-result-rejected .nw-result-icon,
-.result-rejected .result-icon {
+.nw-result-rejected .nw-result-icon {
   background-color: var(--nw-status-error-border);
   color: var(--nw-text-inverse);
+  border-radius: var(--nw-radius-sm); /* Octagonal / squared appearance */
 }
 
-.nw-result-rejected .nw-result-title,
-.result-rejected h2 {
+.nw-result-rejected .nw-result-title {
   color: var(--nw-status-error-text);
 }
 
-/* Unconfirmed / Uncertain (CRITICAL: 2px Dashed Perimeter) */
+/* Unconfirmed / Uncertain (CRITICAL: 2px Dashed Perimeter Border) */
 .nw-result-unconfirmed,
 .result-unconfirmed {
   background-color: var(--nw-status-uncertain-bg);
   border: 2px dashed var(--nw-status-uncertain-border);
   border-left: 4px solid var(--nw-status-uncertain-border);
+  animation: none !important;
+  transition: none !important;
 }
 
-.nw-result-unconfirmed .nw-result-icon,
-.result-unconfirmed .result-icon {
+.nw-result-unconfirmed .nw-result-icon {
   background-color: var(--nw-status-uncertain-border);
   color: var(--nw-text-inverse);
+  border-radius: var(--nw-radius-sm);
 }
 
-.nw-result-unconfirmed .nw-result-title,
-.result-unconfirmed h2 {
+.nw-result-unconfirmed .nw-result-title {
   color: var(--nw-status-uncertain-text);
 }
 
 .nw-uncertain-explanation {
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--nw-status-uncertain-text);
   margin-bottom: 20px;
   line-height: 1.5;
 }
 
-/* Status Tags */
+/* Status Tags (Sentence-Case, Low-Contrast Fill per GOV.UK) */
 .nw-status-tag {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: var(--nw-radius-sm);
+  border-radius: 6px;
 }
 
 .nw-tag-success {
@@ -881,115 +1148,54 @@ button[type='button']:hover:not(:disabled) {
   font-size: 12px;
 }
 
-/* ==========================================================================
-   PHASE 6: ACCOUNT SUMMARY & RECENT ACTIVITY
-   ========================================================================== */
-.nw-account-header,
-.account-summary {
+.nw-result-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 14px 18px;
-  background-color: var(--nw-surface-primary);
-  border: 1px solid var(--nw-border-subtle);
-  border-radius: var(--nw-radius-md);
-  margin-bottom: 20px;
-  box-sizing: border-box;
-}
-
-.nw-account-name {
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--nw-text-primary);
-}
-
-.nw-account-meta {
-  font-size: 12px;
-  color: var(--nw-text-muted);
-}
-
-.nw-account-balance {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--nw-text-primary);
-}
-
-.nw-currency-code {
-  font-size: 14px;
-  color: var(--nw-text-secondary);
-}
-
-.nw-section-heading {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--nw-text-primary);
-}
-
-.nw-activity-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nw-activity-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--nw-border-subtle);
-  font-size: 14px;
-}
-
-.nw-activity-item:last-child {
-  border-bottom: none;
-}
-
-.nw-activity-left {
-  display: flex;
-  flex-direction: column;
-  flex: 2;
-}
-
-.nw-activity-recipient {
-  color: var(--nw-text-primary);
-}
-
-.nw-activity-ref {
-  font-size: 12px;
-  color: var(--nw-text-muted);
-}
-
-.nw-activity-center {
-  flex: 1;
-  text-align: center;
-}
-
-.nw-activity-right {
-  flex: 1;
-  text-align: right;
-  font-weight: 600;
-  color: var(--nw-text-primary);
-}
-
-.nw-empty-text {
-  font-size: 14px;
-  color: var(--nw-text-muted);
-  margin: 12px 0;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 /* ==========================================================================
-   PHASE 7: CHAOS SIMULATION CONSOLE
+   PHASE 7: CHAOS SIMULATION CONSOLE (ChaosPanel.tsx)
    ========================================================================== */
 .nw-chaos-console,
 .chaos-panel-container {
   background-color: var(--nw-surface-console);
   border: 1px solid var(--nw-border-console);
   border-radius: var(--nw-radius-lg);
-  padding: 20px;
+  box-shadow: none; /* Recessed diagnostic instrument */
+  padding: 20px 22px;
   box-sizing: border-box;
+}
+
+.nw-chaos-top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+/* Sleek Console Drawer Toggle Pill */
+.chaos-toggle-button,
+.nw-btn-drawer-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  border: 1px solid #94a3b8;
+  border-radius: var(--nw-radius-pill);
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  min-height: 32px;
+  min-width: auto;
+  transition: all var(--nw-duration-fast) var(--nw-ease-out);
+}
+
+.chaos-toggle-button:hover,
+.nw-btn-drawer-pill:hover {
+  background: #cbd5e1;
+  color: var(--nw-text-primary);
 }
 
 #chaos-panel {
@@ -1049,69 +1255,106 @@ button[type='button']:hover:not(:disabled) {
   color: var(--nw-text-secondary);
 }
 
-/* 2x2 Preset Grid */
+/* 2x2 Preset Card Grid with Zero Double-Border */
 .nw-preset-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-bottom: 16px;
 }
 
+/* Outer Preset Card */
 .nw-preset-card {
-  background-color: var(--nw-surface-primary);
-  border: 1px solid var(--nw-border-control-console);
-  border-radius: var(--nw-radius-md);
-  padding: 10px 12px;
-  cursor: pointer;
-  transition: all var(--nw-duration-fast) var(--nw-ease-standard);
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 12px 14px;
+  background-color: var(--nw-surface-primary);
+  border: 1px solid #94a3b8;
+  border-radius: var(--nw-radius-md);
+  box-shadow: 0 1px 2px rgba(6, 27, 49, 0.04);
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+  transition:
+    background-color 140ms var(--nw-ease-out),
+    border-color 140ms var(--nw-ease-out),
+    box-shadow 140ms var(--nw-ease-out),
+    transform 100ms var(--nw-spring-snappy);
 }
 
 .nw-preset-card:hover {
   background-color: #f8fafc;
-  border-color: var(--nw-text-primary);
+  border-color: #334155;
+  box-shadow: 0 3px 6px -1px rgba(6, 27, 49, 0.08);
 }
 
-.nw-preset-card.is-active {
+.nw-preset-card:active {
+  transform: scale(0.985);
+}
+
+/* CRITICAL FIX: Strip all default browser button chrome inside preset cards */
+.nw-preset-card button,
+.nw-preset-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nw-text-primary);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: auto;
+  min-width: auto;
+}
+
+/* Stretch inner button hit target across the entire preset card */
+.nw-preset-card button::after,
+.nw-preset-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Active / Selected Preset State */
+.nw-preset-card.is-active,
+.nw-preset-card[aria-pressed='true'],
+.nw-preset-card[aria-checked='true'],
+.nw-preset-card:has(button[aria-pressed='true']) {
   background-color: var(--nw-chaos-active-bg);
   border: 2px solid var(--nw-chaos-active-border);
-  padding: 9px 11px;
+  padding: 11px 13px; /* Compensates for 2px border with zero layout shift */
+  box-shadow: 0 2px 5px rgba(67, 56, 202, 0.12);
+}
+
+.nw-preset-card.is-active button,
+.nw-preset-card.is-active .nw-preset-btn,
+.nw-preset-card:has(button[aria-pressed='true']) button {
+  color: var(--nw-chaos-active-text);
 }
 
 .nw-preset-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
-}
-
-.nw-preset-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--nw-text-primary);
-  text-align: left;
-  cursor: pointer;
-}
-
-.nw-preset-card.is-active .nw-preset-btn {
-  color: var(--nw-chaos-active-text);
+  width: 100%;
 }
 
 .nw-preset-name {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--nw-text-primary);
-}
-
-.nw-preset-card.is-active .nw-preset-name {
-  color: var(--nw-chaos-active-text);
-  font-weight: 700;
 }
 
 .nw-preset-indicator {
@@ -1132,23 +1375,114 @@ button[type='button']:hover:not(:disabled) {
 }
 
 /* Group Fieldsets */
-.nw-chaos-fieldset,
+.nw-chaos-console fieldset,
 .chaos-group {
   background-color: var(--nw-surface-console-group);
   border: 1px solid var(--nw-border-console);
   border-radius: var(--nw-radius-md);
   padding: 12px 14px;
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
+  box-sizing: border-box;
 }
 
-.nw-chaos-legend,
+.nw-chaos-console legend,
 .chaos-group legend {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  color: var(--nw-text-muted);
+  padding: 0 6px;
+}
+
+/* Sliding-Pill Latency Segmented Radio Group */
+.chaos-radios,
+.nw-latency-group,
+.nw-segmented-control {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  background-color: var(--nw-surface-track);
+  padding: 3px;
+  border-radius: var(--nw-radius-md);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  gap: 2px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.chaos-radios label,
+.nw-latency-group label,
+.nw-segmented-control label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
   color: var(--nw-text-secondary);
-  padding: 0 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0;
+  transition:
+    background-color 180ms var(--nw-spring-smooth),
+    color 180ms var(--nw-spring-smooth),
+    box-shadow 180ms var(--nw-spring-smooth);
+}
+
+.chaos-radios label:has(input:checked),
+.nw-latency-group label:has(input:checked),
+.nw-segmented-control label:has(input:checked),
+.nw-segment-label.is-selected {
+  background-color: var(--nw-surface-primary);
+  color: var(--nw-text-primary);
+  font-weight: 700;
+  box-shadow: var(--nw-shadow-pill);
+}
+
+/* Tactile Checkbox Rows (:has(input:checked)) */
+.nw-chaos-console label:has(input[type='checkbox']),
+.chaos-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+  padding: 4px 8px;
+  margin: 2px -8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nw-text-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.nw-chaos-console label:has(input[type='checkbox']):hover,
+.chaos-checkboxes label:hover {
+  background-color: rgba(15, 23, 42, 0.04);
+}
+
+.nw-chaos-console label:has(input[type='checkbox']:checked),
+.chaos-checkboxes label:has(input:checked) {
+  background-color: var(--nw-chaos-active-bg);
+  border-color: #c7d2fe;
+  color: var(--nw-chaos-active-text);
+  font-weight: 600;
+}
+
+.nw-chaos-console input[type='checkbox'],
+.chaos-checkboxes input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--nw-chaos-active-border);
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .nw-control-row {
@@ -1164,36 +1498,10 @@ button[type='button']:hover:not(:disabled) {
   color: var(--nw-text-secondary);
 }
 
-.nw-segmented-sm .nw-segment-label {
-  padding: 4px 8px;
-  font-size: 12px;
-}
-
 .nw-select-sm {
   height: 34px;
   width: auto;
   font-size: 13px;
-}
-
-/* Checkbox Row Ergonomics (>= 32px Touch Target) */
-.nw-checkbox-label,
-.chaos-radios label,
-.chaos-checkboxes label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  font-size: 13px;
-  color: var(--nw-text-primary);
-  cursor: pointer;
-}
-
-.nw-checkbox-label input[type='checkbox'],
-.chaos-radios input[type='radio'],
-.chaos-checkboxes input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--nw-action-primary);
 }
 
 /* Trigger Buttons & Footer */
@@ -1211,24 +1519,20 @@ button[type='button']:hover:not(:disabled) {
   padding: 0 12px;
 }
 
-.nw-chaos-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 16px;
-}
-
 /* ==========================================================================
-   PHASE 8: SLEEK MOTION SUITE
+   PHASE 8: PRE-EXISTING WEB ANIMATIONS & SAFETY LOCKS
    ========================================================================== */
-.nw-step-content-viewport {
-  animation: nw-fade-in var(--nw-duration-base) var(--nw-ease-decelerate);
+/* 1. Emil Kowalski fadeInUp Step Transition (180ms smooth spring) */
+.nw-step-content-viewport,
+.nw-review-container,
+.nw-result-success {
+  animation: nw-fade-in-up var(--nw-duration-base) var(--nw-spring-smooth) both;
 }
 
-@keyframes nw-fade-in {
+@keyframes nw-fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(2px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -1236,26 +1540,26 @@ button[type='button']:hover:not(:disabled) {
   }
 }
 
-/* Instant Render for Errors & Uncertain States (Zero Jitter) */
+/* 2. NON-NEGOTIABLE SAFETY OVERRIDE: 0ms Instant Render for Errors, Rejections & Uncertainty */
 .nw-error-summary,
 .smu-error-summary,
+.nw-result-rejected,
+.result-rejected,
 .nw-result-unconfirmed,
 .result-unconfirmed,
-.nw-result-rejected,
-.result-rejected {
+[role='alert'] {
   animation: none !important;
+  transition: none !important;
 }
 
-/* Recent Activity New Item Highlight */
-.nw-activity-item.is-new {
-  animation: nw-highlight-row 400ms var(--nw-ease-standard);
-}
-
-@keyframes nw-highlight-row {
-  from {
-    background-color: var(--nw-chaos-active-bg);
+/* 3. Self-Drawing SVG Checkmark / Badge Pop for Confirmed Transfers */
+@keyframes nw-scale-pop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
   }
-  to {
-    background-color: transparent;
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

@@ -317,16 +317,18 @@ export function ChaosPanel(): JSX.Element {
 
   return (
     <div className="chaos-panel-container nw-chaos-console">
-      <button
-        type="button"
-        id="chaos-toggle-button"
-        className="chaos-toggle-button nw-btn nw-btn-secondary nw-btn-block"
-        aria-expanded={chaos.panelOpen}
-        aria-controls="chaos-panel"
-        onClick={() => dispatch(togglePanel())}
-      >
-        {COPY['chaos.heading']}
-      </button>
+      <div className="nw-chaos-top-bar">
+        <button
+          type="button"
+          id="chaos-toggle-button"
+          className="chaos-toggle-button nw-btn-drawer-pill"
+          aria-expanded={chaos.panelOpen}
+          aria-controls="chaos-panel"
+          onClick={() => dispatch(togglePanel())}
+        >
+          {COPY['chaos.heading']}
+        </button>
+      </div>
 
       {chaos.panelOpen && (
         <section id="chaos-panel" aria-labelledby="chaos-heading">

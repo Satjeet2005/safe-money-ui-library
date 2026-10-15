@@ -51,24 +51,14 @@ export function App(): JSX.Element {
       <header className="nw-header">
         <div className="nw-header-inner">
           <div className="nw-brand-cluster">
-            <svg
-              className="nw-brand-logo"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polygon points="12 6 15 12 12 18 9 12" fill="currentColor" />
-            </svg>
+            <span className="nw-brand-mark" aria-hidden="true">
+              NP
+            </span>
             <h1 className="nw-brand-name">{COPY['app.title']}</h1>
             <span className="nw-brand-divider" aria-hidden="true">
               /
             </span>
-            <span className="nw-brand-subtitle">Safe-Submit Transfer Demo</span>
+            <span className="nw-brand-subtitle">Safe-submit reference transfer demo</span>
           </div>
 
           <aside aria-label={UI_LABELS.demoNotice} className="nw-simulation-badge-group">
@@ -94,6 +84,9 @@ export function App(): JSX.Element {
       <div className="nw-workspace-container">
         {/* Left Column: Primary User Task & Account Ledger (7fr) */}
         <section className="nw-col-primary">
+          {/* Top 3-Currency Multi-Wallet Balance Strip */}
+          <AccountSummary />
+
           <div className="nw-card nw-transfer-card">
             {/* Step Progress Bar */}
             <nav className="nw-step-indicator" aria-label="Transfer Progress">
@@ -130,9 +123,6 @@ export function App(): JSX.Element {
               <TransferFlow />
             </div>
           </div>
-
-          {/* Account Summary */}
-          <AccountSummary />
 
           {/* Recent Activity */}
           <section aria-label={COPY['history.heading']} className="nw-card nw-history-card">
