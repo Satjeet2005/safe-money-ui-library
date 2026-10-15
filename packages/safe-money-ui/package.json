@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Satjeet2005/safe-money-ui.git"
+    "url": "https://github.com/Satjeet2005/safe-money-ui-library.git"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
